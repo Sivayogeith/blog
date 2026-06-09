@@ -1,34 +1,34 @@
 import Image from "next/image";
-import { remark } from "remark";
-import html from "remark-html";
+import {
+  convertDateToString,
+  getPosts,
+  Post,
+} from "./postsAPI";
 
-const getPosts = async () => {
-  let data = await fetch(`${process.env.API}/posts`);
-  let posts: { id: number; title: string; body: string }[] = await data.json();
-  posts.map(async (post) => {
-    const bodyMD = await remark().use(html).process(post.body);
-    const bodyHTML = bodyMD.toString();
-    console.log(bodyHTML);
-    post.body = bodyHTML;
-  });
-
-  return posts
-}
 export default async function Home() {
-  const posts = await getPosts();
+  const posts: Post[] = await getPosts();
 
   return (
-    <div className="flex flex-col flex-1 items-center bg-zinc-50 dark:bg-[#000217] py-10">
-      <h1 className="text-5xl mb-5">Sage's Blog</h1>
-      {posts.map(async (post) => (
+    <div className="flex flex-col flex-1 items-center bg-zinc-50 dark:bg-[#000217]">
+      <div className="text-3xl text-center p-5">
+        <a href="/">Sage's Blog</a>
+      </div>
+      {posts.map(async (post: Post) => (
         <div
           key={post.id}
-          className="p-10 my-5 w-2/3 border rounded-2xl flex justify-between"
+          className="p-10 my-5 mx-10 lg:w-[80vw] w-[90vw] h-full border rounded-2xl flex justify-between lg:flex-row flex-col-reverse gap-10"
         >
-          <div>
-            <h2 className="text-3xl">{post.title}</h2>
+          <div className="lg:w-3/4">
+            <a className="text-4xl font-semibold" href={`/${post.slug}`}>
+              {post.title}
+            </a>
+            <p className="mb-5">
+              {convertDateToString(post.created_at)} •{" "}
+              {post.readingTime}
+            </p>
+
             <div
-              className="text-xl"
+              className="lg:text-xl md:text-lg text-sm body-preview"
               dangerouslySetInnerHTML={{ __html: post.body }}
             />
           </div>
@@ -37,7 +37,7 @@ export default async function Home() {
             alt="cats"
             width={500}
             height={500}
-            className="rounded-xl"
+            className="rounded-xl lg:w-[40%] w-full h-full"
           />
         </div>
       ))}
