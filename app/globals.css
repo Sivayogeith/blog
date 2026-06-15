@@ -1,40 +1,80 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme inline {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+
+  --color-darkest: #1c1225;
+  --color-darker: #130a1c;
+  --color-dark: #261d2e;
+  --color-pale-dark: #473b52;
+
+  --color-deep-light: #62229d;
+  --color-light: #783dae;
+  --color-lighter: #b283dd;
+  --color-lightest: #d3b4f0;
+  --color-white: #decdf0;
+
+  --animate-loading: loading 2s linear infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-}
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --primary: var(--color-darkest);
+    --secondary: var(--color-lighter);
+    color: #fff;
+  }
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --primary: var(--color-white);
+    --secondary: var(--color-deep-light);
+    color: #000;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--primary);
 }
 
 .body h1 {
-  @apply text-2xl
+  @apply text-2xl;
 }
 
 .body p {
-  @apply mb-3
+  @apply mb-3;
 }
 
 .body img {
-  @apply w-1/4 h-auto
+  @apply w-1/4 h-auto;
 }
 
 .body-preview img {
-  @apply w-[20%] h-auto
+  @apply w-[20%] h-auto;
+}
 
+input {
+  @apply border border-secondary rounded-md p-2 dark:bg-dark bg-lightest;
+}
+
+input:focus {
+  @apply border-[1.5px] dark:border-light border-darkest outline-none ;
+}
+
+@keyframes loading {
+  0% {
+    width: 0%;
+    margin-left: 0;
+  }
+
+  50% {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  100% {
+    width: 0%;
+    margin-left: 100%;
+  }
 }

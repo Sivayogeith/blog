@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { convertDateToString, getPost, Post } from "../postsAPI";
+import { convertDateToString, getPost, Post } from "../api/postsAPI";
+import { getMe } from "../api/authAPI";
 
 export default async function PostPage({
   params,
@@ -8,11 +9,16 @@ export default async function PostPage({
 }) {
   const { slug } = await params;
   const post: Post = await getPost(slug);
+  const session = await getMe();
 
   return (
-    <div className="flex flex-col flex-1 bg-zinc-50 dark:bg-[#000217]">
-      <div className="text-3xl text-center p-5">
-        <a href="/">Sage's Blog</a>
+    <div className="flex flex-col flex-1">
+      <div className="p-5 flex w-full justify-center items-center">
+        <div className="md:w-full"></div>
+        <a href="/" className="md:text-center md:text-3xl text-2xl w-full">
+          Sage's Blog
+        </a>
+        <p className="text-xl text-end w-full">{session.username}</p>
       </div>
 
       <div
