@@ -42,23 +42,23 @@ export const calculateReadingTime = (text: string) => {
 }
 
 export const getPosts = async (): Promise<Post[]> => {
-  let data = await fetch(`${process.env.API}/posts`);
-  if (data.status == 200) {
-    let posts: RawPost[] = await data.json();
+  let response = await fetch(`${process.env.API}/posts`);
+  if (response.status == 200) {
+    let posts: RawPost[] = await response.json();
     return await Promise.all(
       posts.map((post) => processPost(post, true))
     );
   }
-  console.error(data.text())
+  console.error(response.text())
   return [] as Post[]
 };
 
 export const getPost = async (slug: string): Promise<Post> => {
-  let data = await fetch(`${process.env.API}/posts/${slug}`);
-  if (data.status == 200){
-    let post: RawPost = await data.json();
+  let response = await fetch(`${process.env.API}/posts/${slug}`);
+  if (response.status == 200){
+    let post: RawPost = await response.json();
     return await processPost(post);
   }
-  console.error(data.text())
+  console.error(response.text())
   return {} as Post
 };

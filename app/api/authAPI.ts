@@ -12,7 +12,7 @@ export const login = async (
   username: string,
   password: string,
 ): Promise<{ message: string; status: number }> => {
-  const data = await fetch(`${process.env.API}/auth/login`, {
+  const response = await fetch(`${process.env.API}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -24,25 +24,25 @@ export const login = async (
   });
 
   const cookieStore = await cookies();
-  const responseCookies = qs.parse(data.headers.getSetCookie()[0], "; ");
+  const responseCookies = qs.parse(response.headers.getSetCookie()[0], "; ");
 
   if (responseCookies["connect.sid"]) {
     cookieStore.set("connect.sid", responseCookies["connect.sid"].toString());
   }
 
-  return { message: await data.text(), status: data.status };
+  return { message: await response.text(), status: response.status };
 };
 
 export const getMe = async (): Promise<SessionData> => {
   const cookieStore = await cookies();
-  const data = await fetch(`${process.env.API}/auth/me`, {
+  const response = await fetch(`${process.env.API}/auth/me`, {
     headers: {
       Cookie: cookieStore.toString(),
     },
   });
-  if (data.status == 200) {
-    return data.json();
+  if (response.status == 200) {
+    return response.json();
   }
-  console.error(data.text());
+  console.error(response.text());
   return {} as SessionData;
 };
