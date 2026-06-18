@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { convertDateToString, getPost, Post } from "../api/postsAPI";
 import { getMe } from "../api/authAPI";
+import { notFound } from "next/navigation";
 
 export default async function PostPage({
   params,
@@ -9,6 +10,9 @@ export default async function PostPage({
 }) {
   const { slug } = await params;
   const post: Post = await getPost(slug);
+  if (!post.title) {
+    return notFound();
+  }
   const session = await getMe();
 
   return (

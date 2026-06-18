@@ -26,7 +26,7 @@ export default function Login() {
 
     if (result.status == 200) {
       setMessage(result.message + ", Please wait a second...");
-      redirect("/");
+      redirect("/dashboard");
     }
   };
 

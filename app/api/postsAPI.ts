@@ -59,6 +59,6 @@ export const getPost = async (slug: string): Promise<Post> => {
     let post: RawPost = await response.json();
     return await processPost(post);
   }
-  console.error(response.text())
+  console.log(await response.text())
   return {} as Post
 };
