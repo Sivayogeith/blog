@@ -43,6 +43,6 @@ export const getMe = async (): Promise<SessionData> => {
   if (response.status == 200) {
     return response.json();
   }
-  console.error(response.text());
+  console.log(response.text());
   return {} as SessionData;
 };

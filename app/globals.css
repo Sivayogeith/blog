@@ -62,6 +62,10 @@ input:focus {
   @apply border-[1.5px] dark:border-light border-darkest outline-none ;
 }
 
+button:hover {
+  @apply cursor-pointer
+}
+
 @keyframes loading {
   0% {
     width: 0%;

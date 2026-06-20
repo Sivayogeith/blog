@@ -49,7 +49,7 @@ export const getPosts = async (): Promise<Post[]> => {
       posts.map((post) => processPost(post, true))
     );
   }
-  console.error(response.text())
+  console.log(response.text())
   return [] as Post[]
 };
 

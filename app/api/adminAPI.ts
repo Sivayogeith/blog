@@ -1,11 +1,8 @@
+"use server"
+
 import { cookies } from "next/headers";
 
-export const createPost = async (
-  id: string,
-  title: string,
-  body: string,
-  slug: string,
-) => {
+export const createPost = async (title: string, body: string, slug: string): Promise<{ message: string; status: number }> => {
   const cookieStore = await cookies();
   const response = await fetch(`${process.env.API}/admin/createPost`, {
     method: "POST",
@@ -13,14 +10,14 @@ export const createPost = async (
       "Content-Type": "application/json",
       Cookie: cookieStore.toString(),
     },
-    body: JSON.stringify({ id, title, body, slug }),
+    body: JSON.stringify({ title, body, slug }),
   });
 
-  return response.text();
+  return { message: await response.text(), status: response.status };
 };
 
 export const editPost = async (
-  id: string,
+  id: number,
   title?: string,
   body?: string,
   slug?: string,
@@ -38,7 +35,7 @@ export const editPost = async (
   return response.text();
 };
 
-export const deletePost = async (id: string) => {
+export const deletePost = async (id: number) => {
   const cookieStore = await cookies();
   const response = await fetch(`${process.env.API}/admin/deletePost`, {
     method: "DELETE",

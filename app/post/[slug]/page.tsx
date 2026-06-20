@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { convertDateToString, getPost, Post } from "../api/postsAPI";
-import { getMe } from "../api/authAPI";
+import { convertDateToString, getPost, Post } from "../../api/postsAPI";
 import { notFound } from "next/navigation";
 
 export default async function PostPage({
@@ -13,18 +12,9 @@ export default async function PostPage({
   if (!post.title) {
     return notFound();
   }
-  const session = await getMe();
 
   return (
     <div className="flex flex-col flex-1">
-      <div className="p-5 flex w-full justify-center items-center">
-        <div className="md:w-full"></div>
-        <a href="/" className="md:text-center md:text-3xl text-2xl w-full">
-          Sage's Blog
-        </a>
-        <p className="text-xl text-end w-full">{session.username}</p>
-      </div>
-
       <div
         key={post.id}
         className="my-10 w-full rounded-2xl flex flex-col items-center"
@@ -36,6 +26,7 @@ export default async function PostPage({
             width={500}
             height={500}
             className="rounded-xl w-full h-auto mb-5"
+            loading="eager"
           />
           <h2 className="text-4xl font-semibold">{post.title}</h2>
           <p className="mb-5">

@@ -32,9 +32,6 @@ export default function Login() {
 
   return (
     <>
-      <div className="text-3xl text-center p-5">
-        <a href="/">Sage's Blog</a>
-      </div>
       <div className="flex flex-col flex-1 justify-center items-center p-10">
         <h1 className="text-5xl font-bold mb-10">Login</h1>
         <form
