@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { convertDateToString, getPost, Post } from "../../api/postsAPI";
+import { convertDateToString, getPost, Post } from "../../../api/postsAPI";
 import { notFound } from "next/navigation";
 
 export default async function PostPage({

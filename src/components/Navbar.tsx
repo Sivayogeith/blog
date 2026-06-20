@@ -1,4 +1,4 @@
-import { getMe } from "@/app/api/authAPI";
+import { getMe } from "@/src/api/authAPI";
 
 export default async function Navbar() {
   const session = await getMe();

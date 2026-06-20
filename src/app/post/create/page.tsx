@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { SubmitEvent, useState } from "react";
 
 import * as commands from "@uiw/react-md-editor/commands";
-import { createPost } from "@/app/api/adminAPI";
+import { createPost } from "@/src/api/adminAPI";
 import { redirect } from "next/navigation";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });

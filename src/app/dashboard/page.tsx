@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
-import { getMe } from "../api/authAPI";
-import { convertDateToString, getPosts, Post } from "../api/postsAPI";
+import { getMe } from "../../api/authAPI";
+import { convertDateToString, getPosts, Post } from "../../api/postsAPI";
 import Image from "next/image";
-import PlusIcon from "@/components/PlusIcon";
-import DeleteButton from "@/components/DeleteButton";
+import PlusIcon from "@/src/components/PlusIcon";
+import DeleteButton from "@/src/components/DeleteButton";
 
 export default async function Dashboard() {
   const session = await getMe();
@@ -48,9 +48,11 @@ export default async function Dashboard() {
                   dangerouslySetInnerHTML={{ __html: post.body }}
                 />
                 <div className="pt-4 flex gap-2">
-                  <button className="border border-secondary bg-pale-dark px-5 py-2 rounded-lg">
+                  <a className="border border-secondary bg-pale-dark px-5 py-2 rounded-lg" 
+                  href={`/post/${post.slug}/edit`}
+                  >
                     Edit
-                  </button>
+                  </a>
                   <DeleteButton id={post.id}/>
                 </div>
               </div>

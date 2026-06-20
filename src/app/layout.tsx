@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Saira } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/src/components/Navbar";
 
 const saira = Saira({
   display: "swap",

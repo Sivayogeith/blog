@@ -1,6 +1,6 @@
 "use client";
 import { SubmitEvent, useState } from "react";
-import { login } from "../api/authAPI";
+import { login } from "../../api/authAPI";
 import { redirect } from "next/navigation";
 
 export default function Login() {

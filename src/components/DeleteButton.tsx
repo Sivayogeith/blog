@@ -1,6 +1,6 @@
 "use client";
 
-import { deletePost } from "@/app/api/adminAPI";
+import { deletePost } from "@/src/api/adminAPI";
 import { useRouter } from "next/navigation";
 
 export default function DeleteButton(props: { id: number }) {

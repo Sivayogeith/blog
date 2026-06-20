@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { convertDateToString, getPosts, Post } from "./api/postsAPI";
+import { convertDateToString, getPosts, Post } from "../api/postsAPI";
 
 export default async function Home() {
   const posts: Post[] = await getPosts();
