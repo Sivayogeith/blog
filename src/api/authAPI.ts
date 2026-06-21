@@ -46,3 +46,13 @@ export const getMe = async (): Promise<SessionData> => {
   console.log(response.text());
   return {} as SessionData;
 };
+
+export const logout = async (): Promise<string> => {
+  const cookieStore = await cookies();
+  const response = await fetch(`${process.env.API}/auth/logout`, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return response.text();
+};
