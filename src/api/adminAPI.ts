@@ -32,7 +32,7 @@ export const editPost = async (
     body: JSON.stringify({ id, title, body, slug }),
   });
 
-  return response.text();
+  return { message: await response.text(), status: response.status };
 };
 
 export const deletePost = async (id: number) => {

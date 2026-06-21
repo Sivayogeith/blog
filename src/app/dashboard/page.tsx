@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { getMe } from "../../api/authAPI";
-import { convertDateToString, getPosts, Post } from "../../api/postsAPI";
+import { getPosts, Post } from "../../api/postsAPI";
+import { convertDateToString } from "@/src/utils/postUtils";
+
 import Image from "next/image";
 import PlusIcon from "@/src/components/PlusIcon";
 import DeleteButton from "@/src/components/DeleteButton";
