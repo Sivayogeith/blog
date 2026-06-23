@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { getPost, Post } from "../../../api/postsAPI";
 import { convertDateToString } from "@/src/utils/postUtils";
 import { notFound } from "next/navigation";
+import PostPageImage from "@/src/components/PostPageImage";
 
 export default async function PostPage({
   params,
@@ -10,6 +10,7 @@ export default async function PostPage({
 }) {
   const { slug } = await params;
   const post: Post = await getPost(slug);
+
   if (!post.title) {
     return notFound();
   }
@@ -21,14 +22,8 @@ export default async function PostPage({
         className="my-10 w-full rounded-2xl flex flex-col items-center"
       >
         <div className="text-start md:w-[55vw] md:p-0 w-full px-5">
-          <Image
-            src="/cats.png"
             alt="cats"
-            width={500}
-            height={500}
-            className="rounded-xl w-full h-auto mb-5"
-            loading="eager"
-          />
+          <PostPageImage />
           <h2 className="text-4xl font-semibold">{post.title}</h2>
           <p className="mb-5">
             {convertDateToString(post.created_at)} • {post.readingTime}

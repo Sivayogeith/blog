@@ -35,7 +35,7 @@
 }
 
 body {
-  background: var(--primary);
+  @apply bg-linear-to-r from-dark via-darker to-darkest;
 }
 
 .body h1 {
@@ -80,5 +80,14 @@ button:hover {
   100% {
     width: 0%;
     margin-left: 100%;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

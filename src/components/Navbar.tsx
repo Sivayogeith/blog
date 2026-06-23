@@ -1,5 +1,5 @@
 import { getMe, logout } from "@/src/api/authAPI";
-import LogoutIcon from "./LogoutIcon";
+import LogoutIcon from "./icons/LogoutIcon";
 
 export default async function Navbar() {
   const session = await getMe();
