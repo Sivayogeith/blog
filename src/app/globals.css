@@ -66,6 +66,10 @@ button:hover {
   @apply cursor-pointer
 }
 
+.adminBtn {
+  @apply border border-secondary bg-linear-to-tr from-pale-dark from-5% via-dark via-40% to-darker px-5 py-2 w-full;
+}
+
 @keyframes loading {
   0% {
     width: 0%;

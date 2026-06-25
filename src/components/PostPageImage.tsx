@@ -4,7 +4,6 @@ import { useState } from "react";
 
 export default function PostPageImage ()  {
   const [loaded, setLoaded] = useState(false);
-  
   return (
     <Image
       src="/cats.png"

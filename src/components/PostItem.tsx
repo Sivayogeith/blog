@@ -4,9 +4,8 @@ import Image from "next/image";
 import { useState } from "react";
 import { Post } from "../api/postsAPI";
 import { convertDateToString } from "../utils/postUtils";
-import DeleteButton from "./DeleteButton";
 
-export default function PostItem(props: { post: Post; admin?: boolean }) {
+export default function PostItem(props: { post: Post }) {
   const { post } = props;
   const [loaded, setLoaded] = useState(false);
 
@@ -29,19 +28,6 @@ export default function PostItem(props: { post: Post; admin?: boolean }) {
             className="lg:text-xl md:text-lg text-sm body-preview"
             dangerouslySetInnerHTML={{ __html: post.body }}
           />
-          {props.admin ? (
-            <div className="pt-4 flex gap-2 text-center">
-              <a
-                className="border border-secondary bg-linear-to-bl from-pale-dark to-dark px-5 py-2 rounded-lg lg:w-auto w-full"
-                href={`/post/${post.slug}/edit`}
-              >
-                Edit
-              </a>
-              <DeleteButton id={post.id} />
-            </div>
-          ) : (
-            ""
-          )}
         </div>
         <Image
           src="/cats.png"
