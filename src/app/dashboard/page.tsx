@@ -7,6 +7,7 @@ import PlusIcon from "@/src/components/icons/PlusIcon";
 import DeleteButton from "@/src/components/DeleteButton";
 import { convertDateToString } from "@/src/utils/postUtils";
 import PostPageImage from "@/src/components/PostPageImage";
+import EditIcon from "@/src/components/icons/EditIcon";
 
 export default async function Dashboard() {
   const session = await getMe();
@@ -39,7 +40,7 @@ export default async function Dashboard() {
             >
               <div className="flex flex-col items-center">
                 <a
-                  className="text-2xl font-semibold m-5"
+                  className="text-2xl font-semibold mt-5"
                   href={`/post/${post.slug}`}
                 >
                   {post.title}
@@ -57,11 +58,12 @@ export default async function Dashboard() {
                 className="text-md body h-20 mx-5 text-ellipsis overflow-hidden"
                 dangerouslySetInnerHTML={{ __html: post.body }}
               />
-              <div className="pt-4 flex text-center">
+              <div className="pt-4 flex">
                 <a
                   className="adminBtn rounded-bl-xl"
                   href={`/post/${post.slug}/edit`}
                 >
+                  <EditIcon className="size-6"/>
                   Edit
                 </a>
                 <DeleteButton id={post.id} />

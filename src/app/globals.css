@@ -67,7 +67,7 @@ button:hover {
 }
 
 .adminBtn {
-  @apply border border-secondary bg-linear-to-tr from-pale-dark from-5% via-dark via-40% to-darker px-5 py-2 w-full;
+  @apply border border-secondary bg-linear-to-tr from-pale-dark from-5% via-dark via-40% to-darker px-5 py-2 w-full flex justify-center gap-1;
 }
 
 @keyframes loading {

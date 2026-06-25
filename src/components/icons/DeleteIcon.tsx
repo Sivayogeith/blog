@@ -1,4 +1,4 @@
-export default function LogoutIcon(props: any) {
+export default function DeleteIcon(props: any) {
   return <svg
       xmlns="http://www.w3.org/2000/svg"
       width="1em"
@@ -9,7 +9,8 @@ export default function LogoutIcon(props: any) {
       <path d="M0 0h24v24H0z" fill="none" />
       <path
         fill="currentColor"
-        d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"
+        d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z"
       />
     </svg>
+
 }
