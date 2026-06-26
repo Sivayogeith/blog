@@ -35,7 +35,7 @@
 }
 
 body {
-  @apply bg-linear-to-r from-dark via-darker to-darkest;
+  @apply bg-linear-to-r dark:from-dark dark:via-darker dark:to-darkest from-lightest to-lighter;
 }
 
 .body h1 {
@@ -67,7 +67,7 @@ button:hover {
 }
 
 .adminBtn {
-  @apply border border-secondary bg-linear-to-tr from-pale-dark from-5% via-dark via-40% to-darker px-5 py-2 w-full flex justify-center gap-1;
+  @apply border-t border-secondary bg-linear-to-tr dark:from-pale-dark from-lightest dark:from-5% dark:via-dark dark:via-40% dark:to-darker to-lighter px-5 py-2 w-full flex justify-center gap-1;
 }
 
 @keyframes loading {

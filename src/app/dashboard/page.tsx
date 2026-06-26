@@ -24,19 +24,19 @@ export default async function Dashboard() {
           <div className="flex justify-between items-center mb-5">
             <p className="text-2xl">Posts</p>
             <a
-              className="border border-secondary p-1 rounded-lg"
+              className="border dark:border-secondary border-dark p-1 rounded-lg"
               href="/post/create"
             >
-              <PlusIcon className="text-secondary text-2xl" />
+              <PlusIcon className="dark:text-secondary text-dark text-2xl" />
             </a>
           </div>
-          <hr className="text-lightest" />
+          <hr className="dark:text-lightest text-dark" />
         </div>
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 w-[95vw]">
           {posts.map(async (post: Post) => (
             <div
               key={post.id}
-              className={`m-3 border border-secondary rounded-xl bg-darker`}
+              className={`m-3 border border-secondary rounded-xl dark:bg-darker bg-lightest`}
             >
               <div className="flex flex-col items-center">
                 <a

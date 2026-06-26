@@ -14,7 +14,7 @@ export default function PostItem(props: { post: Post }) {
       <div
         key={post.id}
         data-opacity="0"
-        className={`p-10 my-5 mx-10 lg:w-[80vw] w-[90vw] h-full border border-secondary rounded-2xl flex justify-between lg:flex-row flex-col-reverse gap-10 ${loaded ? "opacity-100" : "opacity-0"} transition-opacity duration-300 bg-darker`}
+        className={`p-10 my-5 mx-10 lg:w-[80vw] w-[90vw] h-full border border-secondary rounded-2xl flex justify-between lg:flex-row flex-col-reverse gap-10 ${loaded ? "opacity-100" : "opacity-0"} transition-opacity duration-300 dark:bg-darker bg-lightest`}
       >
         <div className="lg:w-3/4">
           <a className="text-4xl font-semibold" href={`/post/${post.slug}`}>

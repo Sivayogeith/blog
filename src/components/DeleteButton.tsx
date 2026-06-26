@@ -8,7 +8,7 @@ export default function DeleteButton(props: { id: number }) {
     const router = useRouter();
   return (
     <button
-      className="adminBtn rounded-br-xl dark:text-red-600 text-red-400"
+      className="adminBtn rounded-br-xl dark:text-red-600 text-red-800 border-l"
       onClick={async () => {
         await deletePost(props.id);
         router.refresh();
