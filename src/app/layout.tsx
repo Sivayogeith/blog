@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Saira } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/src/components/Navbar";
+import { ThemeProvider } from "@teispace/next-themes";
 
 const saira = Saira({
   display: "swap",
@@ -19,10 +20,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${saira.className} h-full antialiased`}>
+    <html lang="en" className={`${saira.className} h-full antialiased`} suppressHydrationWarning >
       <body className="min-h-full flex flex-col">
-        <Navbar />
-        {children}
+        <ThemeProvider attribute="data-theme">
+          <Navbar />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

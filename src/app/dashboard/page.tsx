@@ -20,7 +20,7 @@ export default async function Dashboard() {
   return (
     <>
       <div className="flex flex-col flex-1 items-center">
-        <div className="m-5 w-[95vw] h-full flex justify-between flex-col">
+        <div className="m-5 md:w-[95vw] w-[90vw] h-full flex justify-between flex-col">
           <div className="flex justify-between items-center mb-5">
             <p className="text-2xl">Posts</p>
             <a
@@ -40,7 +40,7 @@ export default async function Dashboard() {
             >
               <div className="flex flex-col items-center">
                 <a
-                  className="text-2xl font-semibold mt-5"
+                  className="text-2xl font-semibold mt-5 text-center"
                   href={`/post/${post.slug}`}
                 >
                   {post.title}

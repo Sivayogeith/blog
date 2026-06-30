@@ -13,29 +13,26 @@
   --color-light: #783dae;
   --color-lighter: #b283dd;
   --color-lightest: #d3b4f0;
-  --color-white: #decdf0;
 
   --animate-loading: loading 2s linear infinite;
 }
 
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --primary: var(--color-darkest);
-    --secondary: var(--color-lighter);
-    color: #fff;
-  }
+:root {
+  --primary: var(--color-white);
+  --secondary: var(--color-deep-light);
+  color: #000;
 }
-@media (prefers-color-scheme: light) {
-  :root {
-    --primary: var(--color-white);
-    --secondary: var(--color-deep-light);
-    color: #000;
-  }
+
+[data-theme="dark"] {
+  --primary: var(--color-darkest);
+  --secondary: var(--color-lighter);
+  color: #fff;
 }
 
 body {
-  @apply bg-linear-to-r dark:from-dark dark:via-darker dark:to-darkest from-lightest to-lighter;
+  @apply bg-linear-to-r dark:from-dark dark:via-darker dark:to-darkest from-lightest to-lighter dark:text-white;
 }
 
 .body h1 {
@@ -59,15 +56,19 @@ input {
 }
 
 input:focus {
-  @apply border-[1.5px] dark:border-light border-darkest outline-none ;
+  @apply border-[1.5px] dark:border-light border-darkest outline-none;
 }
 
 button:hover {
-  @apply cursor-pointer
+  @apply cursor-pointer;
 }
 
 .adminBtn {
   @apply border-t border-secondary bg-linear-to-tr dark:from-pale-dark from-lightest dark:from-5% dark:via-dark dark:via-40% dark:to-darker to-lighter px-5 py-2 w-full flex justify-center gap-1;
+}
+
+select:focus {
+  @apply border-none outline-none;
 }
 
 @keyframes loading {
