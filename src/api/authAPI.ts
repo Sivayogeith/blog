@@ -8,6 +8,9 @@ export interface SessionData {
   adminId: string;
 }
 
+export const getCookies = async (): Promise<string> =>
+  (await cookies()).toString() || "";
+
 export const login = async (
   username: string,
   password: string,
@@ -33,11 +36,22 @@ export const login = async (
   return { message: await response.text(), status: response.status };
 };
 
+export const editProfile = async (username: string) => {
+  const response = await fetch(`${process.env.API}/auth/edit`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: await getCookies(),
+    },
+    body: JSON.stringify({ username }),
+  });
+  return { message: await response.text(), status: response.status };
+};
+
 export const getMe = async (): Promise<SessionData> => {
-  const cookieStore = await cookies();
   const response = await fetch(`${process.env.API}/auth/me`, {
     headers: {
-      Cookie: cookieStore.toString(),
+      Cookie: await getCookies(),
     },
   });
   if (response.status == 200) {
@@ -48,10 +62,9 @@ export const getMe = async (): Promise<SessionData> => {
 };
 
 export const logout = async (): Promise<string> => {
-  const cookieStore = await cookies();
   const response = await fetch(`${process.env.API}/auth/logout`, {
     headers: {
-      Cookie: cookieStore.toString(),
+      Cookie: await getCookies(),
     },
   });
   return response.text();

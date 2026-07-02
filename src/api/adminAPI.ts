@@ -1,14 +1,17 @@
-"use server"
+"use server";
 
-import { cookies } from "next/headers";
+import { getCookies } from "./authAPI";
 
-export const createPost = async (title: string, body: string, slug: string): Promise<{ message: string; status: number }> => {
-  const cookieStore = await cookies();
+export const createPost = async (
+  title: string,
+  body: string,
+  slug: string,
+): Promise<{ message: string; status: number }> => {
   const response = await fetch(`${process.env.API}/admin/createPost`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Cookie: cookieStore.toString(),
+      Cookie: await getCookies(),
     },
     body: JSON.stringify({ title, body, slug }),
   });
@@ -22,12 +25,11 @@ export const editPost = async (
   body?: string,
   slug?: string,
 ) => {
-  const cookieStore = await cookies();
   const response = await fetch(`${process.env.API}/admin/editPost`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Cookie: cookieStore.toString(),
+      Cookie: await getCookies(),
     },
     body: JSON.stringify({ id, title, body, slug }),
   });
@@ -36,12 +38,11 @@ export const editPost = async (
 };
 
 export const deletePost = async (id: number) => {
-  const cookieStore = await cookies();
   const response = await fetch(`${process.env.API}/admin/deletePost`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      Cookie: cookieStore.toString(),
+      Cookie: await getCookies(),
     },
     body: JSON.stringify({ id }),
   });

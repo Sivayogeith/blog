@@ -8,6 +8,7 @@ import DashboardIcon from "../components/icons/DashboardIcon";
 import LightIcon from "../components/icons/LightIcon";
 import DarkIcon from "../components/icons/DarkIcon";
 import { ThemedIcon } from "@teispace/next-themes";
+import EditIcon from "../components/icons/EditIcon";
 
 export const adminDropdownItems = [
   {
@@ -24,6 +25,11 @@ export const adminDropdownItems = [
   {
     name: "divider",
     divider: true,
+  },
+  {
+    name: "Edit Profile",
+    icon: <EditIcon />,
+    onClick: () => redirect("/profile/edit")
   },
   {
     name: "Logout",
