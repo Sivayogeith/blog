@@ -1,13 +1,16 @@
 "use client";
 
 import { editProfile, getMe, SessionData } from "@/src/api/authAPI";
-import { SubmitEvent, useEffect, useState } from "react";
+import { SubmitEvent, useEffect, useRef, useState } from "react";
 import { redirect, useRouter } from "next/navigation";
+import LoadingButton, {
+  LoadingButtonElement,
+} from "@/src/components/LoadingButton";
 
 export default function EditProfile() {
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
   const [session, setSession] = useState<SessionData>();
+  const buttonRef = useRef<LoadingButtonElement>(null);
   const router = useRouter();
 
   const onSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -19,9 +22,9 @@ export default function EditProfile() {
       setMessage("Please enter a username!");
       return;
     }
-    setLoading(true);
+    buttonRef.current?.setLoading(true);
     const result = await editProfile(username.toString());
-    setLoading(false);
+    buttonRef.current?.setLoading(false);
 
     setMessage(result.message);
     if (result.status == 200) {
@@ -45,17 +48,13 @@ export default function EditProfile() {
         <label htmlFor="username" className="text-lg font-semibold">
           Username
         </label>
-        <input type="text" id="username" name="username" defaultValue={session?.username}/>
-        <button className="text-xl bg-linear-65 from-light to-deep-light mt-5 rounded-sm font-bold text-white flex flex-col items-stretch">
-          <div
-            className={`w-full bg-pale-dark h-1 ${loading ? "" : "invisible"}`}
-          >
-            <div
-              className={`h-full bg-secondary ${loading ? "animate-loading" : ""}`}
-            ></div>
-          </div>
-          <span className="pt-1 pb-2">Submit</span>
-        </button>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          defaultValue={session?.username}
+        />
+        <LoadingButton ref={buttonRef} />
         <p className="text-center mt-1">{message}</p>
       </form>
     </div>

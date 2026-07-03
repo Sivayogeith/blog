@@ -1,11 +1,14 @@
 "use client";
-import { SubmitEvent, useState } from "react";
+import { SubmitEvent, useRef, useState } from "react";
 import { login } from "../../api/authAPI";
 import { redirect } from "next/navigation";
+import LoadingButton, {
+  LoadingButtonElement,
+} from "@/src/components/LoadingButton";
 
 export default function Login() {
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const buttonRef = useRef<LoadingButtonElement>(null);
 
   const onSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -19,9 +22,9 @@ export default function Login() {
       return;
     }
 
-    setLoading(true);
+    buttonRef.current?.setLoading(true);
     const result = await login(username.toString(), password.toString());
-    setLoading(false);
+    buttonRef.current?.setLoading(false);
     setMessage(result.message);
 
     if (result.status == 200) {
@@ -60,16 +63,7 @@ export default function Login() {
             autoComplete="current-password"
           />
 
-          <button className="text-xl bg-linear-65 from-light to-deep-light mt-10 rounded-sm font-bold text-white flex flex-col items-stretch">
-            <div
-              className={`w-full bg-pale-dark h-1 ${loading ? "" : "invisible"}`}
-            >
-              <div
-                className={`h-full bg-secondary ${loading ? "animate-loading" : ""}`}
-              ></div>
-            </div>
-            <span className="pt-1 pb-2">Submit</span>
-          </button>
+          <LoadingButton ref={buttonRef} />
         </form>
         <p>{message}</p>
       </div>

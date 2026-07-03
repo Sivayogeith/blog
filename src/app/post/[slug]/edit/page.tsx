@@ -3,10 +3,11 @@
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
-import { SubmitEvent, useEffect, useState } from "react";
+import { SubmitEvent, useEffect, useRef, useState } from "react";
 import { getPost, Post } from "@/src/api/postsAPI";
 import { redirect, useParams } from "next/navigation";
 import { editPost } from "@/src/api/adminAPI";
+import LoadingButton, { LoadingButtonElement } from "@/src/components/LoadingButton";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -14,8 +15,8 @@ export default function EditPost() {
   const params = useParams<{ slug: string }>();
   const [body, setBody] = useState("**meow**");
   const [data, setData] = useState<Post>();
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const buttonRef = useRef<LoadingButtonElement>(null)
 
   const onSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -33,14 +34,14 @@ export default function EditPost() {
       return;
     }
 
-    setLoading(true);
+    buttonRef.current?.setLoading(true);
     const result = await editPost(
       data.id,
       title.toString(),
       body,
       slug.toString(),
     );
-    setLoading(false);
+    buttonRef.current?.setLoading(false);
 
     setMessage(result.message);
 
@@ -92,16 +93,7 @@ export default function EditPost() {
             className="w-full"
           />
 
-          <button className="text-xl bg-linear-65 from-light to-deep-light mt-10 rounded-sm font-bold text-white flex flex-col items-stretch">
-            <div
-              className={`w-full bg-pale-dark h-1 ${loading ? "" : "invisible"}`}
-            >
-              <div
-                className={`h-full bg-secondary ${loading ? "animate-loading" : ""}`}
-              ></div>
-            </div>
-            <span className="pt-1 pb-2">Submit</span>
-          </button>
+          <LoadingButton ref={buttonRef} />
           <p className="text-center mt-5">{message}</p>
         </form>
       </div>
