@@ -2,7 +2,7 @@
 
 import { editProfile, getMe, SessionData } from "@/src/api/authAPI";
 import { SubmitEvent, useEffect, useRef, useState } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import LoadingButton, {
   LoadingButtonElement,
 } from "@/src/components/LoadingButton";
@@ -30,7 +30,7 @@ export default function EditProfile() {
     if (result.status == 200) {
       setMessage(result.message + ", Please wait a second...");
       router.refresh();
-      redirect("/dashboard");
+      router.push("/dashboard");
     }
   };
 

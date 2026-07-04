@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Saira } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/src/components/Navbar";
 import { ThemeProvider } from "@teispace/next-themes";
+import NextTopLoader from 'nextjs-toploader';
+import "./globals.css";
+
+import Navbar from "@/src/components/Navbar";
 
 const saira = Saira({
   display: "swap",
@@ -23,6 +25,7 @@ export default function RootLayout({
     <html lang="en" className={`${saira.className} h-full antialiased`} suppressHydrationWarning >
       <body className="min-h-full flex flex-col">
         <ThemeProvider attribute="data-theme">
+          <NextTopLoader showSpinner={false} color={'#62229d'}/>
           <Navbar />
           {children}
         </ThemeProvider>

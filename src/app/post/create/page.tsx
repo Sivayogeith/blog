@@ -2,16 +2,18 @@
 
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
+import * as commands from "@uiw/react-md-editor/commands";
 import dynamic from "next/dynamic";
 import { SubmitEvent, useState } from "react";
 
-import * as commands from "@uiw/react-md-editor/commands";
 import { createPost } from "@/src/api/adminAPI";
-import { redirect } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 export default function CreatePost() {
+  const router = useRouter();
+
   const [body, setBody] = useState("**meow**");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,7 +37,7 @@ export default function CreatePost() {
 
     if (result.status == 200) {
       setMessage(result.message + ", Please wait a second...");
-      redirect("/dashboard");
+      router.push("/dashboard");
     }
   };
   return (

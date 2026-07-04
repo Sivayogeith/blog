@@ -1,12 +1,10 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getMe } from "../../api/authAPI";
 import { getPosts, Post } from "../../api/postsAPI";
-import Image from "next/image";
 
 import PlusIcon from "@/src/components/icons/PlusIcon";
 import DeleteButton from "@/src/components/DeleteButton";
-import { convertDateToString } from "@/src/utils/postUtils";
-import PostPageImage from "@/src/components/PostPageImage";
 import EditIcon from "@/src/components/icons/EditIcon";
 
 export default async function Dashboard() {

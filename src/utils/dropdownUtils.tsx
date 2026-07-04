@@ -1,25 +1,46 @@
-import { redirect } from "next/navigation";
-import { JSX } from "react/jsx-runtime";
-
-import { logout } from "../api/authAPI";
-
 import LogoutIcon from "../components/icons/LogoutIcon";
 import DashboardIcon from "../components/icons/DashboardIcon";
 import LightIcon from "../components/icons/LightIcon";
 import DarkIcon from "../components/icons/DarkIcon";
-import { ThemedIcon } from "@teispace/next-themes";
 import EditIcon from "../components/icons/EditIcon";
+import { ThemedIcon, useTheme } from "@teispace/next-themes";
 
-export const adminDropdownItems = [
+import { logout } from "../api/authAPI";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { ReactNode } from "react";
+
+interface Dropdown {
+  name: string;
+  onClick?: (router: AppRouterInstance, theme: ReturnType<typeof useTheme>) => Promise<void> | void;
+  icon?: ReactNode;
+  divider?: boolean;
+}
+
+export const adminDropdownItems: Dropdown[] = [
   {
     name: "Dashboard",
     icon: <DashboardIcon />,
-    onClick: () => redirect("/dashboard"),
+    onClick: (r) => r.push("/dashboard"),
   },
   {
     name: "",
-    icon: <ThemedIcon variants={{light: <><LightIcon /> Light Mode</>, dark: <><DarkIcon /> Dark Mode</>}}/>,
-    onClick: (t: any) =>
+    icon: (
+      <ThemedIcon
+        variants={{
+          light: (
+            <>
+              <LightIcon /> Light Mode
+            </>
+          ),
+          dark: (
+            <>
+              <DarkIcon /> Dark Mode
+            </>
+          ),
+        }}
+      />
+    ),
+    onClick: (_, t) =>
       t.setTheme(t.resolvedTheme == "light" ? "dark" : "light"),
   },
   {
@@ -29,22 +50,15 @@ export const adminDropdownItems = [
   {
     name: "Edit Profile",
     icon: <EditIcon />,
-    onClick: () => redirect("/profile/edit")
+    onClick: (r) => r.push("/profile/edit"),
   },
   {
     name: "Logout",
     icon: <LogoutIcon />,
-    onClick: () => logout().then(() => redirect("/"))
+    onClick: (r) => logout().then(() => r.push("/")),
   },
 ];
 
-export const dropdownMap: {
-  [type: string]: {
-    name: string;
-    onClick?: (theme: any) => never | void;
-    icon?: JSX.Element;
-    divider?: boolean;
-  }[];
-} = {
+export const dropdownMap: { [type: string]: Dropdown[] } = {
   admin: adminDropdownItems,
 };

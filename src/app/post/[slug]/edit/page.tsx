@@ -3,20 +3,26 @@
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { SubmitEvent, useEffect, useRef, useState } from "react";
+
 import { getPost, Post } from "@/src/api/postsAPI";
-import { redirect, useParams } from "next/navigation";
 import { editPost } from "@/src/api/adminAPI";
-import LoadingButton, { LoadingButtonElement } from "@/src/components/LoadingButton";
+import LoadingButton, {
+  LoadingButtonElement,
+} from "@/src/components/LoadingButton";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 export default function EditPost() {
   const params = useParams<{ slug: string }>();
+  const router = useRouter();
+
   const [body, setBody] = useState("**meow**");
   const [data, setData] = useState<Post>();
   const [message, setMessage] = useState("");
-  const buttonRef = useRef<LoadingButtonElement>(null)
+  const buttonRef = useRef<LoadingButtonElement>(null);
 
   const onSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -47,7 +53,7 @@ export default function EditPost() {
 
     if (result.status == 200) {
       setMessage(result.message + ", Please wait a second...");
-      redirect("/dashboard");
+      router.push("/dashboard");
     }
   };
 

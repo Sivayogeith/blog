@@ -1,7 +1,7 @@
 "use client";
 
 import { deletePost } from "@/src/api/adminAPI";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import DeleteIcon from "./icons/DeleteIcon";
 
 export default function DeleteButton(props: { id: number }) {

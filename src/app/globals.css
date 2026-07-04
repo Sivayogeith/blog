@@ -29,6 +29,9 @@
   --primary: var(--color-darkest);
   --secondary: var(--color-lighter);
   color: #fff;
+  #nprogress .bar {
+    background: var(--secondary);
+  }
 }
 
 body {

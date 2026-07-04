@@ -4,15 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import { dropdownMap } from "../utils/dropdownUtils";
 import { SessionData } from "../api/authAPI";
 import { useTheme } from "@teispace/next-themes";
+import { useRouter } from "nextjs-toploader/app";
 
 export default function Dropdown(props: {
   itemsId: string;
   session: SessionData;
 }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const theme = useTheme();
+
   const [isOpened, setDropdown] = useState(false);
   const items = dropdownMap[props.itemsId];
-  const theme = useTheme();
 
   useEffect(() =>
     document.addEventListener("click", (event) => {
@@ -36,7 +39,7 @@ export default function Dropdown(props: {
               <hr className="dark:text-lightest text-dark my-1" />
             ) : (
               <button
-                onClick={() => (item.onClick ? item.onClick(theme) : "")}
+                onClick={() => (item.onClick ? item.onClick(router, theme) : "")}
                 className="mb-1 text-lg"
               >
                 {item.icon ? (

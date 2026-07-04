@@ -1,14 +1,16 @@
 "use client";
 import { SubmitEvent, useRef, useState } from "react";
 import { login } from "../../api/authAPI";
-import { redirect } from "next/navigation";
 import LoadingButton, {
   LoadingButtonElement,
 } from "@/src/components/LoadingButton";
+import { useRouter } from "nextjs-toploader/app";
 
 export default function Login() {
-  const [message, setMessage] = useState("");
+  const router = useRouter()
   const buttonRef = useRef<LoadingButtonElement>(null);
+
+  const [message, setMessage] = useState("");
 
   const onSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,7 +31,7 @@ export default function Login() {
 
     if (result.status == 200) {
       setMessage(result.message + ", Please wait a second...");
-      redirect("/dashboard");
+      router.push("/dashboard");
     }
   };
 
