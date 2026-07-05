@@ -19,6 +19,16 @@ export default async function Dashboard() {
     <>
       <div className="flex flex-col flex-1 items-center">
         <div className="m-5 md:w-[95vw] w-[90vw] h-full flex justify-between flex-col">
+          <p className="text-2xl">Stats</p>
+          <hr className="dark:text-lightest text-dark" />
+        </div>
+        <div className="flex">
+          <div className="flex flex-col text-center">
+            <p>Number of Posts</p>
+            <span className="text-4xl">{posts.length}</span>
+          </div>
+        </div>
+        <div className="m-5 md:w-[95vw] w-[90vw] h-full flex justify-between flex-col">
           <div className="flex justify-between items-center mb-5">
             <p className="text-2xl">Posts</p>
             <a
@@ -61,7 +71,7 @@ export default async function Dashboard() {
                   className="adminBtn rounded-bl-xl"
                   href={`/post/${post.slug}/edit`}
                 >
-                  <EditIcon className="size-6"/>
+                  <EditIcon className="size-6" />
                   Edit
                 </a>
                 <DeleteButton id={post.id} />
