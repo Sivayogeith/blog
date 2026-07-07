@@ -13,14 +13,9 @@ import {
 import { getStats } from "@/src/api/adminAPI";
 
 export default async function Dashboard() {
-  const session = await getMe();
   const posts = await getPosts();
   const stats = await getStats();
-  const authenticated = !!session.username;
 
-  if (!authenticated) {
-    return notFound();
-  }
   return (
     <>
       <div className="flex flex-col flex-1 items-center">
