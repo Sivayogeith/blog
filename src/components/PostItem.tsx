@@ -21,7 +21,7 @@ export default function PostItem(props: { post: Post }) {
             {post.title}
           </a>
           <p className="mb-5">
-            {convertDateToString(post.created_at)} • {post.readingTime}
+            {convertDateToString(post.created_at)} • {post.stats.readingTime}
           </p>
 
           <div

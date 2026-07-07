@@ -25,7 +25,7 @@ export default async function PostPage({
           <PostPageImage />
           <h2 className="text-4xl font-semibold">{post.title}</h2>
           <p className="mb-5">
-            {convertDateToString(post.created_at)} • {post.readingTime}
+            {convertDateToString(post.created_at)} • {post.stats.readingTime}
           </p>
           <div
             className="md:text-xl text-md body"

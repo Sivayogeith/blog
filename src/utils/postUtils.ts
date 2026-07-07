@@ -6,10 +6,15 @@ export const convertDateToString = (date: Date) => {
   });
 };
 
-export const calculateReadingTime = (text: string) => {
-  const wordsPerMinute = 225
-  const noOfWords = text.split(/\s/g).length
-  const minutes = noOfWords / wordsPerMinute
-  const readTime = Math.ceil(minutes)
-  return `${readTime} minute read`
-}
+export const convertMinutesToString = (mins: number, compact: boolean = false) => (mins < 60 ? `${mins} ${compact ? 'm' : 'minute'}` : `${(mins / 60).toFixed(1)} ${compact ? 'h' : 'hour'}`) + (compact ? '' : ' read');
+ 
+export const calculateReadingTime = (text: string, string: boolean = false) => {
+  const wordsPerMinute = 225;
+  const minutes = calculateWordCount(text) / wordsPerMinute;
+  const readTime = Math.ceil(minutes);
+  return string ? convertMinutesToString(readTime) : readTime;
+};
+
+export const calculateWordCount = (text: string) => {
+  return text.split(/\s+/).length;
+};
