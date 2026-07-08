@@ -7,7 +7,7 @@ import { convertDateToString, convertMinutesToString } from "../utils/postUtils"
 
 export default function PostItem(props: { post: Post }) {
   const { post } = props;
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(post.image ? false : true);
 
   return (
     <>
@@ -29,15 +29,17 @@ export default function PostItem(props: { post: Post }) {
             dangerouslySetInnerHTML={{ __html: post.body }}
           />
         </div>
-        <Image
-          src="/cats.png"
-          alt="cats"
+        {post.image &&
+          <Image
+          src={post.image}
+          alt={`${post.title}'s image cover`}
           width={500}
           height={500}
           className="rounded-xl lg:w-[40%] w-full h-full"
           onLoad={() => setLoaded(!loaded)}
           loading="eager"
-        />
+          />
+        }
       </div>
     </>
   );

@@ -3,17 +3,6 @@
 import { remark } from "remark";
 import html from "remark-html";
 
-export interface RawPost {
-  id: number;
-  title: string;
-  body: string;
-  created_at: string;
-  slug: string;
-  stats: {
-    readingTime: number;
-    words: number;
-  };
-}
 
 export interface Post {
   id: number;
@@ -25,10 +14,11 @@ export interface Post {
     readingTime: number;
     words: number;
   };
+  image?: string;
 }
 
 const processPost = async (
-  post: RawPost,
+  post: Post,
   md: boolean = false,
   truncate: boolean = false,
 ): Promise<Post> => {
@@ -46,7 +36,7 @@ const processPost = async (
 export const getPosts = async (): Promise<Post[]> => {
   let response = await fetch(`${process.env.API}/posts`);
   if (response.status == 200) {
-    let posts: RawPost[] = await response.json();
+    let posts: Post[] = await response.json();
     return await Promise.all(
       posts.map((post) => processPost(post, false, true)),
     );
@@ -61,7 +51,7 @@ export const getPost = async (
 ): Promise<Post> => {
   let response = await fetch(`${process.env.API}/posts/${slug}`);
   if (response.status == 200) {
-    let post: RawPost = await response.json();
+    let post: Post = await response.json();
     return await processPost(post, md);
   }
   console.log(await response.text());

@@ -2,12 +2,12 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export default function PostPageImage ()  {
+export default function PostPageImage(props: { src: string; alt: string }) {
   const [loaded, setLoaded] = useState(false);
   return (
     <Image
-      src="/cats.png"
-      alt="cats"
+      src={props.src}
+      alt={props.alt}
       width={500}
       height={500}
       className={`rounded-xl w-full h-auto mb-5 ${loaded ? "opacity-100" : "opacity-0"} transition-opacity duration-300 bg-darker`}
@@ -15,4 +15,4 @@ export default function PostPageImage ()  {
       onLoad={() => setLoaded(!loaded)}
     />
   );
-};
+}
