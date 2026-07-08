@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Post } from "../api/postsAPI";
-import { convertDateToString } from "../utils/postUtils";
+import { convertDateToString, convertMinutesToString } from "../utils/postUtils";
 
 export default function PostItem(props: { post: Post }) {
   const { post } = props;
@@ -21,7 +21,7 @@ export default function PostItem(props: { post: Post }) {
             {post.title}
           </a>
           <p className="mb-5">
-            {convertDateToString(post.created_at)} • {post.stats.readingTime}
+            {convertDateToString(post.created_at)} • {convertMinutesToString(post.stats.readingTime)}
           </p>
 
           <div

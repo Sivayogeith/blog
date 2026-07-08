@@ -14,6 +14,7 @@ interface Dropdown {
   onClick?: (router: AppRouterInstance, theme: ReturnType<typeof useTheme>) => Promise<void> | void;
   icon?: ReactNode;
   divider?: boolean;
+  adminOnly?: boolean;
 }
 
 export const adminDropdownItems: Dropdown[] = [
@@ -21,6 +22,7 @@ export const adminDropdownItems: Dropdown[] = [
     name: "Dashboard",
     icon: <DashboardIcon />,
     onClick: (r) => r.push("/dashboard"),
+    adminOnly: true
   },
   {
     name: "",
@@ -55,7 +57,7 @@ export const adminDropdownItems: Dropdown[] = [
   {
     name: "Logout",
     icon: <LogoutIcon />,
-    onClick: (r) => logout().then(() => r.push("/")),
+    onClick: (r) => logout().then(() => {r.refresh(); r.push("/")}),
   },
 ];
 

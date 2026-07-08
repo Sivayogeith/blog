@@ -11,7 +11,7 @@ export default async function Navbar() {
         Sage's Blog
       </a>
       <div className="flex justify-end text-xl items-center gap-2 md:w-full">
-        {session.adminId ? <Dropdown itemsId={"admin"} session={session} /> : <ThemeButton />}
+        {session.userId ? <Dropdown itemsId={"admin"} session={session} /> : <><a href="/login" className="me-2">Login</a><ThemeButton /></>}
       </div>
     </div>
   );

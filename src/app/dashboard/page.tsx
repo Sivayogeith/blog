@@ -1,6 +1,4 @@
 import Image from "next/image";
-import { notFound } from "next/navigation";
-import { getMe } from "../../api/authAPI";
 import { getPosts, Post } from "../../api/postsAPI";
 
 import PlusIcon from "@/src/components/icons/PlusIcon";

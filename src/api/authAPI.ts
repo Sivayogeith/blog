@@ -5,7 +5,8 @@ import qs from "querystring";
 
 export interface SessionData {
   username: string;
-  adminId: string;
+  userId: string;
+  isAdmin: boolean
 }
 
 export const getCookies = async (): Promise<string> =>
