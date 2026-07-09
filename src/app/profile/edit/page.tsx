@@ -29,8 +29,8 @@ export default function EditProfile() {
     setMessage(result.message);
     if (result.status == 200) {
       setMessage(result.message + ", Please wait a second...");
-      router.refresh();
-      router.push("/dashboard");
+      window.location.href = "/"
+      router.replace("/");
     }
   };
 

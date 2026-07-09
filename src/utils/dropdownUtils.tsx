@@ -57,10 +57,12 @@ export const adminDropdownItems: Dropdown[] = [
   {
     name: "Logout",
     icon: <LogoutIcon />,
-    onClick: (r) => logout().then(() => {r.refresh(); r.push("/")}),
+    onClick: (r) => logout().then(() => {window.location.href = "/"; r.replace("/");}),
   },
 ];
 
 export const dropdownMap: { [type: string]: Dropdown[] } = {
   admin: adminDropdownItems,
 };
+
+export const hideNavbarRoutes: string[] = ["/login", "/register"]

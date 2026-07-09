@@ -1,31 +1,37 @@
 "use client";
-import { SubmitEvent, useRef, useState } from "react";
-import { login } from "../../api/authAPI";
+
+import { register } from "@/src/api/authAPI";
 import LoadingButton, {
   LoadingButtonElement,
 } from "@/src/components/LoadingButton";
 import { useRouter } from "nextjs-toploader/app";
+import { SubmitEvent, useRef, useState } from "react";
 
-export default function Login() {
+export default function Register() {
+  const [message, setMessage] = useState("");
   const router = useRouter();
   const buttonRef = useRef<LoadingButtonElement>(null);
-
-  const [message, setMessage] = useState("");
 
   const onSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const form = new FormData(event.currentTarget);
-    const username = form.get("username");
-    const password = form.get("password");
+    const form = new FormData(event.target);
+    const username = form.get("username"),
+      password = form.get("password"),
+      confirmPassword = form.get("confirmPassword");
 
-    if (!username || !password) {
-      setMessage("Please enter username and password!");
+    if (!username || !password || !confirmPassword) {
+      setMessage("Please enter all the fields!");
+      return;
+    }
+
+    if (confirmPassword !== password) {
+      setMessage("The passwords don't match!");
       return;
     }
 
     buttonRef.current?.setLoading(true);
-    const result = await login(username.toString(), password.toString());
+    const result = await register(username.toString(), password.toString());
     buttonRef.current?.setLoading(false);
     setMessage(result.message);
 
@@ -35,11 +41,10 @@ export default function Login() {
       router.replace("/");
     }
   };
-
   return (
     <>
       <div className="flex flex-col flex-1 justify-center items-center p-10">
-        <h1 className="text-5xl font-bold mb-10">Login</h1>
+        <h1 className="text-5xl font-bold mb-10">Register</h1>
         <form
           onSubmit={onSubmit}
           className="flex flex-col p-10 border border-secondary rounded-2xl lg:w-[40%] w-full mb-5"
@@ -53,8 +58,8 @@ export default function Login() {
             id="username"
             placeholder="Enter your username"
             autoComplete="username"
+            min="4"
           />
-
           <label htmlFor="password" className="text-lg font-semibold mt-5 mb-2">
             Password
           </label>
@@ -64,6 +69,22 @@ export default function Login() {
             id="password"
             placeholder="Enter your password"
             autoComplete="current-password"
+            min="8"
+          />
+
+          <label
+            htmlFor="confirmPassword"
+            className="text-lg font-semibold mt-5 mb-2"
+          >
+            Confirm Password
+          </label>
+          <input
+            type="confirmPassword"
+            name="confirmPassword"
+            id="confirmPassword"
+            placeholder="Confirm your password"
+            autoComplete="current-password"
+            min="8"
           />
 
           <LoadingButton ref={buttonRef} />

@@ -1,5 +1,6 @@
 "use server";
 
+import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import { cookies } from "next/headers";
 import qs from "querystring";
 
@@ -11,6 +12,26 @@ export interface SessionData {
 
 export const getCookies = async (): Promise<string> =>
   (await cookies()).toString() || "";
+
+export const parseSessionCookies = async (res: Response): Promise<string> => (qs.parse(res.headers.getSetCookie()[0], "; ") as any)["connect.sid"]
+
+export const register = async (username: string, password: string) => {
+  const response = await fetch(`${process.env.API}/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({username: username, password: password})
+  })
+
+  const sessionCookie = await parseSessionCookies(response)
+
+  if (sessionCookie) {
+    (await cookies()).set("connect.sid", sessionCookie.toString())
+  }
+
+  return { message: await response.text(), status: response.status }
+}
 
 export const login = async (
   username: string,
@@ -27,11 +48,10 @@ export const login = async (
     }),
   });
 
-  const cookieStore = await cookies();
-  const responseCookies = qs.parse(response.headers.getSetCookie()[0], "; ");
+  const sessionCookie = await parseSessionCookies(response)
 
-  if (responseCookies["connect.sid"]) {
-    cookieStore.set("connect.sid", responseCookies["connect.sid"].toString());
+  if (sessionCookie) {
+    (await cookies()).set("connect.sid", sessionCookie);
   }
 
   return { message: await response.text(), status: response.status };
