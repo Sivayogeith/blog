@@ -74,6 +74,20 @@ select:focus {
   @apply border-none outline-none;
 }
 
+.nav-link {
+  @apply relative;
+}
+
+.nav-link::after {
+  content: "";
+  @apply absolute bottom-0 left-1/2 h-0.5 w-0 -translate-x-1/2 bg-secondary transition-all duration-300 ease-in-out;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  @apply w-full;
+}
+
 @keyframes loading {
   0% {
     width: 0%;

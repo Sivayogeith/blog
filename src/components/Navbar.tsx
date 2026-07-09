@@ -24,14 +24,14 @@ export default async function Navbar() {
         ) : (
           <>
             {!matchesRoute(header.get('x-path') || "", hideNavbarRoutes) && (
-              <>
-                <a href="/register" className="me-2">
+              <div className="my-2">
+                <a href="/register" className="me-4 nav-link">
                   Register
                 </a>
-                <a href="/login" className="me-2">
+                <a href="/login" className="me-2 nav-link">
                   Login
                 </a>
-              </>
+              </div>
             )}
             <ThemeButton />
           </>
