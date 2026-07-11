@@ -9,7 +9,7 @@ import { SubmitEvent, useState } from "react";
 import { createPost } from "@/src/api/adminAPI";
 import { useRouter } from "nextjs-toploader/app";
 
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"));
 
 export default function CreatePost() {
   const router = useRouter();

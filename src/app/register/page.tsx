@@ -56,7 +56,7 @@ export default function Register() {
             type="text"
             name="username"
             id="username"
-            placeholder="Enter your username"
+            placeholder="Choose a username"
             autoComplete="username"
             min="4"
           />
@@ -67,7 +67,7 @@ export default function Register() {
             type="password"
             name="password"
             id="password"
-            placeholder="Enter your password"
+            placeholder="Set your password"
             autoComplete="current-password"
             min="8"
           />

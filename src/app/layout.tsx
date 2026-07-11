@@ -35,6 +35,7 @@ export default async function RootLayout({
           attribute="data-theme"
           initialTheme={initialTheme ?? undefined}
           transition="fade"
+          themes={["light", "dark"]}
         >
           <NextTopLoader showSpinner={false} color={"#62229d"} />
           <Navbar />

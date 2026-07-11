@@ -39,12 +39,12 @@ export default function EditProfile() {
   }, []);
 
   return (
-    <div className="flex flex-1 flex-col justify-center items-center">
+    <div className="flex flex-1 flex-col justify-center items-center px-4">
+      <h1 className="text-4xl font-bold mb-5">Edit Profile</h1>
       <form
         onSubmit={onSubmit}
-        className="p-10 h-full border border-secondary rounded-2xl flex justify-between flex-col w-3/4"
+        className="md:p-10 p-6 h-full border border-secondary rounded-2xl flex justify-between flex-col md:w-[35%] w-full"
       >
-        <h1 className="text-3xl font-bold mb-2">Edit Profile</h1>
         <label htmlFor="username" className="text-lg font-semibold">
           Username
         </label>
@@ -53,6 +53,8 @@ export default function EditProfile() {
           id="username"
           name="username"
           defaultValue={session?.username}
+          disabled={!session?.username}
+          placeholder={session?.username ? "Choose a username" : "Please wait a second.."}
         />
         <LoadingButton ref={buttonRef} />
         <p className="text-center mt-1">{message}</p>

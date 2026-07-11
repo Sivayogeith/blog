@@ -4,7 +4,7 @@ export interface LoadingButtonElement extends HTMLButtonElement {
     setLoading: Dispatch<SetStateAction<boolean>>
 }
 
-export default function LoadingButton({ref}: {ref: Ref<LoadingButtonElement>}) {
+export default function LoadingButton({ref, ...props}: {ref: Ref<LoadingButtonElement>} & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) {
   const [isLoading, setLoading] = useState<boolean>(false);
 
   useImperativeHandle(ref, () => {
@@ -13,7 +13,7 @@ export default function LoadingButton({ref}: {ref: Ref<LoadingButtonElement>}) {
 
   return (
     <>
-      <button className="text-xl bg-linear-65 from-light to-deep-light mt-10 rounded-sm font-bold text-white flex flex-col items-stretch">
+      <button className="text-xl bg-linear-65 from-light to-deep-light mt-8 rounded-sm font-bold text-white flex flex-col items-stretch" {...props}>
         <div
           className={`w-full bg-pale-dark h-1 ${isLoading ? "" : "invisible"}`}
         >

@@ -62,8 +62,16 @@ input:focus {
   @apply border-[1.5px] dark:border-light border-darkest outline-none;
 }
 
+input:disabled {
+  @apply dark:bg-darker bg-lighter
+}
+
 button:hover {
   @apply cursor-pointer;
+}
+
+button:disabled {
+  @apply cursor-not-allowed 
 }
 
 .adminBtn {
