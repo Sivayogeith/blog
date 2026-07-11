@@ -4,15 +4,15 @@
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
 
-  --color-darkest: #1c1225;
-  --color-darker: #130a1c;
-  --color-dark: #261d2e;
-  --color-pale-dark: #473b52;
+  --color-darkest:   #120b1b;
+  --color-darker:    #1a1226;
+  --color-dark:      #2a2036;
+  --color-pale-dark: #43365a;
 
-  --color-deep-light: #62229d;
-  --color-light: #783dae;
-  --color-lighter: #b283dd;
-  --color-lightest: #d3b4f0;
+  --color-deep-light:#685487;
+  --color-light:     #8d79b2;
+  --color-lighter:   #b8aad8;
+  --color-lightest:  #e4ddf6;
 
   --animate-loading: loading 2s linear infinite;
 }
