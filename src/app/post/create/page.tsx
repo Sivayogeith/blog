@@ -1,92 +1,104 @@
 "use client";
 
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
 import * as commands from "@uiw/react-md-editor/commands";
 import dynamic from "next/dynamic";
-import { SubmitEvent, useState } from "react";
+import { useRef } from "react";
 
 import { createPost } from "@/src/api/adminAPI";
 import { useRouter } from "nextjs-toploader/app";
+import z from "zod";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import LoadingButton, {
+  LoadingButtonElement,
+} from "@/src/components/LoadingButton";
+import { useTheme } from "@teispace/next-themes";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"));
 
 export default function CreatePost() {
   const router = useRouter();
+  const { resolvedTheme } = useTheme<"light" | "dark">();
+  const buttonRef = useRef<LoadingButtonElement>(null);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    control,
+    formState: { errors, isValid },
+  } = useForm<CreatePostFormData>({
+    resolver: zodResolver(createPostSchema),
+    mode: "onTouched",
+  });
 
-  const [body, setBody] = useState("**meow**");
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const onSubmit = async ({ title, slug, body }: CreatePostFormData) => {
+    buttonRef.current?.setLoading(true);
+    const result = await createPost(title, body, slug);
+    buttonRef.current?.setLoading(false);
 
-  const onSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const title = formData.get("title");
-    const slug = formData.get("slug");
-
-    if (!title || !slug) {
-      setMessage("Please enter the title and slug!");
-      return;
-    }
-
-    setLoading(true);
-    const result = await createPost(title.toString(), body, slug.toString());
-    setLoading(false);
-
-    setMessage(result.message);
+    setError("form", { message: result.message });
 
     if (result.status == 200) {
-      setMessage(result.message + ", Please wait a second...");
+      setError("form", {
+        message: result.message + ", Please wait a second...",
+      });
       router.push("/dashboard");
     }
   };
   return (
     <>
-      <div className="flex flex-1 flex-col justify-center items-center">
+      <div className="flex flex-1 flex-col justify-center items-center px-3">
+        <h1 className="text-4xl font-bold mb-4">Create New Post</h1>
         <form
-          className="p-10 h-full border border-secondary rounded-2xl flex justify-between flex-col w-3/4"
-          onSubmit={onSubmit}
+          className="md:p-10 p-4 h-full border border-secondary rounded-2xl flex justify-between flex-col lg:w-3/4 w-full"
+          onSubmit={handleSubmit(onSubmit)}
         >
-          <h1 className="text-3xl font-bold mb-2">Create New Post</h1>
           <div className="flex flex-col gap-2 mb-5">
             <label htmlFor="title" className="text-lg font-semibold">
               Title
             </label>
             <input
+              {...register("title")}
               type="text"
-              name="title"
               id="title"
               placeholder="Enter the title of the post"
             />
+            <p>{errors.title?.message}</p>
             <label htmlFor="slug" className="text-lg font-semibold">
               Slug
             </label>
             <input
+              {...register("slug")}
               type="text"
-              name="slug"
               id="slug"
               placeholder="Enter the slug of the post"
             />
+            <p className="error-msg">{errors.slug?.message}</p>
           </div>
           <p className="text-lg font-semibold">Body</p>
-          <MDEditor
-            value={body}
-            onChange={(value) => setBody(value || "")}
-            className="w-full"
+          <Controller
+            name="body"
+            control={control}
+            render={({ field }) => (
+              <MDEditor
+                {...field}
+                className="w-full"
+                data-color-mode={resolvedTheme}
+              />
+            )}
           />
-          <button className="text-xl bg-linear-65 from-light to-deep-light mt-10 rounded-sm font-bold text-white flex flex-col items-stretch">
-            <div
-              className={`w-full bg-pale-dark h-1 ${loading ? "" : "invisible"}`}
-            >
-              <div
-                className={`h-full bg-secondary ${loading ? "animate-loading" : ""}`}
-              ></div>
-            </div>
-            <span className="pt-1 pb-2">Submit</span>
-          </button>
-          <p className="text-center mt-5">{message}</p>
+          <LoadingButton ref={buttonRef} disabled={!isValid} />
+          <p className="text-center mt-5">{errors.form?.message}</p>
         </form>
       </div>
     </>
   );
 }
+
+export const createPostSchema = z.object({
+  title: z.string(),
+  slug: z.string(),
+  body: z.string(),
+});
+
+export type CreatePostFormData = z.infer<typeof createPostSchema>;

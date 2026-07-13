@@ -59,11 +59,11 @@ input {
 }
 
 input:focus {
-  @apply border-[1.5px] dark:border-light border-darkest outline-none;
+  @apply border-[1.5px] outline-none;
 }
 
-input:disabled {
-  @apply dark:bg-darker bg-lighter
+input:disabled, textarea:disabled {
+  @apply opacity-60 cursor-not-allowed
 }
 
 button:hover {
@@ -78,10 +78,6 @@ button:disabled {
   @apply border-t border-secondary bg-linear-to-tr dark:from-pale-dark from-lightest dark:from-5% dark:via-dark dark:via-40% dark:to-darker to-lighter px-5 py-2 w-full flex justify-center gap-1;
 }
 
-select:focus {
-  @apply border-none outline-none;
-}
-
 .nav-link {
   @apply relative;
 }
@@ -94,6 +90,10 @@ select:focus {
 .nav-link:hover::after,
 .nav-link.active::after {
   @apply w-full;
+}
+
+.error-msg {
+  @apply dark:text-red-600 text-red-800 text-sm mt-1
 }
 
 @keyframes loading {
