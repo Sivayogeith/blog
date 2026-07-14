@@ -9,6 +9,7 @@ import {
   convertMinutesToString,
 } from "@/src/utils/postUtils";
 import { getStats } from "@/src/api/adminAPI";
+import Markdown from "@/src/components/Markdown";
 
 export default async function Dashboard() {
   const posts = await getPosts();
@@ -62,23 +63,27 @@ export default async function Dashboard() {
                 >
                   {post.title}
                 </a>
-                <Image
-                  src="/cats.png"
-                  alt="cats"
-                  width={500}
-                  height={500}
-                  loading="eager"
-                  className="border border-secondary rounded-xl max-w-40 max-h-30 w-auto my-2"
-                />
+                {post.image && (
+                  <div className="h-30">
+                    <Image
+                      src={post.image}
+                      alt={`${post.title}'s image cover`}
+                      width={500}
+                      height={500}
+                      loading="eager"
+                      className={`border border-secondary rounded-xl max-w-40 max-h-30 w-auto my-2`}
+                    />
+                  </div>
+                )}
                 <p>
                   {convertDateToString(post.created_at)} •{" "}
                   {convertMinutesToString(post.stats.readingTime)} •{" "}
                   {post.stats.words} words
                 </p>
               </div>
-              <div
-                className="text-md body h-20 mx-5 text-ellipsis overflow-hidden"
-                dangerouslySetInnerHTML={{ __html: post.body }}
+              <Markdown
+                source={post.body}
+                class={`text-md ${post.image ? 'h-20' : 'h-50'} mx-5 text-ellipsis overflow-hidden`}
               />
               <div className="pt-4 flex">
                 <a

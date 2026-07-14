@@ -3,7 +3,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Post } from "../api/postsAPI";
-import { convertDateToString, convertMinutesToString } from "../utils/postUtils";
+import {
+  convertDateToString,
+  convertMinutesToString,
+} from "../utils/postUtils";
+import Markdown from "./Markdown";
 
 export default function PostItem(props: { post: Post }) {
   const { post } = props;
@@ -20,25 +24,23 @@ export default function PostItem(props: { post: Post }) {
             {post.title}
           </a>
           <p className="mb-5">
-            {convertDateToString(post.created_at)} • {convertMinutesToString(post.stats.readingTime)}
+            {convertDateToString(post.created_at)} •{" "}
+            {convertMinutesToString(post.stats.readingTime)}
           </p>
 
-          <div
-            className="lg:text-xl md:text-lg text-sm body-preview"
-            dangerouslySetInnerHTML={{ __html: post.body }}
-          />
+          <Markdown source={post.body} class="body-preview" />
         </div>
-        {post.image &&
+        {post.image && (
           <Image
-          src={post.image}
-          alt={`${post.title}'s image cover`}
-          width={500}
-          height={500}
-          className="rounded-xl lg:w-[40%] w-full h-full"
-          onLoad={() => setLoaded(!loaded)}
-          loading="eager"
+            src={post.image}
+            alt={`${post.title}'s image cover`}
+            width={500}
+            height={500}
+            className="rounded-xl lg:w-[40%] w-full h-full"
+            onLoad={() => setLoaded(!loaded)}
+            loading="eager"
           />
-        }
+        )}
       </div>
     </>
   );

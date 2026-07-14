@@ -13,25 +13,34 @@ export const matchesRoute = (path: string, routes: string[]) => {
 };
 
 export async function proxy(request: NextRequest) {
-  const session = await getMe();
   const path = request.nextUrl.pathname;
   const headers = new Headers(request.headers);
-  headers.set("x-path", path)
+  headers.set("x-path", path);
 
-  // If user is not authenticated and they are trying to access authenticated routes
+  const needsAuth =
+    matchesRoute(path, authenticatedRoutes) ||
+    matchesRoute(path, adminOnlyRoutes);
+
+  if (!needsAuth) {
+    return NextResponse.next({
+      request: { headers },
+    });
+  }
+
+  const session = await getMe();
+
+  // If user is not authenticated
   if (!session.username) {
-    if (matchesRoute(path, authenticatedRoutes) || matchesRoute(path, adminOnlyRoutes)) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
-
-  return NextResponse.next({request: {headers: headers}});
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   // If user is not an admin and they are trying to access admin routes
   if (!session.isAdmin && matchesRoute(path, adminOnlyRoutes)) {
     return NextResponse.redirect(new URL("/", request.url));
   }
-
-  return NextResponse.next({request: {headers: headers}});
+  return NextResponse.next({ request: { headers } });
 }
 
+export const config = {
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+};

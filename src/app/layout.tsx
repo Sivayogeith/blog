@@ -3,8 +3,6 @@ import { Saira } from "next/font/google";
 import { ThemeProvider } from "@teispace/next-themes";
 import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
 
 import Navbar from "@/src/components/Navbar";
 import { getTheme } from "@teispace/next-themes/server";

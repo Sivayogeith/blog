@@ -62,7 +62,7 @@ export default function EditPost() {
   };
 
   useEffect(() => {
-    getPost(params.slug, true).then((data) => {
+    getPost(params.slug).then((data) => {
       setValues(data, { shouldValidate: true });
       setData(data);
     });

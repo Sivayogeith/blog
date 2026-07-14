@@ -4,15 +4,15 @@
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
 
-  --color-darkest:   #120b1b;
-  --color-darker:    #1a1226;
-  --color-dark:      #2a2036;
+  --color-darkest: #120b1b;
+  --color-darker: #1a1226;
+  --color-dark: #2a2036;
   --color-pale-dark: #43365a;
 
-  --color-deep-light:#685487;
-  --color-light:     #8d79b2;
-  --color-lighter:   #b8aad8;
-  --color-lightest:  #e4ddf6;
+  --color-deep-light: #685487;
+  --color-light: #8d79b2;
+  --color-lighter: #b8aad8;
+  --color-lightest: #e4ddf6;
 
   --animate-loading: loading 2s linear infinite;
 }
@@ -22,6 +22,7 @@
 :root {
   --primary: var(--color-white);
   --secondary: var(--color-deep-light);
+  --color-border-muted: var(--color-secondary) !important;
   color: #000;
 }
 
@@ -38,22 +39,6 @@ body {
   @apply bg-linear-to-r dark:from-dark dark:via-darker dark:to-darkest from-lightest to-lighter dark:text-white;
 }
 
-.body h1 {
-  @apply text-2xl;
-}
-
-.body p {
-  @apply mb-3;
-}
-
-.body img {
-  @apply w-1/4 h-auto;
-}
-
-.body-preview img {
-  @apply w-[20%] h-auto;
-}
-
 input {
   @apply border border-secondary rounded-md p-2 dark:bg-dark bg-lightest;
 }
@@ -62,8 +47,9 @@ input:focus {
   @apply border-[1.5px] outline-none;
 }
 
-input:disabled, textarea:disabled {
-  @apply opacity-60 cursor-not-allowed
+input:disabled,
+textarea:disabled {
+  @apply opacity-60 cursor-not-allowed;
 }
 
 button:hover {
@@ -71,7 +57,7 @@ button:hover {
 }
 
 button:disabled {
-  @apply cursor-not-allowed 
+  @apply cursor-not-allowed;
 }
 
 .adminBtn {
@@ -93,8 +79,32 @@ button:disabled {
 }
 
 .error-msg {
-  @apply dark:text-red-600 text-red-800 text-sm mt-1
+  @apply dark:text-red-600 text-red-800 text-sm mt-1;
 }
+
+/* Markdown Preview CSS */
+
+.wmde-markdown hr {
+  @apply box-content! border-none! h-0.5! mb-2! p-0! overflow-hidden! dark:bg-lightest! bg-dark!;
+}
+
+.wmde-markdown h1 {
+  @apply dark:border-lightest! border-dark!
+}
+
+.wmde-markdown img {
+  @apply w-1/4 h-auto;
+}
+
+.wmde-markdown.body-preview img {
+  @apply w-[20%] h-auto;
+}
+
+.wmde-markdown pre:hover .copied:hover {
+  @apply dark:bg-lighter! bg-deep-light!
+}
+
+/* Animations */
 
 @keyframes loading {
   0% {
