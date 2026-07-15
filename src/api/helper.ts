@@ -31,9 +31,9 @@ export const post = async (
   return response;
 };
 
-export const del = async (path: string, body: [] | {}) =>
+export const del = async (path: string, body: [] | {} = {}) =>
   await fetch(process.env.API + path, {
-    method: "POST",
+    method: "DELETE",
     headers: { Cookie: await getCookies(), "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
@@ -65,3 +65,10 @@ export interface Post {
   image?: string;
 }
 
+export interface Comments {
+  id: number;
+  created_at: string;
+  from: string; // username from users
+  on: number; // id from posts
+  message: string;
+}

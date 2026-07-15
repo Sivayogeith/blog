@@ -1,7 +1,7 @@
 "use server";
 
 import { processPost } from "../utils/postUtils";
-import { get, post, Post } from "./helper";
+import { get, post, Post, Comments } from "./helper";
 export type { Post } from "./helper";
 
 export const getPosts = async (truncate: boolean = true): Promise<Post[]> => {
@@ -16,6 +16,14 @@ export const getPost = async (slug: string): Promise<Post> => {
   return response.ok ? processPost(await response.json()): {} as Post;
 };
 
+// Comments
+
+export const getComments = async (postId: number): Promise<Comments> => {
+  const response = await get(`/posts/${postId}/comments`);
+  return response.ok ? response.json() : {} as Comments;
 };
 
+export const addComment = async (postId: number, message: string) => {
+  const response = await post(`/posts/${postId}/comment`, { message });
+  return { message: await response.text(), status: response.status }
 };
