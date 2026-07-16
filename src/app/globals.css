@@ -82,6 +82,10 @@ button:disabled {
   @apply dark:text-red-600 text-red-800 text-sm mt-1;
 }
 
+.animated-post-div {
+  @apply opacity-0 data-[loaded=true]:opacity-100 transition-opacity duration-300
+}
+
 /* Markdown Preview CSS */
 
 .wmde-markdown hr {

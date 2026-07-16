@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { getPosts, Post } from "../../api/postsAPI";
 
 import PlusIcon from "@/src/components/icons/PlusIcon";
@@ -10,7 +9,7 @@ import {
 } from "@/src/utils/postUtils";
 import { getStats } from "@/src/api/adminAPI";
 import Markdown from "@/src/components/Markdown";
-import Video from "@/src/components/Video";
+import PostCover from "@/src/components/PostCover";
 
 export default async function Dashboard() {
   const posts = await getPosts();
@@ -55,7 +54,8 @@ export default async function Dashboard() {
           {posts.map(async (post: Post) => (
             <div
               key={post.id}
-              className={`m-3 border border-secondary rounded-xl dark:bg-darker bg-lightest`}
+              data-loaded={post.cover?.type !== "image"}
+              className="m-3 border border-secondary rounded-xl dark:bg-darker bg-lightest animated-post-div"
             >
               <div className="flex flex-col items-center mb-3">
                 <a
@@ -64,25 +64,11 @@ export default async function Dashboard() {
                 >
                   {post.title}
                 </a>
-                {post.cover && (
-                  <div className="h-30">
-                    {post.cover.type == "image" ? (
-                      <Image
-                        src={post.cover.src}
-                        alt={`${post.title}'s image cover`}
-                        width={500}
-                        height={500}
-                        loading="eager"
-                        className={`border border-secondary rounded-xl max-w-40 max-h-30 w-auto my-2`}
-                      />
-                    ) : (
-                      <Video
-                        src={post.cover.src}
-                        className={`border border-secondary rounded-xl max-w-40 max-h-30 w-auto my-2`}
-                      ></Video>
-                    )}
-                  </div>
-                )}
+                <PostCover
+                  post={post}
+                  className="border border-secondary rounded-xl max-w-40 max-h-30 w-auto my-2"
+                  parentsParent
+                />
                 <p>
                   {convertDateToString(post.created_at)} •{" "}
                   {convertMinutesToString(post.stats.readingTime)} •{" "}

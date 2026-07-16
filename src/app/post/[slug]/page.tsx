@@ -6,9 +6,8 @@ import {
   convertMinutesToString,
 } from "@/src/utils/postUtils";
 
-import PostPageImage from "@/src/components/PostPageImage";
 import Markdown from "@/src/components/Markdown";
-import Video from "@/src/components/Video";
+import PostCover from "@/src/components/PostCover";
 
 export default async function PostPage({
   params,
@@ -26,7 +25,8 @@ export default async function PostPage({
     <div className="flex flex-col flex-1">
       <div
         key={post.id}
-        className="my-10 w-full rounded-2xl flex flex-col items-center"
+        data-loaded={post.cover?.type !== "image"}
+        className="my-10 w-full rounded-2xl flex flex-col items-center animated-post-div"
       >
         <div className="text-start lg:w-[55vw] lg:p-0 w-full px-5">
           <h2 className="md:text-5xl text-4xl font-semibold mb-1">
@@ -37,18 +37,11 @@ export default async function PostPage({
               post.stats.readingTime &&
               `${convertDateToString(post.created_at)} • ${convertMinutesToString(post.stats?.readingTime)}`}
           </p>
-          {post.cover &&
-            (post.cover.type == "image" ? (
-              <PostPageImage
-                src={post.cover.src}
-                alt={`${post.title}'s cover image`}
-              />
-            ) : (
-              <Video
-                src={post.cover.src}
-                className={`rounded-xl w-full h-auto mb-5 bg-darker`}
-              />
-            ))}
+          <PostCover
+            post={post}
+            className="rounded-xl w-full h-auto mb-5 bg-darker"
+            parentsParent
+          />
           <Markdown source={post.body} />
         </div>
       </div>
