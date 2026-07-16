@@ -54,7 +54,7 @@ export default async function Dashboard() {
           {posts.map(async (post: Post) => (
             <div
               key={post.id}
-              data-loaded={post.cover?.type !== "image"}
+              data-loaded={!post.cover}
               className="m-3 border border-secondary rounded-xl dark:bg-darker bg-lightest animated-post-div"
             >
               <div className="flex flex-col items-center mb-3">

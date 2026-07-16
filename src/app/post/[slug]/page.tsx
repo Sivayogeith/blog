@@ -25,7 +25,7 @@ export default async function PostPage({
     <div className="flex flex-col flex-1">
       <div
         key={post.id}
-        data-loaded={post.cover?.type !== "image"}
+        data-loaded={!post.cover}
         className="my-10 w-full rounded-2xl flex flex-col items-center animated-post-div"
       >
         <div className="text-start lg:w-[55vw] lg:p-0 w-full px-5">
