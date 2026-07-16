@@ -8,10 +8,13 @@ import {
   convertMinutesToString,
 } from "../utils/postUtils";
 import Markdown from "./Markdown";
+import Video from "./Video";
 
 export default function PostItem(props: { post: Post }) {
   const { post } = props;
-  const [loaded, setLoaded] = useState(post.image ? false : true);
+  const [loaded, setLoaded] = useState(
+    post.cover?.type == "image" ? false : true,
+  );
 
   return (
     <>
@@ -30,17 +33,23 @@ export default function PostItem(props: { post: Post }) {
 
           <Markdown source={post.body} class="body-preview" />
         </div>
-        {post.image && (
-          <Image
-            src={post.image}
-            alt={`${post.title}'s image cover`}
-            width={500}
-            height={500}
-            className="rounded-xl lg:w-[40%] w-full h-full"
-            onLoad={() => setLoaded(!loaded)}
-            loading="eager"
-          />
-        )}
+        {post.cover &&
+          (post.cover.type == "image" ? (
+            <Image
+              src={post.cover.src}
+              alt={`${post.title}'s image cover`}
+              width={500}
+              height={500}
+              className="rounded-xl lg:w-[40%] w-full h-full"
+              onLoad={() => setLoaded(!loaded)}
+              loading="eager"
+            />
+          ) : (
+            <Video
+              src={post.cover.src}
+              className="rounded-xl lg:w-[40%] w-full h-full"
+            ></Video>
+          ))}
       </div>
     </>
   );

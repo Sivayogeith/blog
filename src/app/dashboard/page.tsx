@@ -10,6 +10,7 @@ import {
 } from "@/src/utils/postUtils";
 import { getStats } from "@/src/api/adminAPI";
 import Markdown from "@/src/components/Markdown";
+import Video from "@/src/components/Video";
 
 export default async function Dashboard() {
   const posts = await getPosts();
@@ -63,16 +64,23 @@ export default async function Dashboard() {
                 >
                   {post.title}
                 </a>
-                {post.image && (
+                {post.cover && (
                   <div className="h-30">
-                    <Image
-                      src={post.image}
-                      alt={`${post.title}'s image cover`}
-                      width={500}
-                      height={500}
-                      loading="eager"
-                      className={`border border-secondary rounded-xl max-w-40 max-h-30 w-auto my-2`}
-                    />
+                    {post.cover.type == "image" ? (
+                      <Image
+                        src={post.cover.src}
+                        alt={`${post.title}'s image cover`}
+                        width={500}
+                        height={500}
+                        loading="eager"
+                        className={`border border-secondary rounded-xl max-w-40 max-h-30 w-auto my-2`}
+                      />
+                    ) : (
+                      <Video
+                        src={post.cover.src}
+                        className={`border border-secondary rounded-xl max-w-40 max-h-30 w-auto my-2`}
+                      ></Video>
+                    )}
                   </div>
                 )}
                 <p>
@@ -83,7 +91,7 @@ export default async function Dashboard() {
               </div>
               <Markdown
                 source={post.body}
-                class={`text-md ${post.image ? 'h-20' : 'h-50'} mx-5 text-ellipsis overflow-hidden`}
+                class={`text-md ${post.cover ? "h-20" : "h-50"} mx-5 text-ellipsis overflow-hidden`}
               />
               <div className="pt-4 flex">
                 <a

@@ -62,7 +62,10 @@ export interface Post {
     readingTime: number;
     words: number;
   };
-  image?: string;
+  cover?: {
+    type: "image" | "video";
+    src: string;
+  }
 }
 
 export interface Comments {

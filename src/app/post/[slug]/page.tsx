@@ -8,6 +8,7 @@ import {
 
 import PostPageImage from "@/src/components/PostPageImage";
 import Markdown from "@/src/components/Markdown";
+import Video from "@/src/components/Video";
 
 export default async function PostPage({
   params,
@@ -36,12 +37,18 @@ export default async function PostPage({
               post.stats.readingTime &&
               `${convertDateToString(post.created_at)} • ${convertMinutesToString(post.stats?.readingTime)}`}
           </p>
-          {post.image && (
-            <PostPageImage
-              src={post.image}
-              alt={`${post.title}'s cover image`}
-            />
-          )}
+          {post.cover &&
+            (post.cover.type == "image" ? (
+              <PostPageImage
+                src={post.cover.src}
+                alt={`${post.title}'s cover image`}
+              />
+            ) : (
+              <Video
+                src={post.cover.src}
+                className={`rounded-xl w-full h-auto mb-5 bg-darker`}
+              />
+            ))}
           <Markdown source={post.body} />
         </div>
       </div>
