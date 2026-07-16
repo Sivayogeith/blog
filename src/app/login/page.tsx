@@ -9,6 +9,7 @@ import LoadingButton, {
   LoadingButtonElement,
 } from "@/src/components/LoadingButton";
 import { login } from "../../api/authAPI";
+import { toast } from "sonner";
 
 export default function Login() {
   const router = useRouter();
@@ -16,7 +17,6 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isValid },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -27,15 +27,15 @@ export default function Login() {
     buttonRef.current?.setLoading(true);
     const result = await login(username, password);
     buttonRef.current?.setLoading(false);
-    setError("form", { message: result.message });
 
     if (result.status == 200) {
-      setError("form", {
-        message: result.message + ", Please wait a second...",
-      });
+      toast.success(result.message + ", Please wait a second...");
       window.location.href = "/";
       router.replace("/");
+      return;
     }
+    
+    toast.error(result.message);
   };
 
   return (

@@ -14,6 +14,7 @@ import { useTheme } from "@teispace/next-themes";
 import z from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"));
 
@@ -27,7 +28,6 @@ export default function EditPost() {
   const {
     register,
     setValues,
-    setError,
     handleSubmit,
     control,
     formState: { errors, isValid },
@@ -38,7 +38,7 @@ export default function EditPost() {
 
   const onSubmit = async ({ title, slug, body }: EditPostFormData) => {
     if (!data?.id) {
-      setError("form", { message: "Something went wrong (no id)" });
+      toast.error("Something went wrong (no id)");
       return;
     }
 
@@ -51,14 +51,12 @@ export default function EditPost() {
     );
     buttonRef.current?.setLoading(false);
 
-    setError("form", { message: result.message });
-
     if (result.status == 200) {
-      setError("form", {
-        message: result.message + ", Please wait a second...",
-      });
+      toast.success(result.message + ", Please wait a second...");
       router.push("/dashboard");
+      return;
     }
+    toast.error(result.message);
   };
 
   useEffect(() => {

@@ -9,6 +9,7 @@ import LoadingButton, {
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 export default function EditProfile() {
   const [session, setSession] = useState<SessionData>();
@@ -17,7 +18,6 @@ export default function EditProfile() {
   const {
     register,
     handleSubmit,
-    setError,
     setValue,
     formState: { errors, isValid },
   } = useForm<EditProfileFormData>({
@@ -30,14 +30,13 @@ export default function EditProfile() {
     const result = await editProfile(username);
     buttonRef.current?.setLoading(false);
 
-    setError("form", { message: result.message });
     if (result.status == 200) {
-      setError("form", {
-        message: result.message + ", Please wait a second...",
-      });
+      toast.success(result.message + ", Please wait a second...",);
       window.location.href = "/";
       router.replace("/");
+      return;
     }
+    toast.error(result.message);
   };
 
   useEffect(() => {

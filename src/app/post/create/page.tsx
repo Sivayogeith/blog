@@ -13,6 +13,7 @@ import LoadingButton, {
   LoadingButtonElement,
 } from "@/src/components/LoadingButton";
 import { useTheme } from "@teispace/next-themes";
+import { toast } from "sonner";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"));
 
@@ -23,7 +24,6 @@ export default function CreatePost() {
   const {
     register,
     handleSubmit,
-    setError,
     control,
     formState: { errors, isValid },
   } = useForm<CreatePostFormData>({
@@ -36,14 +36,13 @@ export default function CreatePost() {
     const result = await createPost(title, body, slug);
     buttonRef.current?.setLoading(false);
 
-    setError("form", { message: result.message });
-
+    
     if (result.status == 200) {
-      setError("form", {
-        message: result.message + ", Please wait a second...",
-      });
+      toast.success(result.message + ", Please wait a second...");
       router.push("/dashboard");
+      return;
     }
+    toast.error(result.message);
   };
   return (
     <>

@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "nextjs-toploader/app";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 export default function Register() {
@@ -28,15 +29,14 @@ export default function Register() {
     buttonRef.current?.setLoading(true);
     const result = await registerUser(username, password);
     buttonRef.current?.setLoading(false);
-    setError("form", { message: result.message });
 
     if (result.status == 200) {
-      setError("form", {
-        message: result.message + ", Please wait a second...",
-      });
+      toast.success(result.message + ", Please wait a second...");
       window.location.href = "/";
       router.replace("/");
+      return;
     }
+    toast.error(result.message);
   };
 
   return (

@@ -6,6 +6,7 @@ import "./globals.css";
 
 import Navbar from "@/src/components/Navbar";
 import { getTheme } from "@teispace/next-themes/server";
+import Toaster  from "../components/Toaster";
 
 const saira = Saira({
   display: "swap",
@@ -22,7 +23,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const initialTheme = await getTheme();
+  const initialTheme = await getTheme() as ("light" | "dark");
 
   return (
     <html
@@ -40,6 +41,7 @@ export default async function RootLayout({
           <NextTopLoader showSpinner={false} color={"#62229d"} />
           <Navbar />
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
