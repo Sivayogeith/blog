@@ -1,7 +1,10 @@
 import { getPosts, Post } from "../api/postsAPI";
 import Markdown from "../components/Markdown";
 import PostCover from "../components/PostCover";
-import { convertDateToString, convertMinutesToString } from "../utils/postUtils";
+import {
+  convertDateToString,
+  convertMinutesToString,
+} from "../utils/postUtils";
 
 export default async function Home() {
   const posts: Post[] = await getPosts();
@@ -28,7 +31,6 @@ export default async function Home() {
           <PostCover
             post={post}
             className="rounded-xl lg:w-[40%] w-full h-full"
-            spinner
           />
         </div>
       ))}

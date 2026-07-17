@@ -63,13 +63,13 @@ export default async function Dashboard() {
                 >
                   {post.title}
                 </a>
-                <PostCover
-                  post={post}
-                  className="border border-secondary rounded-xl max-w-40 max-h-30 w-auto my-2"
-                  spinnerProps={{ size: 50 }}
-                  parentsParent
-                  spinner
-                />
+                <div className={post.cover && "h-30"}>
+                  <PostCover
+                    post={post}
+                    className="rounded-xl max-w-40 max-h-30 w-auto my-2"
+                    spinnerProps={{ size: 50 }}
+                  />
+                </div>
                 <p>
                   {convertDateToString(post.created_at)} •{" "}
                   {convertMinutesToString(post.stats.readingTime)} •{" "}

@@ -38,10 +38,8 @@ export default async function PostPage({
           </p>
           <PostCover
             post={post}
-            className="rounded-xl mb-5"
-            coverProps={{className: "w-full h-auto"}}
-            parentsParent
-            spinner
+            className="rounded-xl mb-5 w-full h-auto"
+            coverProps={{ className: "w-full h-auto" }}
           />
           <Markdown source={post.body} />
         </div>
