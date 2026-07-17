@@ -25,8 +25,7 @@ export default async function PostPage({
     <div className="flex flex-col flex-1">
       <div
         key={post.id}
-        data-loaded={!post.cover}
-        className="my-10 w-full rounded-2xl flex flex-col items-center animated-post-div"
+        className="my-10 w-full rounded-2xl flex flex-col items-center"
       >
         <div className="text-start lg:w-[55vw] lg:p-0 w-full px-5">
           <h2 className="md:text-5xl text-4xl font-semibold mb-1">
@@ -39,8 +38,10 @@ export default async function PostPage({
           </p>
           <PostCover
             post={post}
-            className="rounded-xl w-full h-auto mb-5 bg-darker"
+            className="rounded-xl mb-5"
+            coverProps={{className: "w-full h-auto"}}
             parentsParent
+            spinner
           />
           <Markdown source={post.body} />
         </div>

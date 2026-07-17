@@ -54,8 +54,7 @@ export default async function Dashboard() {
           {posts.map(async (post: Post) => (
             <div
               key={post.id}
-              data-loaded={!post.cover}
-              className="m-3 border border-secondary rounded-xl dark:bg-darker bg-lightest animated-post-div"
+              className="m-3 border border-secondary rounded-xl dark:bg-darker bg-lightest"
             >
               <div className="flex flex-col items-center mb-3">
                 <a
@@ -67,7 +66,9 @@ export default async function Dashboard() {
                 <PostCover
                   post={post}
                   className="border border-secondary rounded-xl max-w-40 max-h-30 w-auto my-2"
+                  spinnerProps={{ size: 50 }}
                   parentsParent
+                  spinner
                 />
                 <p>
                   {convertDateToString(post.created_at)} •{" "}

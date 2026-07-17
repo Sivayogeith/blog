@@ -12,7 +12,7 @@ export default async function Home() {
         <div
           key={post.id}
           data-loaded={!post.cover}
-          className={`p-10 my-5 mx-10 lg:w-[80vw] w-[90vw] h-full border border-secondary rounded-2xl flex justify-between lg:flex-row flex-col-reverse gap-10 dark:bg-darker bg-lightest animated-post-div`}
+          className={`p-10 my-5 mx-10 lg:w-[80vw] w-[90vw] h-full border border-secondary rounded-2xl flex justify-between lg:flex-row flex-col-reverse gap-10 dark:bg-darker bg-lightest`}
         >
           <div className="lg:w-3/4">
             <a className="text-4xl font-semibold" href={`/post/${post.slug}`}>
@@ -28,6 +28,7 @@ export default async function Home() {
           <PostCover
             post={post}
             className="rounded-xl lg:w-[40%] w-full h-full"
+            spinner
           />
         </div>
       ))}
