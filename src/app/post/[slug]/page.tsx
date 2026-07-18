@@ -31,16 +31,25 @@ export default async function PostPage({
           <h2 className="md:text-5xl text-4xl font-semibold mb-1">
             {post.title}
           </h2>
-          <p className="mb-5">
+          <p className="mb-2">
             {post.created_at &&
               post.stats.readingTime &&
               `${convertDateToString(post.created_at)} • ${convertMinutesToString(post.stats?.readingTime)}`}
           </p>
           <PostCover
             post={post}
-            className="rounded-xl mb-5 w-full h-auto"
+            className="rounded-xl mb-3 mt-3 w-full h-auto"
             coverProps={{ className: "w-full h-auto" }}
           />
+          {post.cover?.caption && (
+            <Markdown
+              class="text-sm! mb-1 text-center opacity-70"
+              source={post.cover?.caption}
+            />
+          )}
+          {(!post.cover || post.cover.caption) && (
+            <hr className="mb-3 opacity-70" />
+          )}
           <Markdown source={post.body} />
         </div>
       </div>

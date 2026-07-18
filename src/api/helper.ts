@@ -65,6 +65,7 @@ export interface Post {
   cover?: {
     type: "image" | "video";
     src: string;
+    caption: string;
   }
 }
 

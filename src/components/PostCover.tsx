@@ -26,7 +26,7 @@ export default function PostCover(props: {
 
   return (
     <div
-      className={`${props.className} relative border ${!loaded && "border-2 border-dashed"}  border-secondary `}
+      className={`${props.className} relative border ${!loaded && "border-2 border-dashed"} border-secondary `}
     >
       <div
         className={`absolute inset-0 z-10 flex justify-center items-center rounded-[inherit] transition-opacity duration-500 ${loaded ? "opacity-0 pointer-events-none" : "opacity-100"}`}
