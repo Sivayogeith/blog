@@ -39,7 +39,7 @@ body {
   @apply bg-linear-to-r dark:from-dark dark:via-darker dark:to-darkest from-lightest to-lighter dark:text-white;
 }
 
-input {
+input, textarea {
   @apply border border-secondary rounded-md p-2 dark:bg-dark bg-lightest;
 }
 

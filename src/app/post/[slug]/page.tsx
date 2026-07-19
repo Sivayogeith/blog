@@ -8,6 +8,8 @@ import {
 
 import Markdown from "@/src/components/Markdown";
 import PostCover from "@/src/components/PostCover";
+import CommentForm from "@/src/components/CommentForm";
+import Comments from "@/src/components/Comments";
 
 export default async function PostPage({
   params,
@@ -51,6 +53,11 @@ export default async function PostPage({
             <hr className="mb-3 opacity-70" />
           )}
           <Markdown source={post.body} />
+
+          <hr className="mb-5 mt-8 opacity-70" />
+          <CommentForm post={post} />
+          <p className="text-xl font-bold mt-4">Comments</p>
+          <Comments post={post} />
         </div>
       </div>
     </div>
