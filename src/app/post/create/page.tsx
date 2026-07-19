@@ -2,7 +2,7 @@
 
 import * as commands from "@uiw/react-md-editor/commands";
 import dynamic from "next/dynamic";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { createPost } from "@/src/api/adminAPI";
 import { useRouter } from "nextjs-toploader/app";
@@ -14,6 +14,9 @@ import LoadingButton, {
 } from "@/src/components/LoadingButton";
 import { useTheme } from "@teispace/next-themes";
 import { toast } from "sonner";
+import PostCover, { Cover } from "@/src/components/PostCover";
+import { Post } from "@/src/api/helper";
+import Markdown from "@/src/components/Markdown";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"));
 
@@ -21,9 +24,11 @@ export default function CreatePost() {
   const router = useRouter();
   const { resolvedTheme } = useTheme<"light" | "dark">();
   const buttonRef = useRef<LoadingButtonElement>(null);
+  const [cover, setCover] = useState<Cover>({} as Cover);
   const {
     register,
     handleSubmit,
+    getValues,
     control,
     formState: { errors, isValid },
   } = useForm<CreatePostFormData>({
@@ -36,7 +41,6 @@ export default function CreatePost() {
     const result = await createPost(title, body, slug);
     buttonRef.current?.setLoading(false);
 
-    
     if (result.status == 200) {
       toast.success(result.message + ", Please wait a second...");
       router.push("/dashboard");
@@ -44,6 +48,7 @@ export default function CreatePost() {
     }
     toast.error(result.message);
   };
+
   return (
     <>
       <div className="flex flex-1 flex-col justify-center items-center px-3">
@@ -73,6 +78,51 @@ export default function CreatePost() {
               placeholder="Enter the slug of the post"
             />
             <p className="error-msg">{errors.slug?.message}</p>
+
+            <label htmlFor="slug" className="text-lg font-semibold">
+              Cover
+            </label>
+            <div className="flex flex-col items-center border border-secondary p-5 rounded-lg">
+              <div className="flex gap-4 w-full md:flex-row flex-col">
+                <input
+                  {...register("cover.src")}
+                  type="text"
+                  id="cover.src"
+                  placeholder="Enter a image/video URL"
+                  className="w-[55%]"
+                />
+                <input
+                  {...register("cover.type")}
+                  type="text"
+                  id="cover.type"
+                  placeholder="Image/Video"
+                  className="w-[25%]"
+                />
+                <button
+                  className="border border-secondary p-2 rounded-sm w-[25%]"
+                  onClick={() => setCover(getValues("cover") as Cover)}
+                >
+                  Preview
+                </button>
+              </div>
+              {cover.src ? <PostCover post={{ cover } as Post} className="w-[50%] h-auto my-4" /> : <div className="border-2 border-dashed border-secondary w-[50%] h-60 my-4"></div> }
+              {cover?.caption && (
+                <Markdown
+                  class="text-sm! mb-1 text-center opacity-70"
+                  source={cover?.caption}
+                />
+              )}
+              {(!cover || cover.caption) && (
+                <hr className="mb-3 opacity-70 w-full" />
+              )}
+              <input
+                {...register("cover.caption")}
+                type="text"
+                id="cover.caption"
+                placeholder="Enter a caption"
+                className="w-full"
+              />
+            </div>
           </div>
           <p className="text-lg font-semibold">Body</p>
           <Controller
@@ -98,6 +148,11 @@ export const createPostSchema = z.object({
   title: z.string(),
   slug: z.string(),
   body: z.string(),
+  cover: z.object({
+    src: z.string().optional(),
+    type: z.string().optional(),
+    caption: z.string().optional(),
+  }),
 });
 
 export type CreatePostFormData = z.infer<typeof createPostSchema>;

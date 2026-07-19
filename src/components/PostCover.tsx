@@ -35,6 +35,7 @@ export default function PostCover(props: {
       </div>
       {cover.type == "image" ? (
         <Image
+          loader={({ src }) => src}
           src={cover.src}
           alt={`${props.post.title}'s image cover`}
           width={500}
@@ -57,4 +58,10 @@ export default function PostCover(props: {
       )}
     </div>
   );
+}
+
+export interface Cover {
+  src: string;
+  type: "image" | "video";
+  caption: string;
 }
