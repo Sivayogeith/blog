@@ -89,23 +89,32 @@ export default function CreatePost() {
                   type="text"
                   id="cover.src"
                   placeholder="Enter a image/video URL"
-                  className="w-[55%]"
+                  className="md:w-[55%] w-full"
                 />
-                <input
-                  {...register("cover.type")}
-                  type="text"
-                  id="cover.type"
-                  placeholder="Image/Video"
-                  className="w-[25%]"
-                />
-                <button
-                  className="border border-secondary p-2 rounded-sm w-[25%]"
-                  onClick={() => setCover(getValues("cover") as Cover)}
-                >
-                  Preview
-                </button>
+                <div className="flex md:w-[45%] gap-4">
+                  <select
+                    {...register("cover.type")}
+                    className="w-[56%] appearance-none "
+                  >
+                    <option value="image">Image</option>
+                    <option value="video">Video</option>
+                  </select>
+                  <button
+                    className="border border-secondary p-2 rounded-sm w-[44%]"
+                    onClick={() => setCover(getValues("cover") as Cover)}
+                  >
+                    Preview
+                  </button>
+                </div>
               </div>
-              {cover.src ? <PostCover post={{ cover } as Post} className="w-[50%] h-auto my-4" /> : <div className="border-2 border-dashed border-secondary w-[50%] h-60 my-4"></div> }
+              {cover.src ? (
+                <PostCover
+                  post={{ cover } as Post}
+                  className="w-[50%] h-auto my-4"
+                />
+              ) : (
+                <div className="border-2 border-dashed border-secondary w-[50%] h-60 my-4"></div>
+              )}
               {cover?.caption && (
                 <Markdown
                   class="text-sm! mb-1 text-center opacity-70"
