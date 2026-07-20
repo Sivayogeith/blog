@@ -1,5 +1,6 @@
 "use server";
 
+import { Cover } from "../components/PostCover";
 import { calculateReadingTime, calculateWordCount } from "../utils/postUtils";
 import { del, get, getCookies, post } from "./helper";
 
@@ -7,6 +8,7 @@ export const createPost = async (
   title: string,
   body: string,
   slug: string,
+  cover: Cover
 ): Promise<{ message: string; status: number }> => {
   const response = await post(`/admin/createPost`, {
     title,
@@ -16,6 +18,7 @@ export const createPost = async (
       readingTime: calculateReadingTime(body),
       words: calculateWordCount(body),
     },
+    cover
   });
 
   return { message: await response.text(), status: response.status };

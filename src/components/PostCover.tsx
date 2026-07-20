@@ -63,5 +63,5 @@ export default function PostCover(props: {
 export interface Cover {
   src: string;
   type: "image" | "video";
-  caption: string;
+  caption?: string;
 }

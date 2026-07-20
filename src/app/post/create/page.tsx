@@ -36,9 +36,9 @@ export default function CreatePost() {
     mode: "onTouched",
   });
 
-  const onSubmit = async ({ title, slug, body }: CreatePostFormData) => {
+  const onSubmit = async ({ title, slug, body, cover }: CreatePostFormData) => {
     buttonRef.current?.setLoading(true);
-    const result = await createPost(title, body, slug);
+    const result = await createPost(title, body, slug, cover as Cover);
     buttonRef.current?.setLoading(false);
 
     if (result.status == 200) {
@@ -102,6 +102,7 @@ export default function CreatePost() {
                   <button
                     className="border border-secondary p-2 rounded-sm w-[44%]"
                     onClick={() => setCover(getValues("cover") as Cover)}
+                    type="button"
                   >
                     Preview
                   </button>
@@ -110,7 +111,7 @@ export default function CreatePost() {
               {cover.src ? (
                 <PostCover
                   post={{ cover } as Post}
-                  className="w-[50%] h-auto my-4"
+                  className="w-auto h-[50%] my-4"
                 />
               ) : (
                 <div className="border-2 border-dashed border-secondary w-[50%] h-60 my-4"></div>
