@@ -31,12 +31,12 @@ export default function CreatePost() {
     getValues,
     control,
     formState: { errors, isValid },
-  } = useForm<CreatePostFormData>({
-    resolver: zodResolver(createPostSchema),
+  } = useForm<PostFormData>({
+    resolver: zodResolver(postSchema),
     mode: "onTouched",
   });
 
-  const onSubmit = async ({ title, slug, body, cover }: CreatePostFormData) => {
+  const onSubmit = async ({ title, slug, body, cover }: PostFormData) => {
     buttonRef.current?.setLoading(true);
     const result = await createPost(title, body, slug, cover as Cover);
     buttonRef.current?.setLoading(false);
@@ -79,7 +79,7 @@ export default function CreatePost() {
             />
             <p className="error-msg">{errors.slug?.message}</p>
 
-            <label htmlFor="slug" className="text-lg font-semibold">
+            <label htmlFor="cover" className="text-lg font-semibold">
               Cover
             </label>
             <div className="flex flex-col items-center border border-secondary p-5 rounded-lg">
@@ -154,7 +154,7 @@ export default function CreatePost() {
   );
 }
 
-export const createPostSchema = z.object({
+export const postSchema = z.object({
   title: z.string(),
   slug: z.string(),
   body: z.string(),
@@ -165,4 +165,4 @@ export const createPostSchema = z.object({
   }),
 });
 
-export type CreatePostFormData = z.infer<typeof createPostSchema>;
+export type PostFormData = z.infer<typeof postSchema>;

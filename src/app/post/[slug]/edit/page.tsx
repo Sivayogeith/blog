@@ -15,6 +15,9 @@ import z from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { PostFormData, postSchema } from "../../create/page";
+import PostCover, { Cover } from "@/src/components/PostCover";
+import Markdown from "@/src/components/Markdown";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"));
 
@@ -29,14 +32,15 @@ export default function EditPost() {
     register,
     setValues,
     handleSubmit,
+    getValues,
     control,
     formState: { errors, isValid },
-  } = useForm<EditPostFormData>({
-    resolver: zodResolver(editPostSchema),
+  } = useForm<PostFormData>({
+    resolver: zodResolver(postSchema),
     mode: "onTouched",
   });
 
-  const onSubmit = async ({ title, slug, body }: EditPostFormData) => {
+  const onSubmit = async ({ title, slug, body }: PostFormData) => {
     if (!data?.id) {
       toast.error("Something went wrong (no id)");
       return;
@@ -102,8 +106,65 @@ export default function EditPost() {
               }
               disabled={!data?.title}
             />
+            <p className="error-msg">{errors.slug?.message}</p>
+            <label htmlFor="cover" className="text-lg font-semibold">
+              Cover
+            </label>
+            <div className="flex flex-col items-center border border-secondary p-5 rounded-lg">
+              <div className="flex gap-4 w-full md:flex-row flex-col">
+                <input
+                  {...register("cover.src")}
+                  type="text"
+                  id="cover.src"
+                  placeholder="Enter a image/video URL"
+                  className="md:w-[55%] w-full"
+                />
+                <div className="flex md:w-[45%] gap-4">
+                  <select
+                    {...register("cover.type")}
+                    className="w-[56%] appearance-none"
+                    defaultValue="image"
+                  >
+                    <option value="image">Image</option>
+                    <option value="video">Video</option>
+                  </select>
+                  <button
+                    className="border border-secondary p-2 rounded-sm w-[44%]"
+                    onClick={() =>
+                      setData({
+                        ...data,
+                        cover: getValues("cover") as Cover,
+                      } as Post)
+                    }
+                    type="button"
+                  >
+                    Preview
+                  </button>
+                </div>
+              </div>
+              {data?.cover?.src ? (
+                <PostCover post={data} className="w-auto h-[50%] my-4" />
+              ) : (
+                <div className="border-2 border-dashed border-secondary w-[50%] h-60 my-4"></div>
+              )}
+              {data?.cover?.caption && (
+                <Markdown
+                  class="text-sm! mb-1 text-center opacity-70"
+                  source={data?.cover?.caption}
+                />
+              )}
+              {(!data?.cover || data?.cover.caption) && (
+                <hr className="mb-3 opacity-70 w-full" />
+              )}
+              <input
+                {...register("cover.caption")}
+                type="text"
+                id="cover.caption"
+                placeholder="Enter a caption"
+                className="w-full"
+              />
+            </div>
           </div>
-          <p className="error-msg">{errors.slug?.message}</p>
 
           <p className="text-lg font-semibold">Body</p>
           <Controller
@@ -132,11 +193,3 @@ export default function EditPost() {
     </>
   );
 }
-
-export const editPostSchema = z.object({
-  title: z.string(),
-  slug: z.string(),
-  body: z.string(),
-});
-
-export type EditPostFormData = z.infer<typeof editPostSchema>;
