@@ -159,10 +159,10 @@ export const postSchema = z.object({
   slug: z.string(),
   body: z.string(),
   cover: z.object({
-    src: z.string().optional(),
-    type: z.string().optional(),
-    caption: z.string().optional(),
-  }),
+    src: z.string(),
+    type: z.string(),
+    caption: z.string(),
+  }).optional(),
 });
 
 export type PostFormData = z.infer<typeof postSchema>;

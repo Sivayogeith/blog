@@ -1,3 +1,5 @@
+@import "@uiw/react-md-editor/markdown-editor.css";
+@import "@uiw/react-markdown-preview/markdown.css";
 @import "tailwindcss";
 
 @theme inline {
@@ -39,11 +41,15 @@ body {
   @apply bg-linear-to-r dark:from-dark dark:via-darker dark:to-darkest from-lightest to-lighter dark:text-white;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   @apply border border-secondary rounded-md p-2 dark:bg-dark bg-lightest;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
   @apply border-[1.5px] outline-none;
 }
 
@@ -90,7 +96,7 @@ button:disabled {
 }
 
 .wmde-markdown h1 {
-  @apply dark:border-lightest! border-dark!
+  @apply dark:border-lightest! border-dark!;
 }
 
 .wmde-markdown img {
@@ -102,7 +108,13 @@ button:disabled {
 }
 
 .wmde-markdown pre:hover .copied:hover {
-  @apply dark:bg-lighter! bg-deep-light!
+  @apply dark:bg-lighter! bg-deep-light!;
+}
+
+ol,
+ul,
+menu {
+  list-style: revert;
 }
 
 /* Animations */
