@@ -2,7 +2,7 @@
 
 import * as commands from "@uiw/react-md-editor/commands";
 import dynamic from "next/dynamic";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { createPost } from "@/src/api/adminAPI";
 import { useRouter } from "nextjs-toploader/app";
@@ -29,12 +29,15 @@ export default function CreatePost() {
     register,
     handleSubmit,
     getValues,
+    watch,
     control,
     formState: { errors, isValid },
   } = useForm<PostFormData>({
     resolver: zodResolver(postSchema),
     mode: "onTouched",
   });
+
+  const file = watch("cover.file");
 
   const onSubmit = async ({ title, slug, body, cover }: PostFormData) => {
     buttonRef.current?.setLoading(true);
@@ -48,6 +51,11 @@ export default function CreatePost() {
     }
     toast.error(result.message);
   };
+
+  useEffect(() => {
+    console.log(file);
+    console.log(errors);
+  }, [errors]);
 
   return (
     <>
@@ -83,18 +91,31 @@ export default function CreatePost() {
               Cover
             </label>
             <div className="flex flex-col items-center border border-secondary p-5 rounded-lg">
-              <div className="flex gap-4 w-full md:flex-row flex-col">
+              <div className="flex gap-4 w-full md:flex-row flex-col items-center">
+                <input
+                  {...register("cover.file")}
+                  type="file"
+                  id="files"
+                  className="w-[15%] border border-secondary p-2 rounded-sm text-center cursor-pointer"
+                  />
+                {/* <label
+                  htmlFor="files"
+                  className="w-[11%] border border-secondary p-2 rounded-sm text-center cursor-pointer"
+                >
+                  Select File
+                </label> */}
+                <p className="w-[3%] text-center">- or -</p>
                 <input
                   {...register("cover.src")}
                   type="text"
                   id="cover.src"
                   placeholder="Enter a image/video URL"
-                  className="md:w-[55%] w-full"
+                  className="md:w-[43%] w-full"
                 />
-                <div className="flex md:w-[45%] gap-4">
+                <div className="flex md:w-[43%] gap-4">
                   <select
                     {...register("cover.type")}
-                    className="w-[56%] appearance-none "
+                    className="w-[56%] appearance-none"
                   >
                     <option value="image">Image</option>
                     <option value="video">Video</option>
@@ -108,6 +129,7 @@ export default function CreatePost() {
                   </button>
                 </div>
               </div>
+              <p className="error-msg text-start w-full">{errors.cover?.file?.message}</p>
               {cover.src ? (
                 <PostCover
                   post={{ cover } as Post}
@@ -154,15 +176,39 @@ export default function CreatePost() {
   );
 }
 
+export const ACCEPTED_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "video/mp4",
+  "video/webm",
+];
+
 export const postSchema = z.object({
   title: z.string(),
   slug: z.string(),
   body: z.string(),
-  cover: z.object({
-    src: z.string(),
-    type: z.string(),
-    caption: z.string(),
-  }).optional(),
+  cover: z
+    .object({
+      src: z.string(),
+      type: z.string(),
+      caption: z.string(),
+      file: z
+        .custom<FileList | undefined>()
+        .optional()
+        .refine(
+          (files) =>
+            !files || files.length === 0 || files[0].size <= 100 * 1024 * 1024,
+          { message: "max file size is 100 MB!" },
+        )
+        .refine(
+          (files) =>
+            !files ||
+            files.length === 0 ||
+            ACCEPTED_TYPES.includes(files[0].type),
+          { message: "only images and videos are allowed!" },
+        ),
+    })
 });
 
 export type PostFormData = z.infer<typeof postSchema>;
