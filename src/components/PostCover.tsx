@@ -35,7 +35,6 @@ export default function PostCover(props: {
       </div>
       {cover.type == "image" ? (
         <Image
-          loader={({ src }) => src}
           src={cover.src}
           alt={`${props.post.title}'s image cover`}
           width={500}
@@ -43,6 +42,7 @@ export default function PostCover(props: {
           className={coverClassName}
           onLoad={() => setLoaded(true)}
           loading="eager"
+          unoptimized
         />
       ) : (
         <video

@@ -6,7 +6,7 @@ import { useRouter } from "nextjs-toploader/app";
 import { useEffect, useRef, useState } from "react";
 
 import { getPost, Post } from "@/src/api/postsAPI";
-import { editPost } from "@/src/api/adminAPI";
+import { editPost, upload } from "@/src/api/adminAPI";
 import LoadingButton, {
   LoadingButtonElement,
 } from "@/src/components/LoadingButton";
@@ -15,7 +15,7 @@ import z from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { PostFormData, postSchema } from "../../create/page";
+import { ACCEPTED_TYPES, PostFormData, postSchema } from "../../create/page";
 import PostCover, { Cover } from "@/src/components/PostCover";
 import Markdown from "@/src/components/Markdown";
 
@@ -31,6 +31,7 @@ export default function EditPost() {
   const {
     register,
     setValues,
+    setValue,
     handleSubmit,
     getValues,
     control,
@@ -56,6 +57,39 @@ export default function EditPost() {
       return;
     }
     toast.error(result.message);
+  };
+
+  const onUpload = async () => {
+    const file = getValues("cover.file")?.[0];
+    if (!file) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    const imageResult = await upload(formData);
+    if (imageResult.error) {
+      return toast.error(imageResult.error);
+    }
+    toast.success("Uploaded your cover to CDN!");
+    setValue("cover.src", imageResult.url);
+    onPreview(true);
+  };
+
+  const onPreview = async (forceDefault: boolean = false) => {
+    const values = getValues("cover") as Cover & { file: FileList };
+    let cover: Cover = {
+      src: values.src,
+      type: values.type,
+      caption: values.caption,
+    };
+    if (!forceDefault && values.file[0]) {
+      cover.src = URL.createObjectURL(values.file[0]);
+    }
+    setData({
+      ...data,
+      cover: values as Cover,
+    } as Post);
   };
 
   useEffect(() => {
@@ -108,6 +142,23 @@ export default function EditPost() {
             <div className="flex flex-col items-center border border-secondary p-5 rounded-lg">
               <div className="flex gap-4 w-full md:flex-row flex-col">
                 <input
+                  {...register("cover.file")}
+                  type="file"
+                  id="files"
+                  className="w-[75%] border border-secondary p-2 rounded-sm text-center cursor-pointer"
+                  accept={ACCEPTED_TYPES.join(",")}
+                />
+                <button
+                  className="border border-secondary p-2 rounded-sm w-[25%]"
+                  onClick={onUpload}
+                  type="button"
+                >
+                  Upload
+                </button>
+              </div>
+              <p className="my-2 text-lg text-center">- or -</p>
+              <div className="flex gap-4 w-full md:flex-row flex-col">
+                <input
                   {...register("cover.src")}
                   type="text"
                   id="cover.src"
@@ -125,12 +176,7 @@ export default function EditPost() {
                   </select>
                   <button
                     className="border border-secondary p-2 rounded-sm w-[44%]"
-                    onClick={() =>
-                      setData({
-                        ...data,
-                        cover: getValues("cover") as Cover,
-                      } as Post)
-                    }
+                    onClick={() => onPreview()}
                     type="button"
                   >
                     Preview

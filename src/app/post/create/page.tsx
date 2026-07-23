@@ -151,12 +151,12 @@ export default function CreatePost() {
                   type="text"
                   id="cover.src"
                   placeholder="Enter a image/video URL"
-                  className="md:w-[57%] w-full"
+                  className="md:w-[55%] w-full"
                 />
                 <div className="flex md:w-[43%] gap-4">
                   <select
                     {...register("cover.type")}
-                    className="w-[56%] appearance-none"
+                    className="w-[45%] appearance-none"
                   >
                     <option value="image">Image</option>
                     <option value="video">Video</option>
