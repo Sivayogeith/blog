@@ -8,7 +8,7 @@ export const createPost = async (
   title: string,
   body: string,
   slug: string,
-  cover: Cover
+  cover: Cover,
 ): Promise<{ message: string; status: number }> => {
   const response = await post(`/admin/createPost`, {
     title,
@@ -18,7 +18,7 @@ export const createPost = async (
       readingTime: calculateReadingTime(body),
       words: calculateWordCount(body),
     },
-    cover
+    cover,
   });
 
   return { message: await response.text(), status: response.status };
@@ -47,7 +47,18 @@ export const editPost = async (
 export const deletePost = async (id: number) =>
   (await del(`/admin/deletePost`, { id })).text();
 
-export const getStats = async (): Promise<{ readingTime: number; words: number } | null> => {
+export const getStats = async (): Promise<{
+  readingTime: number;
+  words: number;
+} | null> => {
   const response = await get(`/admin/stats`);
   return response.ok ? response.json() : null;
+};
+
+export const upload = async (formData: FormData) => {
+  const response = await post("/admin/upload", formData);
+  if (response.status === 500) {
+    return { error: response.text() };
+  }
+  return response.json();
 };

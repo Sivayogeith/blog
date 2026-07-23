@@ -11,13 +11,16 @@ export const get = async (path: string) =>
 
 export const post = async (
   path: string,
-  body: [] | {},
+  body: [] | {} | FormData,
   setSession: boolean = false,
 ) => {
+  const headers: HeadersInit = { Cookie: await getCookies() };
+  if (!(body instanceof FormData)) headers["Content-Type"] = "application/json";
+  
   const response = await fetch(process.env.API + path, {
     method: "POST",
-    headers: { Cookie: await getCookies(), "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    headers,
+    body: body instanceof FormData ? body : JSON.stringify(body),
   });
 
   if (setSession) {
@@ -66,7 +69,7 @@ export interface Post {
     type: "image" | "video";
     src: string;
     caption: string;
-  }
+  };
 }
 
 export interface Comments {

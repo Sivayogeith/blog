@@ -4,7 +4,7 @@ import * as commands from "@uiw/react-md-editor/commands";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 
-import { createPost } from "@/src/api/adminAPI";
+import { createPost, upload } from "@/src/api/adminAPI";
 import { useRouter } from "nextjs-toploader/app";
 import z from "zod";
 import { Controller, useForm } from "react-hook-form";
@@ -29,6 +29,7 @@ export default function CreatePost() {
     register,
     handleSubmit,
     getValues,
+    setValue,
     watch,
     control,
     formState: { errors, isValid },
@@ -52,13 +53,33 @@ export default function CreatePost() {
     toast.error(result.message);
   };
 
-  const onPreview = async () => {
-    const values = getValues("cover") as Cover & {file: FileList}
-    let cover: Cover = { src: values.src, type: values.type, caption: values.caption }
-    if (values.file[0]) {
-      cover.src = URL.createObjectURL(values.file[0])
+  const onUpload = async () => {
+    const file = getValues("cover.file")?.[0];
+    if (!file) {
+      return;
     }
-    setCover(cover)
+
+    const formData = new FormData()
+    formData.append("file", file)
+    const imageResult = await upload(formData);
+    if (imageResult.error) {
+      return toast.error(imageResult.error);
+    }
+    toast.success("Uploaded your cover to CDN!");
+    setValue("cover.src", imageResult.url);
+  };
+
+  const onPreview = async () => {
+    const values = getValues("cover") as Cover & { file: FileList };
+    let cover: Cover = {
+      src: values.src,
+      type: values.type,
+      caption: values.caption,
+    };
+    if (values.file[0]) {
+      cover.src = URL.createObjectURL(values.file[0]);
+    }
+    setCover(cover);
   };
 
   useEffect(() => {
@@ -105,7 +126,8 @@ export default function CreatePost() {
                   {...register("cover.file")}
                   type="file"
                   id="files"
-                  className="w-[15%] border border-secondary p-2 rounded-sm text-center cursor-pointer"
+                  className="w-[75%] border border-secondary p-2 rounded-sm text-center cursor-pointer"
+                  accept={ACCEPTED_TYPES.join(",")}
                 />
                 {/* <label
                   htmlFor="files"
@@ -113,7 +135,16 @@ export default function CreatePost() {
                 >
                   Select File
                 </label> */}
-                <p className="w-[3%] text-center">- or -</p>
+                <button
+                  className="border border-secondary p-2 rounded-sm w-[25%]"
+                  onClick={onUpload}
+                  type="button"
+                >
+                  Upload
+                </button>
+              </div>
+              <p className="my-2 text-lg text-center">- or -</p>
+              <div className="flex gap-4 w-full md:flex-row flex-col items-center">
                 <input
                   {...register("cover.src")}
                   type="text"
