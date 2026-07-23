@@ -29,6 +29,7 @@ export const editPost = async (
   title: string = "",
   body: string = "",
   slug: string = "",
+  cover?: Cover 
 ) => {
   const response = await post(`/admin/editPost`, {
     id,
@@ -39,6 +40,7 @@ export const editPost = async (
       readingTime: calculateReadingTime(body),
       words: calculateWordCount(body),
     },
+    cover
   });
 
   return { message: await response.text(), status: response.status };

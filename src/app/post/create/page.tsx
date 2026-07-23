@@ -59,24 +59,25 @@ export default function CreatePost() {
       return;
     }
 
-    const formData = new FormData()
-    formData.append("file", file)
+    const formData = new FormData();
+    formData.append("file", file);
     const imageResult = await upload(formData);
     if (imageResult.error) {
       return toast.error(imageResult.error);
     }
     toast.success("Uploaded your cover to CDN!");
     setValue("cover.src", imageResult.url);
+    onPreview(true);
   };
 
-  const onPreview = async () => {
+  const onPreview = async (forceDefault: boolean = false) => {
     const values = getValues("cover") as Cover & { file: FileList };
     let cover: Cover = {
       src: values.src,
       type: values.type,
       caption: values.caption,
     };
-    if (values.file[0]) {
+    if (!forceDefault && values.file[0]) {
       cover.src = URL.createObjectURL(values.file[0]);
     }
     setCover(cover);
@@ -150,7 +151,7 @@ export default function CreatePost() {
                   type="text"
                   id="cover.src"
                   placeholder="Enter a image/video URL"
-                  className="md:w-[43%] w-full"
+                  className="md:w-[57%] w-full"
                 />
                 <div className="flex md:w-[43%] gap-4">
                   <select
@@ -162,7 +163,7 @@ export default function CreatePost() {
                   </select>
                   <button
                     className="border border-secondary p-2 rounded-sm w-[44%]"
-                    onClick={onPreview}
+                    onClick={() => onPreview()}
                     type="button"
                   >
                     Preview
@@ -230,26 +231,28 @@ export const postSchema = z.object({
   title: z.string(),
   slug: z.string(),
   body: z.string(),
-  cover: z.object({
-    src: z.string(),
-    type: z.string(),
-    caption: z.string(),
-    file: z
-      .custom<FileList | undefined>()
-      .optional()
-      .refine(
-        (files) =>
-          !files || files.length === 0 || files[0].size <= 100 * 1024 * 1024,
-        { message: "max file size is 100 MB!" },
-      )
-      .refine(
-        (files) =>
-          !files ||
-          files.length === 0 ||
-          ACCEPTED_TYPES.includes(files[0].type),
-        { message: "only images and videos are allowed!" },
-      ),
-  }),
+  cover: z
+    .object({
+      src: z.string(),
+      type: z.string(),
+      caption: z.string(),
+      file: z
+        .custom<FileList | null | undefined>()
+        .refine(
+          (files) =>
+            !files || !(files[0] instanceof File) || files[0].size <= 100 * 1024 * 1024,
+          { message: "max file size is 100 MB!" },
+        )
+        .refine(
+          (files) =>
+            !files ||
+            !(files[0] instanceof File) ||
+            ACCEPTED_TYPES.includes(files[0].type),
+          { message: "only images and videos are allowed!" },
+        )
+        .optional(),
+    })
+    .optional(),
 });
 
 export type PostFormData = z.infer<typeof postSchema>;

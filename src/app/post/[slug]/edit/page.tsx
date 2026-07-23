@@ -40,19 +40,14 @@ export default function EditPost() {
     mode: "onTouched",
   });
 
-  const onSubmit = async ({ title, slug, body }: PostFormData) => {
+  const onSubmit = async ({ title, slug, body, cover }: PostFormData) => {
     if (!data?.id) {
       toast.error("Something went wrong (no id)");
       return;
     }
 
     buttonRef.current?.setLoading(true);
-    const result = await editPost(
-      data.id,
-      title.toString(),
-      body,
-      slug.toString(),
-    );
+    const result = await editPost(data.id, title, body, slug, cover as Cover);
     buttonRef.current?.setLoading(false);
 
     if (result.status == 200) {
