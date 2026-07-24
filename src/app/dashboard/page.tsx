@@ -67,6 +67,7 @@ export default async function Dashboard() {
                   <PostCover
                     post={post}
                     className="rounded-xl max-w-40 max-h-30 w-auto my-2"
+                    coverProps={{className: "max-h-30 w-auto"}}
                     spinnerProps={{ size: 50 }}
                   />
                 </div>

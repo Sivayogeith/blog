@@ -30,7 +30,8 @@ export default async function Home() {
           </div>
           <PostCover
             post={post}
-            className="rounded-xl lg:w-[40%] w-full h-full"
+            className="rounded-xl w-auto h-min"
+            coverProps={{className: "w-auto max-h-80"}}
           />
         </div>
       ))}

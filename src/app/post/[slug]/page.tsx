@@ -38,11 +38,13 @@ export default async function PostPage({
               post.stats.readingTime &&
               `${convertDateToString(post.created_at)} • ${convertMinutesToString(post.stats?.readingTime)}`}
           </p>
-          <PostCover
-            post={post}
-            className="rounded-xl mb-3 mt-3 w-full h-auto"
-            coverProps={{ className: "w-full h-auto" }}
-          />
+          <div className="flex justify-center">
+            <PostCover
+              post={post}
+              className="rounded-xl mb-3 mt-3 w-max max-h-[100%]"
+              coverProps={{ className: "h-[inherit]" }}
+            />
+          </div>
           {post.cover?.caption && (
             <Markdown
               class="text-sm! mb-1 text-center opacity-70"
