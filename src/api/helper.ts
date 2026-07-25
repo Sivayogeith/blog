@@ -51,6 +51,7 @@ export const parseSessionCookies = async (res: Response): Promise<string> =>
 // Types
 export interface SessionData {
   username: string;
+  name: string;
   userId: string;
   isAdmin: boolean;
 }

@@ -41,7 +41,7 @@ export default async function PostPage({
           <div className="flex justify-center">
             <PostCover
               post={post}
-              className="rounded-xl mb-3 mt-3 w-max max-h-[100%]"
+              className="rounded-xl mb-3 mt-3 w-max max-h-full"
               coverProps={{ className: "h-[inherit]" }}
             />
           </div>
