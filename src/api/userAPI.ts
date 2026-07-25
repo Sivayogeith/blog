@@ -1,3 +1,5 @@
+"use server"
+
 import { get, User } from "./helper"
 
 export const getUser = async (username: string): Promise<User> => {

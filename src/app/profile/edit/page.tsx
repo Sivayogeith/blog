@@ -10,9 +10,11 @@ import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { User } from "@/src/api/helper";
+import { getUser } from "@/src/api/userAPI";
 
 export default function EditProfile() {
-  const [session, setSession] = useState<SessionData>();
+  const [user, setUser] = useState<User>();
   const buttonRef = useRef<LoadingButtonElement>(null);
   const router = useRouter();
   const {
@@ -40,10 +42,12 @@ export default function EditProfile() {
   };
 
   useEffect(() => {
-    getMe().then((s) => {
-      setValues(s, { shouldValidate: true });
-      setSession(s);
-    });
+    getMe().then((s) =>
+      getUser(s.username).then((u) => {
+        setValues(s, { shouldValidate: true });
+        setUser(u);
+      }),
+   );
   }, []);
 
   return (
@@ -60,9 +64,9 @@ export default function EditProfile() {
           {...register("username")}
           type="text"
           id="username"
-          disabled={!session?.username}
+          disabled={!user?.username}
           placeholder={
-            session?.username ? "Choose a username" : "Please wait a second.."
+            user?.username ? "Choose a username" : "Please wait a second.."
           }
         />
         <p className="error-msg">{errors.username?.message}</p>
@@ -74,9 +78,9 @@ export default function EditProfile() {
           {...register("name")}
           type="text"
           id="name"
-          disabled={!session?.name}
+          disabled={!user?.name}
           placeholder={
-            session?.name ? "Choose a display name" : "Please wait a second.."
+            user?.name ? "Choose a display name" : "Please wait a second.."
           }
         />
         <p className="error-msg">{errors.name?.message}</p>
@@ -84,7 +88,15 @@ export default function EditProfile() {
         <label htmlFor="image" className="text-lg font-semibold mt-5">
           Profile Picture
         </label>
-        <input {...register("image")} type="text" id="image" placeholder="Enter a Image URL"/>
+        <input
+          {...register("image")}
+          type="text"
+          id="image"
+          disabled={!user}
+          placeholder={
+            user ? "Enter a Image URL" : "Please wait a second.."
+          }
+        />
         <p>{errors.image?.message}</p>
         <LoadingButton ref={buttonRef} disabled={!isValid} />
         <p className="text-center mt-1">{errors.form?.message}</p>
