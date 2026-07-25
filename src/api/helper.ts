@@ -49,6 +49,13 @@ export const parseSessionCookies = async (res: Response): Promise<string> =>
   (qs.parse(res.headers.getSetCookie()[0], "; ") as any)["connect.sid"];
 
 // Types
+export interface User {
+  username: string;
+  name: string;
+  userId: string;
+  isAdmin: string;
+}
+
 export interface SessionData {
   username: string;
   name: string;
