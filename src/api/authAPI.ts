@@ -17,8 +17,8 @@ export const login = async (username: string, password: string) => {
   return { message: await response.text(), status: response.status };
 };
 
-export const editProfile = async (username: string) => {
-  const response = await post("/auth/edit", { username }, true);
+export const editProfile = async (username: string, name: string, image: string) => {
+  const response = await post("/auth/edit", { username, name, image }, true);
   return { message: await response.text(), status: response.status };
 };
 
