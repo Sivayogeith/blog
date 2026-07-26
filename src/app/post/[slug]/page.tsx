@@ -36,7 +36,7 @@ export default async function PostPage({
           <p className="mb-2">
             {post.created_at &&
               post.stats.readingTime &&
-              `${convertDateToString(post.created_at)} • ${convertMinutesToString(post.stats?.readingTime)}`}
+              <><a href={`/user/${post.author}`} className="dark:text-lighter text-dark">{post.author}</a> • {convertDateToString(post.created_at)} • {convertMinutesToString(post.stats?.readingTime)}</>}
           </p>
           <div className="flex justify-center">
             <PostCover

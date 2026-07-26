@@ -22,8 +22,7 @@ export default async function Home() {
               {post.title}
             </a>
             <p className="mb-5">
-              {convertDateToString(post.created_at)} •{" "}
-              {convertMinutesToString(post.stats.readingTime)}
+              <a href={`/user/${post.author}`} className="dark:text-lighter text-dark">{post.author}</a> {` • ${convertDateToString(post.created_at)} • ${convertMinutesToString(post.stats.readingTime)}`}
             </p>
 
             <Markdown source={post.body} class="body-preview" />
@@ -31,7 +30,7 @@ export default async function Home() {
           <PostCover
             post={post}
             className="rounded-xl w-auto h-min"
-            coverProps={{className: "w-auto max-h-80"}}
+            coverProps={{ className: "w-auto max-h-80" }}
           />
         </div>
       ))}
