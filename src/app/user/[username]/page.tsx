@@ -22,6 +22,7 @@ export default async function UserPage({
           alt={`${user.name}'s Profile Picture`}
           width={128}
           height={128}
+          loading="eager"
           unoptimized
           className="rounded-full border dark:border-lighter border-dark"
         />
