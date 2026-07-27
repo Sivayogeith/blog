@@ -7,6 +7,7 @@ import "./globals.css";
 import Navbar from "@/src/components/Navbar";
 import { getTheme } from "@teispace/next-themes/server";
 import Toaster  from "../components/Toaster";
+import { cookies } from "next/headers";
 
 const saira = Saira({
   display: "swap",
@@ -24,6 +25,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const initialTheme = await getTheme() as ("light" | "dark");
+  const cookieStore = await cookies()
+  const toastCookie = cookieStore.get("toast")?.value
 
   return (
     <html
@@ -41,7 +44,7 @@ export default async function RootLayout({
           <NextTopLoader showSpinner={false} color={"#62229d"} />
           <Navbar />
           {children}
-          <Toaster />
+          <Toaster toastCookie={toastCookie}/>
         </ThemeProvider>
       </body>
     </html>

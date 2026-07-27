@@ -24,7 +24,7 @@ export const editProfile = async (username: string, name: string, image: string)
 
 export const getMe = async (): Promise<SessionData> => {
   const response = await get("/auth/me");
-  !response.ok && console.log(response.text());
+  !response.ok && console.log(await response.text());
   return response.ok ? response.json() : ({} as SessionData);
 };
 

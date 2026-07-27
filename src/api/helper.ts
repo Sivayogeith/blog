@@ -1,26 +1,37 @@
+"use server"
+
 import { cookies } from "next/headers";
 import qs from "querystring";
-import { toast } from "sonner";
 
-const errorHandling = (response: Response, allErrors: boolean) => {
+const toast = async (
+  message: string,
+  type: "success" | "error" | "info" | "warning" | "message",
+) => {
+  const cookieStore = await cookies();
+  console.log(message, type)
+  cookieStore.set("toast", JSON.stringify({ message, type }), {
+    maxAge: 10,
+    path: "/",
+  });
+};
+
+const errorHandling = async (response: Response, allErrors: boolean) => {
+  console.log(response.status)
   if (allErrors) {
     if (!response.ok) {
-      toast.error(response.text());
-      return false;
+      await toast(await response.text(), "error");
     }
   }
 
-  if (response.status == 500) {
-    toast.error("Something went wrong, try again or ping Sage!");
-    return false;
+  if (response.status === 500) {
+    await toast("Something went wrong, try again or ping Sage!", "error");
   }
 
   if (response.status == 429) {
-    toast.error("Please slow down, try again in a few mins!");
-    return false;
+    await toast("Please slow down, try again in a few mins!", "error");
   }
 
-  return true;
+  return response;
 };
 
 // fetch methods
@@ -31,10 +42,10 @@ export const get = async (path: string, allErrors: boolean = false) => {
     },
   });
 
-  !errorHandling(response, allErrors)
+  await errorHandling(response, allErrors)
 
-  return response
-}
+  return response;
+};
 
 export const post = async (
   path: string,
@@ -51,7 +62,7 @@ export const post = async (
     body: body instanceof FormData ? body : JSON.stringify(body),
   });
 
-  !errorHandling(response, allErrors)
+  await errorHandling(response, allErrors);
 
   if (setSession) {
     const sessionCookie = await parseSessionCookies(response);
