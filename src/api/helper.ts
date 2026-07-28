@@ -1,37 +1,13 @@
 import { cookies } from "next/headers";
 import qs from "querystring";
-import { toast } from "sonner";
-
-const errorHandling = (response: Response, allErrors: boolean) => {
-  if (allErrors) {
-    if (!response.ok) {
-      toast.error(response.text());
-      return false;
-    }
-  }
-
-  if (response.status == 500) {
-    toast.error("Something went wrong, try again or ping Sage!");
-    return false;
-  }
-
-  if (response.status == 429) {
-    toast.error("Please slow down, try again in a few mins!");
-    return false;
-  }
-
-  return true;
-};
 
 // fetch methods
-export const get = async (path: string, allErrors: boolean = false) => {
+export const get = async (path: string) => {
   const response = await fetch(process.env.API + path, {
     headers: {
       Cookie: await getCookies(),
     },
   });
-
-  !errorHandling(response, allErrors)
 
   return response
 }
@@ -40,7 +16,6 @@ export const post = async (
   path: string,
   body: [] | {} | FormData,
   setSession: boolean = false,
-  allErrors: boolean = false,
 ) => {
   const headers: HeadersInit = { Cookie: await getCookies() };
   if (!(body instanceof FormData)) headers["Content-Type"] = "application/json";
@@ -51,7 +26,6 @@ export const post = async (
     body: body instanceof FormData ? body : JSON.stringify(body),
   });
 
-  !errorHandling(response, allErrors)
 
   if (setSession) {
     const sessionCookie = await parseSessionCookies(response);
