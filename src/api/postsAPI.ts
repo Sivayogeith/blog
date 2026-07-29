@@ -20,12 +20,12 @@ export const getPost = async (slug: string): Promise<Post> => {
 
 // Comments
 
-export const getComments = async (postId: number): Promise<Comment[]> => {
-  const response = await get(`/posts/${postId}/comments`);
+export const getComments = async (postSlug: string): Promise<Comment[]> => {
+  const response = await get(`/posts/${postSlug}/comments`);
   return response.ok ? response.json() : [];
 };
 
-export const addComment = async (postId: number, message: string) => {
-  const response = await post(`/posts/${postId}/comment`, { message });
+export const addComment = async (postSlug: string, message: string) => {
+  const response = await post(`/posts/${postSlug}/comment`, { message });
   return { message: await response.text(), status: response.status };
 };

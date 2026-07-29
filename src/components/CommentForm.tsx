@@ -20,7 +20,7 @@ export default function CommentForm({ post }: { post: Post }) {
   const text = watch("text", "");
 
   const onSubmit = async ({ text }: CommentFormData) => {
-    const result = await addComment(post.id, text);
+    const result = await addComment(post.slug, text);
     if (result.status == 200) {
       return toast.success(result.message);
     }

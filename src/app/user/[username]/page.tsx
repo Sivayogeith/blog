@@ -55,9 +55,7 @@ export default async function UserPage({
       <hr className="text-secondary mb-2" />
       <div className="grid grid-cols-2 p-4 gap-10">
         <table className="table-auto">
-          <caption className="caption-top mb-1">
-            Posts
-          </caption>
+          <caption className="caption-top mb-1">Posts</caption>
           <thead>
             <tr>
               <th>Title</th>
@@ -92,7 +90,14 @@ export default async function UserPage({
               {comments.map((comment) => (
                 <tr key={comment.id}>
                   <td>{comment.message}</td>
-                  <td className="text-end">#{comment.on}</td>
+                  <td className="text-end">
+                    <a
+                      href={`/post/${comment.on}`}
+                      className="dark:text-lighter text-dark"
+                    >
+                      #{comment.on}
+                    </a>
+                  </td>
                 </tr>
               ))}
             </tbody>
