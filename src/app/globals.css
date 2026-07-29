@@ -89,6 +89,14 @@ button:disabled {
   @apply dark:text-red-600 text-red-800 text-sm mt-1;
 }
 
+table {
+  @apply rounded-lg
+}
+
+td, th {
+  @apply p-2 border-secondary border
+}
+
 /* Markdown Preview CSS */
 
 .wmde-markdown hr {

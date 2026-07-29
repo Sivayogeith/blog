@@ -1,7 +1,7 @@
 "use server";
 
 import { processPost } from "../utils/postUtils";
-import { get, post, Post, Comments } from "./helper";
+import { get, post, Post, Comment } from "./helper";
 export type { Post } from "./helper";
 
 export const getPosts = async (truncate: boolean = true): Promise<Post[]> => {
@@ -20,7 +20,7 @@ export const getPost = async (slug: string): Promise<Post> => {
 
 // Comments
 
-export const getComments = async (postId: number): Promise<Comments[]> => {
+export const getComments = async (postId: number): Promise<Comment[]> => {
   const response = await get(`/posts/${postId}/comments`);
   return response.ok ? response.json() : [];
 };

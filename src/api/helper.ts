@@ -85,7 +85,7 @@ export interface Post {
   author: string;
 }
 
-export interface Comments {
+export interface Comment {
   id: number;
   created_at: string;
   from: string; // username from users
