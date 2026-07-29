@@ -6,22 +6,27 @@ import z from "zod";
 import { addComment, Post } from "../api/postsAPI";
 import { toast } from "sonner";
 import SendIcon from "./icons/SendIcon";
+import { useRouter } from "next/navigation";
 
-export default function CommentForm({ post }: { post: Post }) {
+export default function CommentForm({ post }: { post: Post}) {
   const {
     register,
     handleSubmit,
     formState: { isValid },
+    setValue, 
     watch,
   } = useForm<CommentFormData>({
     resolver: zodResolver(commentSchema),
     mode: "onTouched",
   });
+  const router = useRouter()
   const text = watch("text", "");
 
   const onSubmit = async ({ text }: CommentFormData) => {
     const result = await addComment(post.slug, text);
     if (result.status == 200) {
+      router.refresh()
+      setValue("text", "")
       return toast.success(result.message);
     }
     toast.error(result.message);

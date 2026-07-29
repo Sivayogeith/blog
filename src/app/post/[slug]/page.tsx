@@ -55,10 +55,7 @@ export default async function PostPage({
             <hr className="mb-3 opacity-70" />
           )}
           <Markdown source={post.body} />
-
           <hr className="mb-5 mt-8 opacity-70" />
-          <CommentForm post={post} />
-          <p className="text-xl font-bold mt-4">Comments</p>
           <Comments post={post} />
         </div>
       </div>
