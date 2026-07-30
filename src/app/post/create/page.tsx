@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import PostCover, { Cover } from "@/src/components/PostCover";
 import { Post } from "@/src/api/helper";
 import Markdown from "@/src/components/Markdown";
+import Dropzone from "@/src/components/Dropzone";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"));
 
@@ -31,6 +32,7 @@ export default function CreatePost() {
     getValues,
     setValue,
     watch,
+    trigger,
     control,
     formState: { errors, isValid },
   } = useForm<PostFormData>({
@@ -77,7 +79,7 @@ export default function CreatePost() {
       type: values.type,
       caption: values.caption,
     };
-    if (!forceDefault && values.file[0]) {
+    if (!forceDefault && values.file?.[0]) {
       cover.src = URL.createObjectURL(values.file[0]);
     }
     setCover(cover);
@@ -123,21 +125,21 @@ export default function CreatePost() {
             </label>
             <div className="flex flex-col items-center border border-secondary p-5 rounded-lg">
               <div className="flex gap-4 w-full md:flex-row flex-col items-center">
-                <input
-                  {...register("cover.file")}
-                  type="file"
-                  id="files"
-                  className="w-[75%] border border-secondary p-2 rounded-sm text-center cursor-pointer"
-                  accept={ACCEPTED_TYPES.join(",")}
+                <Controller
+                  name="cover.file"
+                  control={control}
+                  render={({ field: { onChange } }) => (
+                    <Dropzone
+                      onChange={async (e) => {
+                        onChange(e.target.files);
+                        await trigger("cover.file");
+                      }}
+                      accept={ACCEPTED_TYPES.join(",")}
+                    />
+                  )}
                 />
-                {/* <label
-                  htmlFor="files"
-                  className="w-[11%] border border-secondary p-2 rounded-sm text-center cursor-pointer"
-                >
-                  Select File
-                </label> */}
                 <button
-                  className="border border-secondary p-2 rounded-sm w-[25%]"
+                  className="border border-secondary p-2 rounded-sm md:w-[25%] w-full h-[stretch]"
                   onClick={onUpload}
                   type="button"
                 >
@@ -153,16 +155,16 @@ export default function CreatePost() {
                   placeholder="Enter a image/video URL"
                   className="md:w-[55%] w-full"
                 />
-                <div className="flex md:w-[43%] gap-4">
+                <div className="flex md:w-[45%] w-full gap-4">
                   <select
                     {...register("cover.type")}
-                    className="w-[45%] appearance-none"
+                    className="w-[50%] appearance-none"
                   >
                     <option value="image">Image</option>
                     <option value="video">Video</option>
                   </select>
                   <button
-                    className="border border-secondary p-2 rounded-sm w-[44%]"
+                    className="border border-secondary p-2 rounded-sm w-[50%]"
                     onClick={() => onPreview()}
                     type="button"
                   >
@@ -240,7 +242,9 @@ export const postSchema = z.object({
         .custom<FileList | null | undefined>()
         .refine(
           (files) =>
-            !files || !(files[0] instanceof File) || files[0].size <= 100 * 1024 * 1024,
+            !files ||
+            !(files[0] instanceof File) ||
+            files[0].size <= 100 * 1024 * 1024,
           { message: "max file size is 100 MB!" },
         )
         .refine(
