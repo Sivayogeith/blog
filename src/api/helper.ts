@@ -89,6 +89,7 @@ export interface Comment {
   id: number;
   created_at: string;
   from: string; // username from users
-  on: number; // id from posts
+  image: string; // user's profile picture
+  on: number; // slug from posts
   message: string;
 }
