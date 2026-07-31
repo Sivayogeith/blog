@@ -2,7 +2,7 @@
 
 import * as commands from "@uiw/react-md-editor/commands";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { createPost, upload } from "@/src/api/adminAPI";
 import { useRouter } from "nextjs-toploader/app";
@@ -31,7 +31,6 @@ export default function CreatePost() {
     handleSubmit,
     getValues,
     setValue,
-    watch,
     trigger,
     control,
     formState: { errors, isValid },
@@ -39,8 +38,6 @@ export default function CreatePost() {
     resolver: zodResolver(postSchema),
     mode: "onTouched",
   });
-
-  const file = watch("cover.file");
 
   const onSubmit = async ({ title, slug, body, cover }: PostFormData) => {
     buttonRef.current?.setLoading(true);
@@ -84,11 +81,6 @@ export default function CreatePost() {
     }
     setCover(cover);
   };
-
-  useEffect(() => {
-    console.log(file);
-    console.log(errors);
-  }, [errors]);
 
   return (
     <>

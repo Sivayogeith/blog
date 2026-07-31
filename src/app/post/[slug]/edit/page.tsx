@@ -11,13 +11,13 @@ import LoadingButton, {
   LoadingButtonElement,
 } from "@/src/components/LoadingButton";
 import { useTheme } from "@teispace/next-themes";
-import z from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { ACCEPTED_TYPES, PostFormData, postSchema } from "../../create/page";
 import PostCover, { Cover } from "@/src/components/PostCover";
 import Markdown from "@/src/components/Markdown";
+import Dropzone from "@/src/components/Dropzone";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"));
 
@@ -34,6 +34,7 @@ export default function EditPost() {
     setValue,
     handleSubmit,
     getValues,
+    trigger,
     control,
     formState: { errors, isValid },
   } = useForm<PostFormData>({
@@ -83,12 +84,12 @@ export default function EditPost() {
       type: values.type,
       caption: values.caption,
     };
-    if (!forceDefault && values.file[0]) {
+    if (!forceDefault && values.file?.[0]) {
       cover.src = URL.createObjectURL(values.file[0]);
     }
     setData({
       ...data,
-      cover: values as Cover,
+      cover,
     } as Post);
   };
 
@@ -141,15 +142,21 @@ export default function EditPost() {
             </label>
             <div className="flex flex-col items-center border border-secondary p-5 rounded-lg">
               <div className="flex gap-4 w-full md:flex-row flex-col">
-                <input
-                  {...register("cover.file")}
-                  type="file"
-                  id="files"
-                  className="w-[75%] border border-secondary p-2 rounded-sm text-center cursor-pointer"
-                  accept={ACCEPTED_TYPES.join(",")}
+                <Controller
+                  name="cover.file"
+                  control={control}
+                  render={({ field: { onChange } }) => (
+                    <Dropzone
+                      onChange={async (e) => {
+                        onChange(e.target.files);
+                        await trigger("cover.file");
+                      }}
+                      accept={ACCEPTED_TYPES.join(",")}
+                    />
+                  )}
                 />
                 <button
-                  className="border border-secondary p-2 rounded-sm w-[25%]"
+                  className="border border-secondary p-2 rounded-sm md:w-[25%] w-full h-[stretch]"
                   onClick={onUpload}
                   type="button"
                 >
@@ -168,14 +175,14 @@ export default function EditPost() {
                 <div className="flex md:w-[45%] gap-4">
                   <select
                     {...register("cover.type")}
-                    className="w-[56%] appearance-none"
+                    className="w-[50%] appearance-none"
                     defaultValue="image"
                   >
                     <option value="image">Image</option>
                     <option value="video">Video</option>
                   </select>
                   <button
-                    className="border border-secondary p-2 rounded-sm w-[44%]"
+                    className="border border-secondary p-2 rounded-sm w-[50%]"
                     onClick={() => onPreview()}
                     type="button"
                   >
