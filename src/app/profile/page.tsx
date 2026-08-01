@@ -1,18 +1,53 @@
 "use client";
 
-import { getMe } from "@/src/api/authAPI";
+import { editProfile, getMe } from "@/src/api/authAPI";
 import { User } from "@/src/api/helper";
 import { getUser } from "@/src/api/userAPI";
 import EditIcon from "@/src/components/icons/EditIcon";
 import Spinner from "@/src/components/Spinner";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { EditProfileFormData, editProfileSchema } from "./edit/page";
+import { toast } from "sonner";
 
 export default function Profile() {
-  const [user, setUser] = useState({} as User);
+  const [user, setUser] = useState({} as Omit<User, "isAdmin">);
+  const [edit, setEdit] = useState(false);
+
+  const {
+    register,
+    getValues,
+    setValues,
+    formState: { errors, isValid },
+  } = useForm<EditProfileFormData>({
+    resolver: zodResolver(editProfileSchema),
+    mode: "onTouched",
+  });
+
+  const onSubmit = () => {
+    const { username, name, image }: EditProfileFormData = getValues();
+
+    toast.promise(editProfile(username, name, image), {
+      loading: "Saving...",
+      success: ({ message, status }) => {
+        return { type: status == 200 ? "success" : "error", message };
+      },
+    });
+
+    setEdit(false);
+    setUser({ username, name, image });
+    console.log(username, name, image);
+  };
 
   useEffect(() => {
-    getMe().then((s) => getUser(s.username).then(setUser as any));
+    getMe().then((s) =>
+      getUser(s.username).then((u) => {
+        setUser(u);
+        setValues(u);
+      }),
+    );
   }, []);
 
   return (
@@ -23,7 +58,7 @@ export default function Profile() {
         {user.username ? (
           <>
             <div className="flex justify-between pb-8">
-              <div className="flex gap-5">
+              <form className="flex gap-5">
                 <Image
                   src={user.image || "/default-user.png"}
                   alt={`${user.name}'s Profile Picture`}
@@ -33,17 +68,38 @@ export default function Profile() {
                   unoptimized
                   className="rounded-full border dark:border-lighter border-dark size-25"
                 />
-                <div className="pt-2">
-                  <h1 className="text-3xl">{user.name}</h1>
-                  <p className="text-xl opacity-75">@{user.username}</p>
+                <div className="pt-2 flex flex-col">
+                  {edit ? (
+                    <>
+                      <input
+                        {...register("name")}
+                        className="py-0! mb-2 text-3xl"
+                      />
+                      <input
+                        {...register("username")}
+                        className="py-0! text-xl"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <h1 className="text-3xl">{user.name}</h1>
+                      <p className="text-xl opacity-75">@{user.username}</p>
+                    </>
+                  )}
                 </div>
-              </div>
-              <a
+              </form>
+              <button
                 className="opacity-85 pt-2 flex gap-1 items-center h-min hover:dark:text-lightest hover:text-dark text-lg"
-                href="/profile/edit"
+                onClick={() => (edit ? onSubmit() : setEdit(true))}
               >
-                <EditIcon /> edit
-              </a>
+                {edit ? (
+                  "save"
+                ) : (
+                  <>
+                    <EditIcon /> edit
+                  </>
+                )}
+              </button>
             </div>
             <div className="border-[0.5] border-secondary w-full flex h-20 rounded-sm justify-between px-5 items-center">
               <div className="flex gap-2 items-center">
