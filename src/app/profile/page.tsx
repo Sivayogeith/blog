@@ -6,11 +6,11 @@ import { getUser } from "@/src/api/userAPI";
 import EditIcon from "@/src/components/icons/EditIcon";
 import Spinner from "@/src/components/Spinner";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { EditProfileFormData, editProfileSchema } from "./edit/page";
 import { toast } from "sonner";
+import ProfileDropzone from "@/src/components/ProfileDropzone";
+import z from "zod";
 
 export default function Profile() {
   const [user, setUser] = useState({} as Omit<User, "isAdmin">);
@@ -20,6 +20,7 @@ export default function Profile() {
     register,
     getValues,
     setValues,
+    trigger, 
     formState: { errors, isValid },
   } = useForm<EditProfileFormData>({
     resolver: zodResolver(editProfileSchema),
@@ -27,9 +28,20 @@ export default function Profile() {
   });
 
   const onSubmit = () => {
-    const { username, name, image }: EditProfileFormData = getValues();
+    const { username, name }: EditProfileFormData = getValues();
+    trigger()
+    
+    if (!isValid) {
+      toast.error(
+        String(
+          (Object.values(errors).find((e: any) => e?.message != null) as any)
+            ?.message ?? "",
+        ),
+      );
+      return;
+    }
 
-    toast.promise(editProfile(username, name, image), {
+    toast.promise(editProfile(username, name, user.image), {
       loading: "Saving...",
       success: ({ message, status }) => {
         return { type: status == 200 ? "success" : "error", message };
@@ -37,15 +49,14 @@ export default function Profile() {
     });
 
     setEdit(false);
-    setUser({ username, name, image });
-    console.log(username, name, image);
+    setUser({ username, name, image: user.image });
   };
 
   useEffect(() => {
     getMe().then((s) =>
       getUser(s.username).then((u) => {
         setUser(u);
-        setValues(u);
+        setValues({ username: u.username, name: u.name });
       }),
     );
   }, []);
@@ -53,20 +64,17 @@ export default function Profile() {
   return (
     <div className="flex justify-center px-2">
       <div
-        className={`border-[0.5] border-secondary md:w-[70%] w-full h-[88dvh] pt-10 mt-6 md:px-15 px-5 rounded-sm ${!user.username && "flex justify-center items-center pt-0"}`}
+        className={`border-[0.5] border-secondary md:w-[70%] w-full h-[88dvh] pt-10 mt-6 md:px-15 px-5 rounded-sm flex flex-col items-center md:block ${!user.username && "flex! justify-center items-center pt-0"}`}
       >
         {user.username ? (
           <>
-            <div className="flex justify-between pb-8">
-              <form className="flex gap-5">
-                <Image
+            <div className="flex md:flex-row flex-col pb-8 justify-between">
+              <form className="flex gap-5 md:flex-row flex-col text-center">
+                <ProfileDropzone
+                  onChange={() => ""}
                   src={user.image || "/default-user.png"}
-                  alt={`${user.name}'s Profile Picture`}
-                  width={128}
-                  height={128}
-                  loading="eager"
-                  unoptimized
-                  className="rounded-full border dark:border-lighter border-dark size-25"
+                  editMode={edit}
+                  accept={PFP_ACCEPTED_TYPES.join(",")}
                 />
                 <div className="pt-2 flex flex-col">
                   {edit ? (
@@ -131,3 +139,35 @@ export default function Profile() {
     </div>
   );
 }
+
+export const PFP_ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/webp"];
+
+export const editProfileSchema = z.object({
+  username: z
+    .string()
+    .min(4, "username has to be atleast 4 chars!")
+    .max(15, "username should be less then 15 chars!"),
+  name: z
+    .string()
+    .min(4, "display name has to be atleast 4 chars!")
+    .max(15, "display name should be less then 15 chars!"),
+  image: z
+    .custom<FileList | null | undefined>()
+    .refine(
+      (files) =>
+        !files ||
+        !(files[0] instanceof File) ||
+        files[0].size <= 10 * 1024 * 1024,
+      { message: "max file size is 10 MB!" },
+    )
+    .refine(
+      (files) =>
+        !files ||
+        !(files[0] instanceof File) ||
+        PFP_ACCEPTED_TYPES.includes(files[0].type),
+      { message: "only .jpeg, .png and .webp files are allowed!" },
+    )
+    .optional(),
+});
+
+export type EditProfileFormData = z.infer<typeof editProfileSchema>;

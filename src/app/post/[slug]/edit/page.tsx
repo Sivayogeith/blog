@@ -14,7 +14,7 @@ import { useTheme } from "@teispace/next-themes";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { ACCEPTED_TYPES, PostFormData, postSchema } from "../../create/page";
+import { COVER_ACCEPTED_TYPES, PostFormData, postSchema } from "../../create/page";
 import PostCover, { Cover } from "@/src/components/PostCover";
 import Markdown from "@/src/components/Markdown";
 import Dropzone from "@/src/components/Dropzone";
@@ -151,7 +151,7 @@ export default function EditPost() {
                         onChange(e.target.files);
                         await trigger("cover.file");
                       }}
-                      accept={ACCEPTED_TYPES.join(",")}
+                      accept={COVER_ACCEPTED_TYPES.join(",")}
                     />
                   )}
                 />

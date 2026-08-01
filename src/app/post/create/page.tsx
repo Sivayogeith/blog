@@ -126,7 +126,7 @@ export default function CreatePost() {
                         onChange(e.target.files);
                         await trigger("cover.file");
                       }}
-                      accept={ACCEPTED_TYPES.join(",")}
+                      accept={COVER_ACCEPTED_TYPES.join(",")}
                     />
                   )}
                 />
@@ -213,7 +213,7 @@ export default function CreatePost() {
   );
 }
 
-export const ACCEPTED_TYPES = [
+export const COVER_ACCEPTED_TYPES = [
   "image/jpeg",
   "image/png",
   "image/webp",
@@ -243,7 +243,7 @@ export const postSchema = z.object({
           (files) =>
             !files ||
             !(files[0] instanceof File) ||
-            ACCEPTED_TYPES.includes(files[0].type),
+            COVER_ACCEPTED_TYPES.includes(files[0].type),
           { message: "only images and videos are allowed!" },
         )
         .optional(),

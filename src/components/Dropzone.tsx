@@ -1,15 +1,14 @@
 import { ChangeEventHandler } from "react";
 import { useDropzone } from "react-dropzone";
-import { Noop, RefCallBack } from "react-hook-form";
 
 export default function Dropzone({
-  onChange,
+  onChange, accept
 }: {
   onChange: ChangeEventHandler<HTMLInputElement>;
   accept: string
 }) {
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
-    useDropzone();
+    useDropzone({multiple: false});
 
   return (
     <section className="w-full">
@@ -19,7 +18,7 @@ export default function Dropzone({
             "w-full rounded-xl border-2 border-dashed border-secondary p-6 text-center cursor-pointer transition hover:bg-surface-secondary dark:bg-dark bg-lightest",
         })}
       >
-        <input {...getInputProps({ onChange })} />
+        <input {...getInputProps({ onChange, accept })} />
 
         {isDragActive ? (
           <p className="text-sm">Drop the files here...</p>
