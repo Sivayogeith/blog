@@ -7,7 +7,7 @@ import EditIcon from "@/src/components/icons/EditIcon";
 import Spinner from "@/src/components/Spinner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import ProfileDropzone from "@/src/components/ProfileDropzone";
 import z from "zod";
@@ -19,8 +19,9 @@ export default function Profile() {
   const {
     register,
     getValues,
+    control,
     setValues,
-    trigger, 
+    trigger,
     formState: { errors, isValid },
   } = useForm<EditProfileFormData>({
     resolver: zodResolver(editProfileSchema),
@@ -29,13 +30,14 @@ export default function Profile() {
 
   const onSubmit = () => {
     const { username, name }: EditProfileFormData = getValues();
-    trigger()
-    
+    trigger();
+
     if (!isValid) {
+      console.log(errors);
       toast.error(
         String(
           (Object.values(errors).find((e: any) => e?.message != null) as any)
-            ?.message ?? "",
+            ?.message ?? "Something went wrong....",
         ),
       );
       return;
@@ -70,12 +72,22 @@ export default function Profile() {
           <>
             <div className="flex lg:flex-row flex-col pb-8 w-full justify-between">
               <form className="flex gap-5 lg:flex-row flex-col text-center">
-                <ProfileDropzone
-                  onChange={() => ""}
-                  src={user.image || "/default-user.png"}
-                  editMode={edit}
-                  accept={PFP_ACCEPTED_TYPES.join(",")}
+                <Controller
+                  control={control}
+                  name="image"
+                  render={({ field: { onChange } }) => (
+                    <ProfileDropzone
+                      onChange={async (e) => {
+                        onChange(e.target.files);
+                        await trigger("image");
+                      }}
+                      src={user.image || "/default-user.png"}
+                      editMode={edit}
+                      accept={PFP_ACCEPTED_TYPES.join(",")}
+                    />
+                  )}
                 />
+
                 <div className="pt-2 flex flex-col">
                   {edit ? (
                     <>
