@@ -64,12 +64,12 @@ export default function Profile() {
   return (
     <div className="flex justify-center px-2">
       <div
-        className={`border-[0.5] border-secondary md:w-[70%] w-full h-[88dvh] pt-10 mt-6 md:px-15 px-5 rounded-sm flex flex-col items-center md:block ${!user.username && "flex! justify-center items-center pt-0"}`}
+        className={`border-[0.5] border-secondary md:w-[70%] w-full h-[88dvh] pt-10 mt-6 md:px-15 px-5 rounded-sm flex flex-col items-center lg:block ${!user.username && "flex! justify-center items-center pt-0"}`}
       >
         {user.username ? (
           <>
-            <div className="flex md:flex-row flex-col pb-8 justify-between">
-              <form className="flex gap-5 md:flex-row flex-col text-center">
+            <div className="flex lg:flex-row flex-col pb-8 w-full justify-between">
+              <form className="flex gap-5 lg:flex-row flex-col text-center">
                 <ProfileDropzone
                   onChange={() => ""}
                   src={user.image || "/default-user.png"}
@@ -97,7 +97,7 @@ export default function Profile() {
                 </div>
               </form>
               <button
-                className="opacity-85 pt-2 flex gap-1 items-center h-min hover:dark:text-lightest hover:text-dark text-lg"
+                className="opacity-85 lg:pt-2 flex gap-1 items-center h-min hover:dark:text-lightest hover:text-dark text-lg lg:w-auto w-full mt-6 p-2 lg:border-0 border border-secondary justify-center"
                 onClick={() => (edit ? onSubmit() : setEdit(true))}
               >
                 {edit ? (

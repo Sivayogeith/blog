@@ -25,11 +25,11 @@ export default function ProfileDropzone({
   });
 
   return (
-    <section className="relative">
+    <section className="relative lg:contents flex justify-center">
       <div
         {...getRootProps({
           className:
-            `absolute inset-0 z-10 rounded-full border border-secondary text-center cursor-pointer size-25 flex justify-center items-center group peer ${!editMode && "pointer-events-none"}`,
+            `absolute z-10 rounded-full border border-secondary text-center cursor-pointer size-25 flex justify-center items-center group peer ${!editMode && "pointer-events-none"}`,
         })}
       >
         <input {...getInputProps({ onChange, accept })} />
