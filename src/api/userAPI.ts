@@ -1,7 +1,7 @@
 "use server";
 
 import { processPost } from "../utils/postUtils";
-import { Comment, get, Post, User } from "./helper";
+import { Comment, get, post, Post, User } from "./helper";
 
 export const getUser = async (username: string): Promise<User> => {
   const response = await get(`/user/${username}`);
@@ -27,4 +27,12 @@ export const getUserPosts = async (username: string): Promise<Post[]> => {
   return response.ok
     ? (await response.json()).map((post: Post) => processPost(post, true))
     : ({} as Post[]);
+};
+
+export const upload = async (formData: FormData) => {
+  const response = await post("/user/upload", formData);
+  if (response.status === 500) {
+    return { error: response.text() };
+  }
+  return response.json();
 };

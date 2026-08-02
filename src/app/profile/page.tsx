@@ -2,7 +2,7 @@
 
 import { editProfile, getMe } from "@/src/api/authAPI";
 import { User } from "@/src/api/helper";
-import { getUser } from "@/src/api/userAPI";
+import { getUser, upload } from "@/src/api/userAPI";
 import EditIcon from "@/src/components/icons/EditIcon";
 import Spinner from "@/src/components/Spinner";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,8 +28,8 @@ export default function Profile() {
     mode: "onTouched",
   });
 
-  const onSubmit = () => {
-    const { username, name }: EditProfileFormData = getValues();
+  const onSubmit = async () => {
+    const { username, name, image }: EditProfileFormData = getValues();
     trigger();
 
     if (!isValid) {
@@ -43,7 +43,24 @@ export default function Profile() {
       return;
     }
 
-    toast.promise(editProfile(username, name, user.image), {
+    let imageSrc = user.image;
+
+    if (image?.[0]) {
+      const formData = new FormData();
+      formData.append("file", image[0]);
+      await toast.promise(upload(formData), {
+        loading: "Uploading Image...",
+        success: (data) => {
+          if (data.error) {
+            return { type: "error", message: data.error };
+          }
+          imageSrc = data.url
+          return { type: "success", message: "Successfully uploaded!" };
+        },
+      }).unwrap();
+    }
+
+    toast.promise(editProfile(username, name, imageSrc), {
       loading: "Saving...",
       success: ({ message, status }) => {
         return { type: status == 200 ? "success" : "error", message };
