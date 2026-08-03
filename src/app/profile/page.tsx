@@ -101,11 +101,12 @@ export default function Profile() {
                       src={user.image || "/default-user.png"}
                       editMode={edit}
                       accept={PFP_ACCEPTED_TYPES.join(",")}
+                      sectionClass="lg:contents flex justify-center"
                     />
                   )}
                 />
 
-                <div className="pt-2 flex flex-col">
+                <div className="pt-2 flex flex-col text-start">
                   {edit ? (
                     <>
                       <input

@@ -8,11 +8,15 @@ export default function ProfileDropzone({
   src,
   accept,
   editMode = false,
+  size = 128,
+  sectionClass
 }: {
   onChange: ChangeEventHandler<HTMLInputElement>;
   src: string;
   editMode?: boolean;
   accept?: string;
+  size?: number
+  sectionClass?: string
 }) {
   const [image, setImage] = useState(src || "/default-user.png");
   const [uploaded, setUploaded] = useState(false);
@@ -25,11 +29,12 @@ export default function ProfileDropzone({
   });
 
   return (
-    <section className="relative lg:contents flex justify-center">
+   <section className={`relative ${sectionClass}`}>
       <div
         {...getRootProps({
           className:
-            `absolute z-10 rounded-full border border-secondary text-center cursor-pointer size-25 flex justify-center items-center group peer ${!editMode && "pointer-events-none"}`,
+            `absolute z-10 rounded-full border border-secondary text-center cursor-pointer flex justify-center items-center group peer ${!editMode && "pointer-events-none"}`,
+            style: {width: size, height: size}
         })}
       >
         <input {...getInputProps({ onChange, accept })} />
@@ -45,11 +50,11 @@ export default function ProfileDropzone({
       <Image
         src={image}
         alt={`Your Profile Picture`}
-        width={128}
-        height={128}
+        width={size}
+        height={size}
         loading="eager"
         unoptimized
-        className={`rounded-full border dark:border-lighter border-dark size-25 ${(!uploaded || isDragActive) && editMode && "brightness-30"} ${editMode && "peer-hover:brightness-30"}`}
+        className={`rounded-full border dark:border-lighter border-dark ${(!uploaded || isDragActive) && editMode && "brightness-30"} ${editMode && "peer-hover:brightness-30"}`}
       />
     </section>
   );
