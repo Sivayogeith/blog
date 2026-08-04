@@ -25,7 +25,7 @@ export default async function UserPage({
 
   return (
     <>
-      <div className="flex py-4 px-8 justify-between">
+      <div className="flex py-4 px-8 justify-between md:flex-row flex-col items-center gap-5">
         <div className="flex gap-5">
           <Image
             src={user.image || "/default-user.png"}
@@ -48,9 +48,9 @@ export default async function UserPage({
             <p className="text-xl opacity-75">@{user.username}</p>
           </div>
         </div>
-        <div className="flex gap-8 items-center justify-between pt-2">
+        <div className="flex gap-8 items-center justify-center pt-2 ">
           <div>
-            <p>Posts Authored</p>
+            <p className="w-full">Posts Authored</p>
             <p className="text-5xl mt-1 text-center">{stats.posts}</p>
           </div>
           <div>
@@ -60,7 +60,7 @@ export default async function UserPage({
         </div>
       </div>
       <hr className="text-secondary mb-2" />
-      <div className="grid grid-cols-2 p-4 gap-10">
+      <div className="grid lg:grid-cols-2 grid-cols-1 p-4 gap-10">
         <table className="table-auto">
           <caption className="caption-top mb-1">Posts</caption>
           <thead>
