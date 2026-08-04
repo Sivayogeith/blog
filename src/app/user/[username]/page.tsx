@@ -37,7 +37,14 @@ export default async function UserPage({
             className="rounded-full border dark:border-lighter border-dark"
           />
           <div className="pt-2">
-            <h1 className="text-5xl">{user.name}</h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-5xl">{user.name}</h1>
+              {user.isAdmin && (
+                <span className="py-1 px-2 rounded-full h-min border-2 border-secondary">
+                  Admin
+                </span>
+              )}
+            </div>
             <p className="text-xl opacity-75">@{user.username}</p>
           </div>
         </div>
