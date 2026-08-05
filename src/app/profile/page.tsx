@@ -13,7 +13,7 @@ import ProfileDropzone from "@/src/components/ProfileDropzone";
 import z from "zod";
 
 export default function Profile() {
-  const [user, setUser] = useState({} as Omit<User, "isAdmin">);
+  const [user, setUser] = useState({} as Omit<Omit<User, "isAdmin">, "isOwner">);
   const [edit, setEdit] = useState(false);
 
   const {

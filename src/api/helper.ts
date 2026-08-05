@@ -57,6 +57,7 @@ export interface User {
   username: string;
   name: string;
   isAdmin: string;
+  isOwner: string;
   image: string;
 }
 

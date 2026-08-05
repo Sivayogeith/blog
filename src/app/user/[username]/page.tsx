@@ -40,10 +40,16 @@ export default async function UserPage({
           <div className="pt-2">
             <div className="flex items-center gap-2">
               <h1 className="text-5xl">{user.name}</h1>
-              {user.isAdmin && (
-                <span className="py-1 px-2 rounded-full h-min border-2 border-secondary">
-                  Admin
+              {user.isOwner ? (
+                <span className="py-1 px-2 rounded-full h-min border-2 border-secondary animate-rainbow bg-dark font-bold">
+                  Owner
                 </span>
+              ) : (
+                user.isAdmin && (
+                  <span className="py-1 px-2 rounded-full h-min border-2 border-secondary">
+                    Admin
+                  </span>
+                )
               )}
             </div>
             <p className="text-xl opacity-75">@{user.username}</p>
@@ -74,23 +80,37 @@ export default async function UserPage({
               </tr>
             </thead>
             <tbody>
-              {posts.length === 0 ? <tr className="text-center h-40"><td className="border-r-0! pr-0! pl-20!">This user hasn't made a post yet!</td><td className="border-l-0! pl-0!"></td></tr> : posts.map((post) => (
-                <tr key={post.id}>
-                  <td>
-                    <a href={post.slug} className="dark:text-lighter text-dark">
-                      {post.title}
-                    </a>
+              {posts.length === 0 ? (
+                <tr className="text-center h-40">
+                  <td className="border-r-0! pr-0! pl-20!">
+                    This user hasn't made a post yet!
                   </td>
-                  <td className="text-end">
-                    {convertDateToString(post.created_at)}
-                  </td>
+                  <td className="border-l-0! pl-0!"></td>
                 </tr>
-              ))}
+              ) : (
+                posts.map((post) => (
+                  <tr key={post.id}>
+                    <td>
+                      <a
+                        href={post.slug}
+                        className="dark:text-lighter text-dark"
+                      >
+                        {post.title}
+                      </a>
+                    </td>
+                    <td className="text-end">
+                      {convertDateToString(post.created_at)}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         )}
         <div className="flex flex-col items-center w-full">
-          <table className={`table-auto ${!user.isAdmin ? "w-[50%]" : "w-full"}`}>
+          <table
+            className={`table-auto ${!user.isAdmin ? "w-[50%]" : "w-full"}`}
+          >
             <caption className="caption-top mb-1">Comments</caption>
             <thead>
               <tr>
@@ -99,19 +119,28 @@ export default async function UserPage({
               </tr>
             </thead>
             <tbody>
-              {comments.length === 0 ? <tr className="text-center h-40"><td className="border-r-0! pr-0! pl-8!">This user hasn't made a comment yet!</td><td className="border-l-0! pl-0!"></td></tr> :comments.map((comment) => (
-                <tr key={comment.id}>
-                  <td>{comment.message}</td>
-                  <td className="text-end">
-                    <a
-                      href={`/post/${comment.on}`}
-                      className="dark:text-lighter text-dark"
-                    >
-                      #{comment.on}
-                    </a>
+              {comments.length === 0 ? (
+                <tr className="text-center h-40">
+                  <td className="border-r-0! pr-0! pl-8!">
+                    This user hasn't made a comment yet!
                   </td>
+                  <td className="border-l-0! pl-0!"></td>
                 </tr>
-              ))}
+              ) : (
+                comments.map((comment) => (
+                  <tr key={comment.id}>
+                    <td>{comment.message}</td>
+                    <td className="text-end">
+                      <a
+                        href={`/post/${comment.on}`}
+                        className="dark:text-lighter text-dark"
+                      >
+                        #{comment.on}
+                      </a>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

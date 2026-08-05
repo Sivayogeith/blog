@@ -17,6 +17,7 @@
   --color-lightest: #e4ddf6;
 
   --animate-loading: loading 2s linear infinite;
+  --animate-rainbow: rainbow 5s linear infinite;
 }
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
@@ -90,11 +91,12 @@ button:disabled {
 }
 
 table {
-  @apply rounded-lg
+  @apply rounded-lg;
 }
 
-td, th {
-  @apply p-2 border-secondary border
+td,
+th {
+  @apply p-2 border-secondary border;
 }
 
 /* Markdown Preview CSS */
@@ -150,5 +152,45 @@ menu {
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes rainbow {
+  0%,
+  100% {
+    color: #ff6b6b;
+  }
+  8% {
+    color: #ff9f43;
+  }
+  16% {
+    color: #ffd93d;
+  }
+  25% {
+    color: #a3e635;
+  }
+  33% {
+    color: #4ade80;
+  }
+  41% {
+    color: #2dd4bf;
+  }
+  50% {
+    color: #22d3ee;
+  }
+  58% {
+    color: #60a5fa;
+  }
+  66% {
+    color: #818cf8;
+  }
+  75% {
+    color: #a78bfa;
+  }
+  83% {
+    color: #f472b6;
+  }
+  91% {
+    color: #fb7185;
   }
 }
