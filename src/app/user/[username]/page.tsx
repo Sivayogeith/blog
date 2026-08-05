@@ -1,3 +1,4 @@
+import { Comment } from "@/src/api/helper";
 import {
   getUser,
   getUserComments,
@@ -60,32 +61,36 @@ export default async function UserPage({
         </div>
       </div>
       <hr className="text-secondary mb-2" />
-      <div className="grid lg:grid-cols-2 grid-cols-1 p-4 gap-10">
-        <table className="table-auto">
-          <caption className="caption-top mb-1">Posts</caption>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Created</th>
-            </tr>
-          </thead>
-          <tbody>
-            {posts.map((post) => (
-              <tr key={post.id}>
-                <td>
-                  <a href={post.slug} className="dark:text-lighter text-dark">
-                    {post.title}
-                  </a>
-                </td>
-                <td className="text-end">
-                  {convertDateToString(post.created_at)}
-                </td>
+      <div
+        className={`grid ${user.isAdmin && "lg:grid-cols-2"} grid-cols-1 p-4 gap-10`}
+      >
+        {user.isAdmin && (
+          <table className="table-auto">
+            <caption className="caption-top mb-1">Posts</caption>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Created</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="flex flex-col">
-          <table className="table-auto w-full">
+            </thead>
+            <tbody>
+              {posts.map((post) => (
+                <tr key={post.id}>
+                  <td>
+                    <a href={post.slug} className="dark:text-lighter text-dark">
+                      {post.title}
+                    </a>
+                  </td>
+                  <td className="text-end">
+                    {convertDateToString(post.created_at)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        <div className="flex flex-col items-center w-full">
+          <table className={`table-auto ${!user.isAdmin ? "w-[50%]" : "w-full"}`}>
             <caption className="caption-top mb-1">Comments</caption>
             <thead>
               <tr>
@@ -94,7 +99,7 @@ export default async function UserPage({
               </tr>
             </thead>
             <tbody>
-              {comments.map((comment) => (
+              {comments.length === 0 ? <tr className="text-center h-40"><td className="border-r-0! pr-0! pl-8!">This user hasn't made a comment yet!</td><td className="border-l-0! pl-0!"></td></tr> :comments.map((comment) => (
                 <tr key={comment.id}>
                   <td>{comment.message}</td>
                   <td className="text-end">
