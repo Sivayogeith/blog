@@ -24,8 +24,8 @@ export default async function Navbar() {
         ) : (
           <>
             {!matchesRoute(header.get('x-path') || "", hideNavbarRoutes) && (
-              <div className="my-2">
-                <a href="/register" className="me-4 nav-link">
+              <div className="my-2 flex items-center gap-4">
+                <a href="/register" className="nav-link">
                   Register
                 </a>
                 <a href="/login" className="me-2 nav-link">
