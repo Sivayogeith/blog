@@ -74,7 +74,7 @@ export default async function UserPage({
               </tr>
             </thead>
             <tbody>
-              {posts.map((post) => (
+              {posts.length === 0 ? <tr className="text-center h-40"><td className="border-r-0! pr-0! pl-20!">This user hasn't made a post yet!</td><td className="border-l-0! pl-0!"></td></tr> : posts.map((post) => (
                 <tr key={post.id}>
                   <td>
                     <a href={post.slug} className="dark:text-lighter text-dark">
