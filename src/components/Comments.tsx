@@ -2,19 +2,24 @@ import { formatDistance } from "date-fns";
 import { Post } from "../api/helper";
 import { getComments } from "../api/postsAPI";
 import CommentForm from "./CommentForm";
+import { getMe } from "../api/authAPI";
 
 export default async function Comments({ post }: { post: Post }) {
-  let comments = await getComments(post.slug);
+  const comments = await getComments(post.slug);
+  const session = await getMe();
 
   return (
     <>
-      <CommentForm post={post} />
+      {session.name && <CommentForm post={post} />}
       <p className="text-xl font-bold mt-4">Comments</p>
       <div className="mt-1 ms-2">
         {comments.map((comment) => (
           <div className="mb-4" key={comment.id}>
             <div className="flex gap-1 itms-center">
-              <img src={comment.image} className="size-7 rounded-full me-1 mt-0.5" />
+              <img
+                src={comment.image}
+                className="size-7 rounded-full me-1 mt-0.5"
+              />
               <div>
                 <div className="flex gap-1 items-center">
                   <a
