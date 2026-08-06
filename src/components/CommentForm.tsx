@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import SendIcon from "./icons/SendIcon";
 import { useRouter } from "next/navigation";
 
-export default function CommentForm({ post }: { post: Post}) {
+export default function CommentForm({ post, className, placeholder = true, charValid = true}: { post: Post, className?: string, placeholder?: boolean, charValid?: boolean}) {
   const {
     register,
     handleSubmit,
@@ -33,14 +33,14 @@ export default function CommentForm({ post }: { post: Post}) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
+    <form onSubmit={handleSubmit(onSubmit)} className={`mt-4 ${className}`}>
       <div className="flex w-full">
-        <textarea {...register("text")} placeholder="Enter your comment here" className="lg:w-[55vw] w-full rounded-e-none!" />
+        <textarea {...register("text")} placeholder={placeholder ? "Enter your comment here" : ""} className="lg:w-[55vw] w-full rounded-e-none!" />
         <button className="border-y border-e border-secondary  rounded-s-none rounded-sm p-2" disabled={!isValid}>
           <SendIcon className="size-6"/>
         </button>
       </div>
-      <p className={`${isValid && "dark:text-green-400! text-green-700!"} error-msg text-end`}>{text.length}/150 chars (min. 10)</p>
+      {charValid && <p className={`${isValid && "dark:text-green-400! text-green-700!"} error-msg text-end`}>{text.length}/150 chars (min. 10)</p>}
     </form>
   );
 }
