@@ -1,4 +1,3 @@
-import { Comment } from "@/src/api/helper";
 import {
   getUser,
   getUserComments,
@@ -6,8 +5,26 @@ import {
   getUserStats,
 } from "@/src/api/userAPI";
 import { convertDateToString } from "@/src/utils/postUtils";
+import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}): Promise<Metadata> {
+  const { username } = await params;
+  const user = await getUser(username);
+
+  return {
+    title: `${user.name}'s Profile`,
+    description: `The user page of ${user.name} with all their posts, comments and more!`,
+    openGraph: {
+      images: user.image
+    }
+  }
+}
 
 export default async function UserPage({
   params,

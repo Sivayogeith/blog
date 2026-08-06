@@ -6,7 +6,7 @@ import "./globals.css";
 
 import Navbar from "@/src/components/Navbar";
 import { getTheme } from "@teispace/next-themes/server";
-import Toaster  from "../components/Toaster";
+import Toaster from "../components/Toaster";
 
 const saira = Saira({
   display: "swap",
@@ -14,8 +14,7 @@ const saira = Saira({
 });
 
 export const metadata: Metadata = {
-  title: "Sage's Blog",
-  description: "Blog of Sage",
+  title: { template: "%s | Sage's Blog", default: "Sage's Blog" },
 };
 
 export default async function RootLayout({
@@ -23,7 +22,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const initialTheme = await getTheme() as ("light" | "dark");
+  const initialTheme = (await getTheme()) as "light" | "dark";
 
   return (
     <html

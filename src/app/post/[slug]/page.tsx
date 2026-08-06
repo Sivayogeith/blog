@@ -8,8 +8,28 @@ import {
 
 import Markdown from "@/src/components/Markdown";
 import PostCover from "@/src/components/PostCover";
-import CommentForm from "@/src/components/CommentForm";
 import Comments from "@/src/components/Comments";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPost(slug);
+
+  let metadata: Metadata = {
+    title: post.title || "404 Post Not Found",
+    description: `The page for blog post #${post.id} ${post.title} by ${post.author} | ${convertDateToString(post.created_at)}`,
+  };
+
+  if (post.cover?.src) {
+    metadata.openGraph = { images: post.cover.src };
+  }
+
+  return metadata;
+}
 
 export default async function PostPage({
   params,
@@ -34,9 +54,18 @@ export default async function PostPage({
             {post.title}
           </h2>
           <p className="mb-2">
-            {post.created_at &&
-              post.stats.readingTime &&
-              <><a href={`/user/${post.author}`} className="dark:text-lighter text-dark">{post.author}</a> • {convertDateToString(post.created_at)} • {convertMinutesToString(post.stats?.readingTime)}</>}
+            {post.created_at && post.stats.readingTime && (
+              <>
+                <a
+                  href={`/user/${post.author}`}
+                  className="dark:text-lighter text-dark"
+                >
+                  {post.author}
+                </a>{" "}
+                • {convertDateToString(post.created_at)} •{" "}
+                {convertMinutesToString(post.stats?.readingTime)}
+              </>
+            )}
           </p>
           <div className="flex justify-center">
             <PostCover

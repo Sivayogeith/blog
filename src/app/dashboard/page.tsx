@@ -10,6 +10,12 @@ import {
 import { getStats } from "@/src/api/adminAPI";
 import Markdown from "@/src/components/Markdown";
 import PostCover from "@/src/components/PostCover";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "The Blog's Dashboard for Admins"
+}
 
 export default async function Dashboard() {
   const posts = await getPosts();
