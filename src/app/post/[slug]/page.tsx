@@ -25,7 +25,7 @@ export async function generateMetadata({
   };
 
   if (post.cover?.src) {
-    metadata.openGraph = { images: post.cover.src };
+    metadata.openGraph = { [post.cover.type == "image" ? "images" : "videos"] : post.cover.src };
   }
 
   return metadata;
