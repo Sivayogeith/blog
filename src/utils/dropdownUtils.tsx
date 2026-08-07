@@ -24,7 +24,7 @@ export const adminDropdownItems: Dropdown[] = [
   {
     name: "Dashboard",
     icon: <DashboardIcon />,
-    onClick: (r) => r.push("/dashboard"),
+    onClick: (r) => r.push("/admin/dashboard"),
     adminOnly: true,
   },
   {

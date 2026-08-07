@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { getMe } from "./api/authAPI";
 
-const adminOnlyRoutes = ["/dashboard", "/post/:slug/edit", "/post/create"];
+const adminOnlyRoutes = ["/admin/dashboard", "/post/:slug/edit", "/post/create"];
 const authenticatedRoutes = ["/profile", "/profile/edit"];
 
 // uses regex to convert :<anything> to <anything> and tests if given path matches each regex route from given list,

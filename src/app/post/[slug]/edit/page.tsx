@@ -54,7 +54,7 @@ export default function EditPost() {
 
     if (result.status == 200) {
       toast.success(result.message + ", Please wait a second...");
-      router.push("/dashboard");
+      router.push("/admin/dashboard");
       return;
     }
     toast.error(result.message);

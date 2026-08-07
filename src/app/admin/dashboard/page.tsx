@@ -1,4 +1,4 @@
-import { getPosts, Post } from "../../api/postsAPI";
+import { getPosts, Post } from "../../../api/postsAPI";
 
 import PlusIcon from "@/src/components/icons/PlusIcon";
 import DeleteButton from "@/src/components/DeleteButton";
