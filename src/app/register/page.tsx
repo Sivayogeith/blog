@@ -153,8 +153,9 @@ export default function Register() {
           />
           <p className="error-msg">{errors.confirmPassword?.message}</p>
 
-          <LoadingButton ref={buttonRef} disabled={!isValid} />
           <p className="text-center mt-2">{errors.form?.message}</p>
+          <LoadingButton ref={buttonRef} disabled={!isValid} />
+          <a className="dark:text-light text-dark text-center mt-2" href="/login">Already have an account? Login!</a>
         </form>
       </div>
     </>
