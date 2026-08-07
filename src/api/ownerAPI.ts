@@ -1,6 +1,6 @@
-import { del, post, get } from "./helper";
+import { del, post, get, User } from "./helper";
 
-export const getUsers = async (username: string) => {
+export const getUsers = async (): Promise<(User & { id: number})[]>  => {
   const response = await get("/owner/getUsers");
   return response.json()
 };
