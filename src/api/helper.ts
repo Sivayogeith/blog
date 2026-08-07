@@ -66,6 +66,7 @@ export interface SessionData {
   name: string;
   userId: string;
   isAdmin: boolean;
+  isOwner: boolean;
 }
 
 export interface Post {

@@ -11,19 +11,31 @@ import { getStats } from "@/src/api/adminAPI";
 import Markdown from "@/src/components/Markdown";
 import PostCover from "@/src/components/PostCover";
 import { Metadata } from "next";
+import { getMe } from "@/src/api/authAPI";
 
 export const metadata: Metadata = {
   title: "Dashboard",
-  description: "The Blog's Dashboard for Admins"
-}
+  description: "The Blog's Dashboard for Admins",
+};
 
 export default async function Dashboard() {
   const posts = await getPosts();
   const stats = await getStats();
+  const session = await getMe();
 
   return (
     <>
       <div className="flex flex-col flex-1 items-center">
+        <div className="m-5 md:w-[95vw] w-[90vw] h-full flex justify-between flex-col">
+          <p className="text-2xl">Quick Links</p>
+          <hr className="dark:text-lightest text-dark" />
+        </div>
+        <div className="flex gap-5 [&_a]:text-lg [&_a]:font-semibold [&_a]:border [&_a]:border-secondary [&_a]:p-3 [&_a]:px-4 [&_a]:rounded-full">
+          {session.isOwner && <a href="/admin/users">See All Users</a>}
+          <a href="/login">Login</a>
+          <a href="/register">Register</a>
+        </div>
+
         <div className="m-5 md:w-[95vw] w-[90vw] h-full flex justify-between flex-col">
           <p className="text-2xl">Stats</p>
           <hr className="dark:text-lightest text-dark" />
@@ -73,7 +85,7 @@ export default async function Dashboard() {
                   <PostCover
                     post={post}
                     className="rounded-xl max-w-40 max-h-30 w-auto my-2"
-                    coverProps={{className: "max-h-30 w-auto"}}
+                    coverProps={{ className: "max-h-30 w-auto" }}
                     spinnerProps={{ size: 50 }}
                   />
                 </div>
