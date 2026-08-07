@@ -70,8 +70,11 @@ export default function Login() {
           />
           <p className="error-msg">{errors.password?.message}</p>
 
-          <LoadingButton ref={buttonRef} disabled={!isValid} />
           <p className="text-center mt-2">{errors.form?.message}</p>
+          <LoadingButton ref={buttonRef} disabled={!isValid} />
+
+          <div className="flex gap-1 items-center [&_hr]:w-full [&_hr]:text-secondary my-5"><hr/> or <hr/></div>
+          <button className="bg-deep-light opacity-80 text-white p-2 font-semibold rounded-sm" onClick={() => router.push("/register")}>Create an Account</button>
         </form>
       </div>
     </>
