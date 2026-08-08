@@ -4,7 +4,7 @@ import { getUsers } from "@/src/api/ownerAPI";
 export default async function Users() {
   const users = await getUsers();
   const session = await getMe();
-  
+
   return (
     <div className="flex flex-col items-center w-full">
       <div className="m-5 md:w-[95vw] w-[90vw] h-full flex justify-between flex-col">
@@ -26,8 +26,15 @@ export default async function Users() {
           <tbody>
             {users.map((user) => (
               <tr key={user.id}>
-                <td>#{user.id}</td>
-                <td>{user.name} <span className="font-semibold">{user.username == session.username && "(you)"}</span></td>
+                <td>
+                  <a href={`/user/${user.username}`} className="dark:text-lighter text-dark">#{user.id}</a>
+                </td>
+                <td>
+                  {user.name}{" "}
+                  <span className="font-semibold">
+                    {user.username == session.username && "(you)"}
+                  </span>
+                </td>
                 <td>{user.username}</td>
                 <td className="flex justify-center">
                   <img className="size-10 rounded-full" src={user.image} />
