@@ -1,3 +1,5 @@
+"use server"
+
 import { del, post, get, User } from "./helper";
 
 export const getUsers = async (): Promise<(User & { id: number})[]>  => {
