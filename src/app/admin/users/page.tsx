@@ -2,7 +2,7 @@
 
 import { getMe, SessionData } from "@/src/api/authAPI";
 import { User } from "@/src/api/helper";
-import { addAdmin, getUsers } from "@/src/api/ownerAPI";
+import { addAdmin, getUsers, removeAdmin } from "@/src/api/ownerAPI";
 import Spinner from "@/src/components/Spinner";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -18,6 +18,28 @@ export default function Users() {
         onClick: () => {
           toast.promise(addAdmin(username), {
             loading: "Admining...",
+            success: ({ message, status }) => {
+              getUsers().then(setUsers as any);
+              return { type: status == 200 ? "success" : "error", message };
+            },
+          });
+        },
+      },
+      classNames: {
+        actionButton: "bg-deep-light text-white rounded-sm p-1",
+        toast: "w-max! gap-5!",
+      },
+      duration: Infinity,
+    });
+  };
+
+  const revokeAdmin = async (username: string) => {
+    toast(`Are you sure you want to remove ${username} from Admins?`, {
+      action: {
+        label: "Confirm",
+        onClick: () => {
+          toast.promise(removeAdmin(username), {
+            loading: "De-Admining...",
             success: ({ message, status }) => {
               getUsers().then(setUsers as any);
               return { type: status == 200 ? "success" : "error", message };
@@ -81,14 +103,12 @@ export default function Users() {
                   <td className="w-50! px-2!">
                     <div className="flex justify-between items-center">
                       {user.isAdmin ? "Yes" : "No"}
-                      {!user.isAdmin && (
-                        <button
-                          className="bg-deep-light text-white rounded-sm p-1"
-                          onClick={() => makeAdmin(user.username)}
-                        >
-                          Make Admin
-                        </button>
-                      )}
+                      <button
+                        className={`bg-pale-dark ${user.isAdmin ? "text-red-500" : "text-green-400"} text-sm rounded-sm p-1`}
+                        onClick={() => (user.isAdmin ? revokeAdmin : makeAdmin)(user.username)}
+                      >
+                        {user.isAdmin ? "Revoke Admin" : "Make Admin"}
+                      </button>
                     </div>
                   </td>
                   <td>{user.isOwner ? "Yes" : "No"}</td>
