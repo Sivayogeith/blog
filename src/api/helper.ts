@@ -9,8 +9,8 @@ export const get = async (path: string) => {
     },
   });
 
-  return response
-}
+  return response;
+};
 
 export const post = async (
   path: string,
@@ -25,7 +25,6 @@ export const post = async (
     headers,
     body: body instanceof FormData ? body : JSON.stringify(body),
   });
-
 
   if (setSession) {
     const sessionCookie = await parseSessionCookies(response);
@@ -56,8 +55,8 @@ export const parseSessionCookies = async (res: Response): Promise<string> =>
 export interface User {
   username: string;
   name: string;
-  isAdmin: string;
-  isOwner: string;
+  isAdmin: boolean;
+  isOwner: boolean;
   image: string;
 }
 
