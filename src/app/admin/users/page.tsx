@@ -3,6 +3,7 @@
 import { getMe, SessionData } from "@/src/api/authAPI";
 import { User } from "@/src/api/helper";
 import { inviteAdmin, getUsers, removeAdmin } from "@/src/api/ownerAPI";
+import RefreshIcon from "@/src/components/icons/RefreshIcon";
 import Spinner from "@/src/components/Spinner";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -12,6 +13,8 @@ export default function Users() {
     useState<(User & { id: number; isInvitedAdmin: boolean })[]>();
   const [session, setSession] = useState<SessionData>();
 
+  const refresh = () => getUsers().then(setUsers as any);
+
   const makeAdmin = async (username: string) => {
     toast(`Are you sure you want to invite ${username} to Admins?`, {
       action: {
@@ -20,7 +23,7 @@ export default function Users() {
           toast.promise(inviteAdmin(username), {
             loading: "Inviting...",
             success: ({ message, status }) => {
-              getUsers().then(setUsers as any);
+              refresh();
               return { type: status == 200 ? "success" : "error", message };
             },
           });
@@ -42,7 +45,7 @@ export default function Users() {
           toast.promise(removeAdmin(username), {
             loading: "De-Admining...",
             success: ({ message, status }) => {
-              getUsers().then(setUsers as any);
+              refresh();
               return { type: status == 200 ? "success" : "error", message };
             },
           });
@@ -64,7 +67,12 @@ export default function Users() {
   return (
     <div className="flex flex-col items-center w-full">
       <div className="m-5 md:w-[95vw] w-[90vw] h-full flex justify-between flex-col">
-        <p className="text-2xl">All Users</p>
+        <div className="flex justify-between items-center mb-2">
+          <p className="text-2xl">All Users</p>
+          <button className="border border-secondary p-2 rounded-sm" onClick={refresh}>
+            <RefreshIcon />
+          </button>
+        </div>
         <hr className="dark:text-lightest text-dark" />
       </div>
       <div className="px-10 w-full">
@@ -108,16 +116,18 @@ export default function Users() {
                         : user.isAdmin
                           ? "Yes"
                           : "No"}
-                      {!user.isInvitedAdmin && <button
-                        className={`bg-pale-dark ${user.isAdmin ? "text-red-500" : "text-green-400"} text-sm rounded-sm p-1`}
-                        onClick={() =>
-                          (user.isAdmin ? revokeAdmin : makeAdmin)(
-                            user.username,
-                          )
-                        }
-                      >
-                        {user.isAdmin ? "Revoke Admin" : "Invite to Admins"}
-                      </button>}
+                      {!user.isInvitedAdmin && (
+                        <button
+                          className={`bg-pale-dark ${user.isAdmin ? "text-red-500" : "text-green-400"} text-sm rounded-sm p-1`}
+                          onClick={() =>
+                            (user.isAdmin ? revokeAdmin : makeAdmin)(
+                              user.username,
+                            )
+                          }
+                        >
+                          {user.isAdmin ? "Revoke Admin" : "Invite to Admins"}
+                        </button>
+                      )}
                     </div>
                   </td>
                   <td>{user.isOwner ? "Yes" : "No"}</td>
