@@ -7,7 +7,7 @@ import LoadingButton, {
 import ProfileDropzone from "@/src/components/ProfileDropzone";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "nextjs-toploader/app";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
@@ -17,11 +17,13 @@ import { upload } from "@/src/api/adminAPI";
 export default function Register() {
   const router = useRouter();
   const buttonRef = useRef<LoadingButtonElement>(null);
+  const [imageUrl, setImageUrl] = useState("");
   const {
     register,
     handleSubmit,
-    setError,
+    getValues,
     control,
+    setValue,
     trigger,
     formState: { errors, isValid },
   } = useForm<RegisterFormData>({
@@ -34,9 +36,9 @@ export default function Register() {
     name,
     password,
     image,
+    imageUrl,
   }: RegisterFormData) => {
     buttonRef.current?.setLoading(true);
-    let imageSrc = undefined;
 
     if (image?.[0]) {
       const formData = new FormData();
@@ -45,7 +47,7 @@ export default function Register() {
         .promise(upload(formData), {
           loading: "Uploading...",
           success: (data) => {
-            imageSrc = data?.url;
+            imageUrl = data?.url;
             return {
               type: data.error ? "error" : "success",
               message: data.error
@@ -56,7 +58,7 @@ export default function Register() {
         })
         .unwrap();
     }
-    const result = await registerUser(username, name, password, imageSrc);
+    const result = await registerUser(username, name, password, imageUrl);
     buttonRef.current?.setLoading(false);
 
     if (result.status == 200) {
@@ -68,6 +70,12 @@ export default function Register() {
     toast.error(result.message);
   };
 
+  const onPreview = async () => {
+    setValue("image", null);
+    const image_url = getValues("imageUrl");
+    setImageUrl(image_url);
+  };
+
   return (
     <>
       <div className="flex flex-col flex-1 justify-center items-center px-4">
@@ -76,7 +84,7 @@ export default function Register() {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col md:p-10 p-6 border border-secondary rounded-2xl lg:w-[50%] w-full mb-5"
         >
-          <div className="flex md:flex-row flex-col md:justify-between justify-center items-center">
+          <div className="flex md:flex-row flex-col md:justify-between justify-center items-start gap-5">
             <div className="flex flex-col md:w-[60%] w-full">
               <label htmlFor="username" className="text-lg font-semibold mb-2">
                 Username
@@ -102,25 +110,42 @@ export default function Register() {
               />
               <p className="error-msg">{errors.name?.message}</p>
             </div>
-            <div className="flex flex-col md:w-[40%] w-full justify-center items-center px-5">
+            <div className="flex flex-col md:w-[40%] w-full justify-center items-center px-5 text-center">
               <Controller
                 name="image"
                 control={control}
                 render={({ field: { onChange } }) => (
                   <ProfileDropzone
-                    src="/default-user.png"
+                    src={imageUrl || "/default-user.png"}
                     sectionClass="mt-5"
                     size={175}
                     accept={PFP_ACCEPTED_TYPES.join(",")}
                     editMode={true}
                     onChange={async (e) => {
+                      setValue("imageUrl", "");
                       onChange(e.target.files);
                       await trigger("image");
                     }}
                   />
                 )}
               />
-              <p className="error-msg wrap-anywhere">{errors.image?.message}</p>
+              <div className="flex gap-1 items-center [&_hr]:w-full [&_hr]:text-secondary my-2">
+                <hr /> or <hr />
+              </div>
+
+              <div className="flex gap-2">
+                <input
+                  {...register("imageUrl")}
+                  placeholder="Enter a Image Url"
+                />
+                <button
+                  className="border border-secondary px-2 rounded-sm"
+                  type="button"
+                  onClick={onPreview}
+                >
+                  Preview
+                </button>
+              </div>
             </div>
           </div>
 
@@ -153,9 +178,14 @@ export default function Register() {
           />
           <p className="error-msg">{errors.confirmPassword?.message}</p>
 
-          <p className="text-center mt-2">{errors.form?.message}</p>
           <LoadingButton ref={buttonRef} disabled={!isValid} />
-          <a className="dark:text-light text-dark text-center mt-2" href="/login">Already have an account? Login!</a>
+          <a
+            className="dark:text-light text-dark text-center mt-2"
+            href="/login"
+          >
+            Already have an account? Login!
+          </a>
+          <p className="text-center error-msg mt-5">{errors.image?.message}</p>
         </form>
       </div>
     </>
@@ -174,6 +204,7 @@ export const registerSchema = z
       .max(15, "display name should be less then 15 chars!"),
     password: z.string().min(8, "password has to be atleast 8 chars!"),
     confirmPassword: z.string(),
+    imageUrl: z.string(),
     image: z
       .custom<FileList | null | undefined>()
       .refine(
