@@ -13,7 +13,9 @@ import ProfileDropzone from "@/src/components/ProfileDropzone";
 import z from "zod";
 
 export default function Profile() {
-  const [user, setUser] = useState({} as Omit<Omit<User, "isAdmin">, "isOwner">);
+  const [user, setUser] = useState(
+    {} as Omit<Omit<User, "isAdmin">, "isOwner">,
+  );
   const [edit, setEdit] = useState(false);
 
   const {
@@ -21,6 +23,7 @@ export default function Profile() {
     getValues,
     control,
     setValues,
+    setValue,
     trigger,
     formState: { errors, isValid },
   } = useForm<EditProfileFormData>({
@@ -29,7 +32,7 @@ export default function Profile() {
   });
 
   const onSubmit = async () => {
-    const { username, name, image }: EditProfileFormData = getValues();
+    let { username, name, image, imageUrl }: EditProfileFormData = getValues();
     trigger();
 
     if (!isValid) {
@@ -43,24 +46,24 @@ export default function Profile() {
       return;
     }
 
-    let imageSrc = user.image;
-
     if (image?.[0]) {
       const formData = new FormData();
       formData.append("file", image[0]);
-      await toast.promise(upload(formData), {
-        loading: "Uploading Image...",
-        success: (data) => {
-          if (data.error) {
-            return { type: "error", message: data.error };
-          }
-          imageSrc = data.url
-          return { type: "success", message: "Successfully uploaded!" };
-        },
-      }).unwrap();
+      await toast
+        .promise(upload(formData), {
+          loading: "Uploading Image...",
+          success: (data) => {
+            if (data.error) {
+              return { type: "error", message: data.error };
+            }
+            imageUrl = data.url;
+            return { type: "success", message: "Successfully uploaded!" };
+          },
+        })
+        .unwrap();
     }
 
-    toast.promise(editProfile(username, name, imageSrc), {
+    toast.promise(editProfile(username, name, imageUrl), {
       loading: "Saving...",
       success: ({ message, status }) => {
         return { type: status == 200 ? "success" : "error", message };
@@ -71,11 +74,16 @@ export default function Profile() {
     setUser({ username, name, image: user.image });
   };
 
+  const onPreview = async () => {
+    setUser({ ...user, image: getValues("imageUrl")})
+    setValue("image", null)
+  }
+
   useEffect(() => {
     getMe().then((s) =>
       getUser(s.username).then((u) => {
         setUser(u);
-        setValues({ username: u.username, name: u.name });
+        setValues({ username: u.username, name: u.name, imageUrl: u.image });
       }),
     );
   }, []);
@@ -89,22 +97,40 @@ export default function Profile() {
           <>
             <div className="flex lg:flex-row flex-col pb-8 w-full justify-between">
               <form className="flex gap-5 lg:flex-row flex-col text-center">
-                <Controller
-                  control={control}
-                  name="image"
-                  render={({ field: { onChange } }) => (
-                    <ProfileDropzone
-                      onChange={async (e) => {
-                        onChange(e.target.files);
-                        await trigger("image");
-                      }}
-                      src={user.image || "/default-user.png"}
-                      editMode={edit}
-                      accept={PFP_ACCEPTED_TYPES.join(",")}
-                      sectionClass="lg:contents flex justify-center"
-                    />
+                <div className="flex flex-col gap-2 items-center">
+                  <Controller
+                    control={control}
+                    name="image"
+                    render={({ field: { onChange } }) => (
+                      <ProfileDropzone
+                        onChange={async (e) => {
+                          setUser({...user, image: ""})
+                          onChange(e.target.files);
+                          await trigger("image");
+                        }}
+                        src={user.image || "/default-user.png"}
+                        editMode={edit}
+                        accept={PFP_ACCEPTED_TYPES.join(",")}
+                        sectionClass="lg:contents flex justify-center"
+                      />
+                    )}
+                  />
+                  {edit && (
+                    <>
+                      or
+                      <div className="flex gap-1">
+                        <input
+                          {...register("imageUrl")}
+                          className="py-0!"
+                          placeholder="Enter a Image Url"
+                        />
+                        <button className="border border-secondary p-1 rounded-sm" onClick={onPreview} type="button">
+                          Preview
+                        </button>
+                      </div>
+                    </>
                   )}
-                />
+                </div>
 
                 <div className="pt-2 flex flex-col text-start">
                   {edit ? (
@@ -181,6 +207,7 @@ export const editProfileSchema = z.object({
     .string()
     .min(4, "display name has to be atleast 4 chars!")
     .max(15, "display name should be less then 15 chars!"),
+  imageUrl: z.string(),
   image: z
     .custom<FileList | null | undefined>()
     .refine(
