@@ -29,7 +29,7 @@ export const editPost = async (
   title: string = "",
   body: string = "",
   slug: string = "",
-  cover?: Cover 
+  cover?: Cover,
 ) => {
   const response = await post(`/admin/editPost`, {
     id,
@@ -40,7 +40,7 @@ export const editPost = async (
       readingTime: calculateReadingTime(body),
       words: calculateWordCount(body),
     },
-    cover
+    cover,
   });
 
   return { message: await response.text(), status: response.status };
@@ -64,3 +64,13 @@ export const upload = async (formData: FormData) => {
   }
   return response.json();
 };
+
+export const respondInvite = async (accept: boolean) => {
+  const response = await post("/admin/respondInvite", { accept });
+  return { message: response.text(), status: response.status }
+};
+
+export const checkInvite = async () => {
+  const response = await get("/admin/checkInvite")
+  return Boolean(response.text())
+}
