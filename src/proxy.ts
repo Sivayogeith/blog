@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { getMe } from "./api/authAPI";
+import { checkInvite } from "./api/adminAPI";
 
-const adminOnlyRoutes = ["/admin/dashboard", "/post/:slug/edit", "/post/create"];
-const authenticatedRoutes = ["/profile", "/profile/edit"];
+const adminOnlyRoutes = [
+  "/admin/dashboard",
+  "/post/:slug/edit",
+  "/post/create",
+  "/admin/users",
+];
+const authenticatedRoutes = ["/profile", "/profile/edit", "/admin/invite"];
 
 // uses regex to convert :<anything> to <anything> and tests if given path matches each regex route from given list,
 export const matchesRoute = (path: string, routes: string[]) => {
@@ -32,6 +38,16 @@ export async function proxy(request: NextRequest) {
   // If user is not authenticated
   if (!session.username) {
     return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  const isInvitedAdmin = await checkInvite();
+
+  if (path == "/admin/invite") {
+    if (!isInvitedAdmin || !session.isAdmin) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+  } else if (isInvitedAdmin) {
+    return NextResponse.redirect(new URL("/admin/invite", request.url));
   }
 
   // If user is not an admin and they are trying to access admin routes
