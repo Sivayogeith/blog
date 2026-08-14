@@ -7,6 +7,7 @@ import "./globals.css";
 import Navbar from "@/src/components/Navbar";
 import { getTheme } from "@teispace/next-themes/server";
 import Toaster from "../components/Toaster";
+import Footer from "../components/Footer";
 
 const saira = Saira({
   display: "swap",
@@ -41,6 +42,7 @@ export default async function RootLayout({
           <Navbar />
           {children}
           <Toaster />
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

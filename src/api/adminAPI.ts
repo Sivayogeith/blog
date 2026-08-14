@@ -66,7 +66,7 @@ export const upload = async (formData: FormData) => {
 };
 
 export const respondInvite = async (accept: boolean) => {
-  const response = await post("/admin/respondInvite", { accept });
+  const response = await post("/admin/respondInvite", { accept }, true);
   return { message: response.text(), status: response.status };
 };
 
