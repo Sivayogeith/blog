@@ -67,10 +67,11 @@ export const upload = async (formData: FormData) => {
 
 export const respondInvite = async (accept: boolean) => {
   const response = await post("/admin/respondInvite", { accept });
-  return { message: response.text(), status: response.status }
+  return { message: response.text(), status: response.status };
 };
 
 export const checkInvite = async () => {
-  const response = await get("/admin/checkInvite")
-  return Boolean(response.text())
-}
+  const response = await get("/admin/checkInvite");
+  if (!response.ok) return false;
+  return await response.text() === "true";
+};

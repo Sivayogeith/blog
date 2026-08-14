@@ -9,9 +9,9 @@ const adminOnlyRoutes = [
   "/post/create",
   "/admin/users",
 ];
+
 const authenticatedRoutes = ["/profile", "/profile/edit", "/admin/invite"];
 
-// uses regex to convert :<anything> to <anything> and tests if given path matches each regex route from given list,
 export const matchesRoute = (path: string, routes: string[]) => {
   return routes.some((route) =>
     new RegExp(`^${route.replace(/:[^/]+/g, "[^/]+")}$`).test(path),
@@ -20,40 +20,48 @@ export const matchesRoute = (path: string, routes: string[]) => {
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
+
   const headers = new Headers(request.headers);
   headers.set("x-path", path);
+
+  // Get session first
+  const session = await getMe();
+
+  // If logged in, check invite status for EVERY route
+  if (session.username) {
+    const isInvitedAdmin = await checkInvite();
+
+    console.log(isInvitedAdmin)
+
+    // Must be invited to access invite page
+    if (path === "/admin/invite" && !isInvitedAdmin) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    // Invited users are forced to invite page from every other route
+    if (isInvitedAdmin && path !== "/admin/invite") {
+      return NextResponse.redirect(new URL("/admin/invite", request.url));
+    }
+  }
 
   const needsAuth =
     matchesRoute(path, authenticatedRoutes) ||
     matchesRoute(path, adminOnlyRoutes);
 
   if (!needsAuth) {
-    return NextResponse.next({
-      request: { headers },
-    });
+    return NextResponse.next({ request: { headers } });
   }
 
-  const session = await getMe();
-
-  // If user is not authenticated
+  // Protected route but not logged in
   if (!session.username) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  const isInvitedAdmin = await checkInvite();
-
-  if (path == "/admin/invite") {
-    if (!isInvitedAdmin || !session.isAdmin) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
-  } else if (isInvitedAdmin) {
-    return NextResponse.redirect(new URL("/admin/invite", request.url));
-  }
-
-  // If user is not an admin and they are trying to access admin routes
+  // Admin-only routes
   if (!session.isAdmin && matchesRoute(path, adminOnlyRoutes)) {
     return NextResponse.redirect(new URL("/", request.url));
   }
+
   return NextResponse.next({ request: { headers } });
 }
 
