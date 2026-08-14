@@ -1,16 +1,24 @@
-"use client"
+"use client";
 
 import { respondInvite } from "@/src/api/adminAPI";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export default function RespondInvite() {
-  const router = useRouter()
+  const router = useRouter();
 
   const onRespond = async (accept: boolean) => {
-    const result = await respondInvite(accept);
-    toast[result.status == 200 ? "success" : "error"](result.message);
-    setTimeout(() =>  router.push(result.status !== 200 || !accept ? "/" : "/admin/dashboard"))
+    toast.promise(respondInvite(accept), {
+      loading: "Responding...",
+      success: ({ message, status }) => {
+        setTimeout(() =>
+          router.push(
+            status !== 200 || !accept ? "/" : "/admin/dashboard",
+          ),
+        );
+        return { type: status == 200 ? "success" : "error", message };
+      },
+    });
   };
   return (
     <div className="flex items-center justify-center h-[92vh] w-full">
@@ -29,10 +37,16 @@ export default function RespondInvite() {
           </div>
         </div>
         <div className="flex gap-2 mt-8 w-full">
-          <button className="p-2 bg-deep-light rounded-sm w-[50%]" onClick={() => onRespond(true)}>
+          <button
+            className="p-2 bg-deep-light rounded-sm w-[50%]"
+            onClick={() => onRespond(true)}
+          >
             Accept
           </button>
-          <button className="p-2 border border-secondary rounded-sm w-[50%]" onClick={() => onRespond(false)}>
+          <button
+            className="p-2 border border-secondary rounded-sm w-[50%]"
+            onClick={() => onRespond(false)}
+          >
             Decline
           </button>
         </div>
