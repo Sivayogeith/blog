@@ -1,3 +1,8 @@
+export const metadata = {
+    title: "About",
+    description: "About Sage's Blog project"
+}
+
 export default async function About() {
   return (
     <div className="flex flex-col items-center w-full text-start justify-center h-[84vh]">
