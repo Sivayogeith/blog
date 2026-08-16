@@ -1,4 +1,4 @@
-import { getTotalTime } from "@/src/api/indexAPI";
+import { getMacondoProject, getTotalTime } from "@/src/api/indexAPI";
 import { differenceInHours } from "date-fns";
 
 export const metadata = {
@@ -9,6 +9,7 @@ export const metadata = {
 export default async function About() {
   const totalSeconds = await getTotalTime();
   const totalHours = differenceInHours(totalSeconds * 1000, 0);
+  const macondoProject = await getMacondoProject();
 
   return (
     <div className="flex flex-col items-center w-full text-start justify-center h-[84vh]">
@@ -16,9 +17,9 @@ export default async function About() {
         <h1 className="text-4xl font-bold">About Sage's Blog</h1>
         <p>
           This blog is my hopefully
-          <span className="font-bold">{totalHours} hours</span> project on
-          Macondo - Hack Club for a Macbook Air! I have spent over 3 months on
-          this project - 3 months of daily coding - and to be honest, it wasn't
+          <span className="ms-1 font-bold">{totalHours} hours</span> project on
+          Macondo - Hack Club for a Macbook Air! I have spent over <span className="font-bold">{macondoProject.project_streak_days} days</span> on
+          this project - {macondoProject.project_streak_days} days of daily coding - and to be honest, it wasn't
           hard and the Macbook being the goal filled me with enough motivation.
         </p>
         <p className="text-xl mt-2">Project Links:</p>

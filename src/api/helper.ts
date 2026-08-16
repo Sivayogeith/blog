@@ -94,3 +94,77 @@ export interface Comment {
   on: number; // slug from posts
   message: string;
 }
+
+export interface MacondoProject {
+  id: number;
+  user_id: string;
+  name: string;
+  type: string;
+  description: string;
+  fruit: string;
+  level: string;
+  stage: number;
+  demo_url: string | null;
+  thumbnail_url: string | null;
+  repository_url: string | null;
+  hackatime_projects: unknown[];
+  is_fork: boolean;
+  guide: string | null;
+  html_content: string | null;
+  css_content: string | null;
+  readme_content: string | null;
+  last_html_sha: string | null;
+  last_css_sha: string | null;
+  invite_code: string;
+  project_streak_days: number;
+  last_worked_date: string;
+  auto_use_streak_freezes: boolean;
+  cart_screenshots: unknown | null;
+  build_cost_cents: number | null;
+  next_ship_needs_funding: boolean;
+  next_ship_is_build_complete: boolean;
+  next_ship_used_ai: boolean;
+  next_ship_ai_usage_description: string | null;
+  next_ship_is_update: boolean;
+  next_ship_update_description: string | null;
+  next_ship_reviewer_note: string | null;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+
+  owner: {
+    id: string;
+    image: string;
+    username: string;
+    slack_id: string;
+  };
+
+  journals: {
+    id: number;
+    short_brief: string;
+    long_brief: string;
+    hours: number;
+    created_at: string;
+    archived: boolean;
+    archived_at: string | null;
+    content_language: string;
+    author_id: string;
+    author_username: string;
+    author_slack_id: string;
+    author_image: string;
+  }[];
+
+  viewer_is_owner: boolean;
+  viewer_can_edit: boolean;
+  activeShip: unknown | null;
+  needsChangesShip: unknown | null;
+  latestActiveGrant: unknown | null;
+  has_active_grant: boolean;
+  hasPreviousShippedShip: boolean;
+  permRejected: boolean;
+  is_extra_fruity: boolean;
+  pendingFruit: unknown | null;
+  previousShippedHackatimeHours: number | null;
+  unshippedJournalHours: number | null;
+  streakStatus: string;
+}
