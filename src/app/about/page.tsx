@@ -1,8 +1,10 @@
 import { getMacondoProject, getHackatime } from "@/src/api/indexAPI";
 import {
+  compareAsc,
   differenceInDays,
   differenceInHours,
   differenceInMinutes,
+  Duration,
   intervalToDuration,
 } from "date-fns";
 
@@ -24,7 +26,7 @@ export default async function About() {
     start: 0,
     end: totalSecondsToday * 1000,
   });
-  const durationToString = (d) =>
+  const durationToString = (d: Duration) =>
     `${d.hours ? d.hours + " hours" : ""} ${d.minutes ? d.minutes + " mins" : ""}`;
 
   const macondoProject = await getMacondoProject();
@@ -91,9 +93,22 @@ export default async function About() {
           </p>
           <p className="text-lg mt-1 text-center">
             Today's Progress:{" "}
-            <span className="font-semibold">
-              {" "}
+            <span
+              className={`font-semibold ${totalSecondsToday > ((GOAL_HOURS - totalHours) / daysTillEnd) * 60 * 60 ? "dark:text-green-300 text-green-700" : "dark:text-red-400 text-red-700"}`}
+            >
               {durationToString(todayWork)} / {durationToString(dailyGoal)}
+            </span>{" "}
+            -{" "}
+            <span
+              className={
+                macondoProject.streakStatus == "active"
+                  ? "dark:text-green-300 text-green-700"
+                  : "dark:text-red-400 text-red-700"
+              }
+            >
+              {macondoProject.streakStatus[0].toUpperCase() +
+                macondoProject.streakStatus.slice(1)}{" "}
+              Streak
             </span>
           </p>
         </div>
