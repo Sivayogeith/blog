@@ -13,3 +13,8 @@ export const getMacondoProject = async (): Promise<MacondoProject> => {
   const result = await get("/macondoProject");
   return result.json();
 };
+
+export const getCommits = async (count: boolean = true) => {
+  const result = await get("/githubCommits");
+  return result.json();
+}
