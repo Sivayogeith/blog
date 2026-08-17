@@ -1,7 +1,8 @@
+import { startOfDay } from "date-fns";
 import { get, MacondoProject } from "./helper";
 
-export const getTotalTime = async () => {
-  const result = await get("/totalTime");
+export const getHackatime = async (today: boolean = false) => {
+  const result = await get(`/totalTime${today ? `?start=${startOfDay(new Date()).toISOString()}` : ""}`);
   if (result.ok) {
     return parseInt(await result.text());
   }

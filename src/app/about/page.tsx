@@ -1,22 +1,41 @@
-import { getMacondoProject, getTotalTime } from "@/src/api/indexAPI";
-import { differenceInDays, differenceInHours } from "date-fns";
+import { getMacondoProject, getHackatime } from "@/src/api/indexAPI";
+import {
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+  intervalToDuration,
+} from "date-fns";
 
 export const metadata = {
   title: "About",
   description: "About Sage's Blog project",
 };
 
-const GOAL_HOURS = 180;
+const GOAL_HOURS = 200;
 const END_DATE = new Date("2026-09-01");
 const MULT = 50;
 
 export default async function About() {
-  const totalSeconds = await getTotalTime();
+  const totalSeconds = await getHackatime();
   const totalHours = differenceInHours(totalSeconds * 1000, 0);
+
+  const totalSecondsToday = await getHackatime(true);
+  const todayWork = intervalToDuration({
+    start: 0,
+    end: totalSecondsToday * 1000,
+  });
+  const durationToString = (d) =>
+    `${d.hours ? d.hours + " hours" : ""} ${d.minutes ? d.minutes + " mins" : ""}`;
+
   const macondoProject = await getMacondoProject();
 
-  const streakGoal =
-    differenceInDays(END_DATE, Date.now()) + macondoProject.project_streak_days;
+  const daysTillEnd = differenceInDays(END_DATE, Date.now());
+  const streakGoal = daysTillEnd + macondoProject.project_streak_days;
+
+  const dailyGoal = intervalToDuration({
+    start: 0,
+    end: ((GOAL_HOURS - totalHours) / daysTillEnd) * 60 * 60 * 1000,
+  });
 
   return (
     <div className="flex flex-col items-center w-full text-start justify-center h-[84vh]">
@@ -63,12 +82,19 @@ export default async function About() {
               }}
             ></div>
           </div>
-          <p className="text-xl mt-2">
+          <p className="text-lg mt-2 text-center">
             Estimated Gold: ({MULT} <span className="text-sm">(Level 3)</span> ×{" "}
             {(1 + streakGoal * 0.01).toPrecision(3)}{" "}
             <span className="text-sm">(streak bonus)</span>) × {totalHours}{" "}
             <span className="text-sm">hours</span> ={" "}
             {Math.round(MULT * (1 + streakGoal * 0.01) * totalHours)} 🪙
+          </p>
+          <p className="text-lg mt-1 text-center">
+            Today's Progress:{" "}
+            <span className="font-semibold">
+              {" "}
+              {durationToString(todayWork)} / {durationToString(dailyGoal)}
+            </span>
           </p>
         </div>
       </div>
