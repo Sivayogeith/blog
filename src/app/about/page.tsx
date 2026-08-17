@@ -50,13 +50,12 @@ export default async function About() {
         <p>
           This blog is my
           <span className="ms-1 font-bold">{totalHours} hours</span> project on
-          Macondo - Hack Club for a Macbook Air! I have spent over{" "}
+          <a href="https://macondo.hackclub.com" className="text-secondary">Macondo</a>, a <a href="https://hackclub.com" className="text-secondary">Hack Club</a> YSWS Program for a Macbook Air! I have spent over{" "}
           <span className="font-bold">
             {macondoProject.project_streak_days} days
           </span>{" "}
           on this project - {macondoProject.project_streak_days} days of daily
-          coding - and to be honest, it wasn't hard and the Macbook being the
-          goal filled me with enough motivation.
+          coding - and while some days were easy, some were filled with misery and on those days the goal of a Macbook filled me with enough motivation.
         </p>
         <p className="text-xl mt-2">Project Links:</p>
         <div className="w-fit text-start text-xl">
