@@ -1,4 +1,4 @@
-import { getMacondoProject, getHackatime } from "@/src/api/indexAPI";
+import { getMacondoProject, getHackatime, getCommits } from "@/src/api/indexAPI";
 import {
   compareAsc,
   differenceInDays,
@@ -38,6 +38,8 @@ export default async function About() {
     start: 0,
     end: ((GOAL_HOURS - totalHours) / daysTillEnd) * 60 * 60 * 1000,
   });
+
+  const commitsCount = await getCommits() as { blog: number, blogAPI: number }
 
   return (
     <div className="flex flex-col items-center w-full text-start justify-center h-[84vh]">
@@ -111,6 +113,7 @@ export default async function About() {
               Streak
             </span>
           </p>
+          <p className="text-lg mt-1 text-center">Total Commits: {commitsCount.blog} <span className="text-sm">frontend</span> + {commitsCount.blogAPI} <span className="text-sm">backend</span> = {commitsCount.blog + commitsCount.blogAPI} Commits</p>
         </div>
       </div>
     </div>

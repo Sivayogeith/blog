@@ -14,7 +14,7 @@ export const getMacondoProject = async (): Promise<MacondoProject> => {
   return result.json();
 };
 
-export const getCommits = async (count: boolean = true) => {
-  const result = await get("/githubCommits");
-  return result.json();
+export const getCommits = async (count: boolean = true): Promise<{blog: number | object, blogAPI: number | object}> => {
+  const result = await get("/githubCommits?count="+count);
+  return result.json()
 }
