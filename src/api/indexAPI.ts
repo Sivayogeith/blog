@@ -2,7 +2,9 @@ import { startOfDay } from "date-fns";
 import { get, MacondoProject } from "./helper";
 
 export const getHackatime = async (today: boolean = false) => {
-  const result = await get(`/totalTime${today ? `?start=${startOfDay(new Date()).toISOString()}` : ""}`);
+  const result = await get(
+    `/totalTime${today ? `?start=${startOfDay(new Date()).toISOString()}` : ""}`,
+  );
   if (result.ok) {
     return parseInt(await result.text());
   }
@@ -14,7 +16,10 @@ export const getMacondoProject = async (): Promise<MacondoProject> => {
   return result.json();
 };
 
-export const getCommits = async (): Promise<{blog: number, blogAPI: number}> => {
-  const result = await get("/totalCommits");
-  return result.json()
-}
+export const getCommits = async (): Promise<{
+  blog: { count: number; last: any };
+  blogAPI: { count: number; last: any };
+}> => {
+  const result = await get("/commitsData");
+  return result.json();
+};

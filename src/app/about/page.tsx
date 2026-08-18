@@ -115,10 +115,10 @@ export default async function About() {
             </span>
           </p>
           <p className="text-lg mt-1 text-center">
-            Total Commits: {commitsCount.blog}{" "}
-            <span className="text-sm">frontend</span> + {commitsCount.blogAPI}{" "}
+            Total Commits: {commitsCount.blog.count}{" "}
+            <span className="text-sm">frontend</span> + {commitsCount.blogAPI.count}{" "}
             <span className="text-sm">backend</span> ={" "}
-            <span className="font-semibold">{commitsCount.blog + commitsCount.blogAPI} Commits</span>
+            <span className="font-semibold">{commitsCount.blog.count + commitsCount.blogAPI.count} Commits</span>
           </p>
         </div>
       </div>
