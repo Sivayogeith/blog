@@ -36,7 +36,7 @@ export default function CommentForm({ post, className, placeholder = true, charV
     <form onSubmit={handleSubmit(onSubmit)} className={`mt-4 ${className}`}>
       <div className="flex w-full">
         <textarea {...register("text")} placeholder={placeholder ? "Enter your comment here" : ""} className="lg:w-[55vw] w-full rounded-e-none!" />
-        <button className="border-y border-e border-secondary  rounded-s-none rounded-sm p-2" disabled={!isValid}>
+        <button className="border-y border-e border-s-0 rounded-s-none" disabled={!isValid}>
           <SendIcon className="size-6"/>
         </button>
       </div>

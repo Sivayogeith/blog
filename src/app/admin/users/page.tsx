@@ -69,7 +69,7 @@ export default function Users() {
       <div className="m-5 md:w-[95vw] w-[90vw] h-full flex justify-between flex-col">
         <div className="flex justify-between items-center mb-2">
           <p className="text-2xl">All Users</p>
-          <button className="border border-secondary p-2 rounded-sm" onClick={refresh}>
+          <button onClick={refresh}>
             <RefreshIcon />
           </button>
         </div>
@@ -118,7 +118,7 @@ export default function Users() {
                           : "No"}
                       {!user.isInvitedAdmin && (
                         <button
-                          className={`bg-pale-dark ${user.isAdmin ? "text-red-500" : "text-green-400"} text-sm rounded-sm p-1`}
+                          className={`bg-pale-dark ${user.isAdmin ? "text-red-500" : "text-green-400"} text-sm p-1`}
                           onClick={() =>
                             (user.isAdmin ? revokeAdmin : makeAdmin)(
                               user.username,

@@ -38,13 +38,13 @@ export default function RespondInvite() {
         </div>
         <div className="flex gap-2 mt-8 w-full">
           <button
-            className="p-2 bg-deep-light rounded-sm w-[50%]"
+            className="p-2 bg-deep-light w-[50%]"
             onClick={() => onRespond(true)}
           >
             Accept
           </button>
           <button
-            className="p-2 border border-secondary rounded-sm w-[50%]"
+            className="p-2 w-[50%]"
             onClick={() => onRespond(false)}
           >
             Decline

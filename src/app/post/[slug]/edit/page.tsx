@@ -156,7 +156,7 @@ export default function EditPost() {
                   )}
                 />
                 <button
-                  className="border border-secondary p-2 rounded-sm md:w-[25%] w-full h-[stretch]"
+                  className="md:w-[25%] w-full h-[stretch]"
                   onClick={onUpload}
                   type="button"
                 >
@@ -182,7 +182,7 @@ export default function EditPost() {
                     <option value="video">Video</option>
                   </select>
                   <button
-                    className="border border-secondary p-2 rounded-sm w-[50%]"
+                    className="w-[50%]"
                     onClick={() => onPreview()}
                     type="button"
                   >

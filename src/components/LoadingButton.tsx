@@ -13,7 +13,7 @@ export default function LoadingButton({ref, ...props}: {ref: Ref<LoadingButtonEl
 
   return (
     <>
-      <button className="text-xl bg-linear-65 from-light to-deep-light disabled:opacity-50 mt-6 rounded-sm font-bold text-white flex flex-col items-stretch" {...props}>
+      <button className="text-xl bg-linear-65 from-light to-deep-light disabled:opacity-50 mt-6 font-bold text-white flex flex-col items-stretch p-0!" {...props}>
         <div
           className={`w-full bg-pale-dark h-1 ${isLoading ? "" : "invisible"}`}
         >

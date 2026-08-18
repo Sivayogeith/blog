@@ -139,7 +139,7 @@ export default function Register() {
                   placeholder="Enter a Image Url"
                 />
                 <button
-                  className="border border-secondary px-2 rounded-sm"
+                  className="px-2 py-0"
                   type="button"
                   onClick={onPreview}
                 >

@@ -60,6 +60,10 @@ select:disabled {
   @apply opacity-60 cursor-not-allowed;
 }
 
+button:not(.adminBtn):not(.triggerBtn):not(.w-md-editor button) {
+  @apply border border-secondary rounded-sm p-2
+}
+
 button:hover {
   @apply cursor-pointer;
 }

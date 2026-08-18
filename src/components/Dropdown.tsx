@@ -44,7 +44,7 @@ export default function Dropdown(props: {
                     onClick={() =>
                       item.onClick ? item.onClick(router, theme) : ""
                     }
-                    className="mb-1 text-lg"
+                    className="mb-1 text-lg border-0! p-0!"
                   >
                     {item.icon ? (
                       <p className="flex items-center gap-1">

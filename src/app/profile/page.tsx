@@ -124,7 +124,7 @@ export default function Profile() {
                           className="py-0!"
                           placeholder="Enter a Image Url"
                         />
-                        <button className="border border-secondary p-1 rounded-sm" onClick={onPreview} type="button">
+                        <button className="p-1" onClick={onPreview} type="button">
                           Preview
                         </button>
                       </div>
@@ -153,7 +153,7 @@ export default function Profile() {
                 </div>
               </form>
               <button
-                className="opacity-85 lg:pt-2 flex gap-1 items-center h-min hover:dark:text-lightest hover:text-dark text-lg lg:w-auto w-full mt-6 p-2 lg:border-0 border border-secondary justify-center"
+                className="opacity-85 lg:pt-2 flex gap-1 items-center h-min hover:dark:text-lightest hover:text-dark text-lg lg:w-auto w-full mt-6 p-2 lg:border-0 justify-center"
                 onClick={() => (edit ? onSubmit() : setEdit(true))}
               >
                 {edit ? (
@@ -177,7 +177,7 @@ export default function Profile() {
                 </div>
               </div>
               <button
-                className="border border-secondary rounded-sm p-1"
+                className="p-1"
                 onClick={() =>
                   alert(
                     "sorry! hackclub auth is WIP - check for updates: #sage-meows",
