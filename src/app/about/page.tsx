@@ -15,7 +15,7 @@ export const metadata = {
   description: "About Sage's Blog project",
 };
 
-const GOAL_HOURS = 200;
+const GOAL_HOURS = 160;
 const END_DATE = new Date("2026-09-01");
 const MULT = 50;
 
@@ -50,12 +50,24 @@ export default async function About() {
         <p>
           This blog is my
           <span className="ms-1 font-bold">{totalHours} hours</span> project on
-          <a href="https://macondo.hackclub.com" className="text-secondary ms-1">Macondo</a>, a <a href="https://hackclub.com" className="text-secondary">Hack Club</a> YSWS Program for a Macbook Air! I have spent over{" "}
+          <a
+            href="https://macondo.hackclub.com"
+            className="text-secondary ms-1"
+          >
+            Macondo
+          </a>
+          , a{" "}
+          <a href="https://hackclub.com" className="text-secondary">
+            Hack Club
+          </a>{" "}
+          YSWS Program for a Macbook Air! I have spent over{" "}
           <span className="font-bold">
             {macondoProject.project_streak_days} days
           </span>{" "}
           on this project - {macondoProject.project_streak_days} days of daily
-          coding - and while some days were easy, some were filled with misery and on those days the goal of a Macbook filled me with enough motivation.
+          coding - and while some days were easy, some were filled with misery
+          and on those days the goal of a Macbook filled me with enough
+          motivation.
         </p>
         <p className="text-xl mt-2">Project Links:</p>
         <div className="w-fit text-start text-xl">
@@ -78,10 +90,16 @@ export default async function About() {
         <div className="flex flex-col w-full">
           <h1 className="text-2xl">Stats</h1>
           <hr className="text-secondary w-full mb-3" />
-          <div className="h-6 w-full bg-light rounded-lg relative text-center">
-            <span className="absolute inset-0 text-white font-semibold">{`${totalHours} / ${GOAL_HOURS} hours`}</span>
+          <div className="size-fit rounded-lg relative">
+            <img
+              src="/macbook.png"
+              className="block rounded-sm brightness-95"
+            />
+            <div className="absolute inset-0 z-10 flex justify-center items-center">
+              <span className="text-white font-semibold text-2xl">{`${totalHours} / ${GOAL_HOURS} hours`}</span>
+            </div>
             <div
-              className="h-full bg-deep-light rounded-s-lg"
+              className="h-full bg-black opacity-30 absolute inset-0 rounded-s-sm border-e border-secondary"
               style={{
                 width: Math.round((totalHours / GOAL_HOURS) * 100) + "%",
               }}
@@ -116,9 +134,12 @@ export default async function About() {
           </p>
           <p className="text-lg mt-1 text-center">
             Total Commits: {commitsCount.blog.count}{" "}
-            <span className="text-sm">frontend</span> + {commitsCount.blogAPI.count}{" "}
+            <span className="text-sm">frontend</span> +{" "}
+            {commitsCount.blogAPI.count}{" "}
             <span className="text-sm">backend</span> ={" "}
-            <span className="font-semibold">{commitsCount.blog.count + commitsCount.blogAPI.count} Commits</span>
+            <span className="font-semibold">
+              {commitsCount.blog.count + commitsCount.blogAPI.count} Commits
+            </span>
           </p>
         </div>
       </div>
