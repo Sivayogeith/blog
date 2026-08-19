@@ -1,3 +1,5 @@
+"use server"
+
 import { startOfDay } from "date-fns";
 import { get, MacondoProject } from "./helper";
 
@@ -21,5 +23,5 @@ export const getCommits = async (): Promise<{
   blogAPI: { count: number; last: any };
 }> => {
   const result = await get("/commitsData");
-  return result.json();
+  return await result.json();
 };
