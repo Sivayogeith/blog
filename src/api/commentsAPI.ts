@@ -9,3 +9,13 @@ export const deleteComment = async (commentId: number) => {
   const response = await del(`/comments/${commentId}/delete`);
   return { message: await response.text(), status: response.status };
 };
+
+export const likeComment = async (commentId: number) => {
+  const response = await post(`/comments/${commentId}/like`, {})
+  return { message: await response.text(), status: response.status}
+}
+
+export const dislikeComment = async (commentId: number) => {
+  const response = await post(`/comments/${commentId}/dislike`, {})
+  return { message: await response.text(), status: response.status}
+}
