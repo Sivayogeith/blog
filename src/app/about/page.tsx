@@ -15,7 +15,7 @@ export const metadata = {
   description: "About Sage's Blog project",
 };
 
-const GOAL_HOURS = 160;
+const GOAL_HOURS = 170;
 const END_DATE = new Date("2026-09-01");
 const MULT = 50;
 

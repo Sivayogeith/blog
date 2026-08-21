@@ -1,4 +1,5 @@
-import { del, post } from "./helper";
+import { del, post, Comment } from "./helper";
+export type { Comment } from "./helper";
 
 export const editComment = async (commentId: number, message: string) => {
   const response = await post(`/comments/${commentId}/edit`, { message });
