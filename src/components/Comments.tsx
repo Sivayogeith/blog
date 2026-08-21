@@ -1,9 +1,8 @@
-import { formatDistance } from "date-fns";
 import { Post } from "../api/helper";
 import { getComments } from "../api/postsAPI";
 import CommentForm from "./CommentForm";
 import { getMe } from "../api/authAPI";
-import CommentButtons from "./CommentButtons";
+import CommentClient from "./CommentClient";
 
 export default async function Comments({ post }: { post: Post }) {
   const comments = await getComments(post.slug);
@@ -34,38 +33,7 @@ export default async function Comments({ post }: { post: Post }) {
         />
       </div>
       <p className="text-xl font-bold mt-4">Comments</p>
-      <div className="mt-1 ms-2">
-        {comments.map((comment) => (
-          <div className="mb-4" key={comment.id}>
-            <div className="flex gap-1 w-full">
-              <img
-                src={comment.image}
-                className="size-7 rounded-full me-1 mt-0.5"
-              />
-              <div className="w-full">
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-1 items-center">
-                    <a
-                      className="text-lg font-bold"
-                      href={`/user/${comment.from}`}
-                    >
-                      @{comment.from}
-                    </a>
-                    <span className="text-sm">
-                      •{" "}
-                      {formatDistance(comment.created_at, Date.now(), {
-                        addSuffix: true,
-                      })}
-                    </span>
-                  </div>
-                </div>
-                <p className="text-lg ms-1">{comment.message}</p>
-              </div>
-              <CommentButtons comment={comment} session={session}/>
-            </div>
-          </div>
-        ))}
-      </div>
+      <CommentClient comments={comments} session={session}/>
     </>
   );
 }
