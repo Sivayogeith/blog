@@ -1,10 +1,12 @@
-"use client"
+"use client";
 
 import { formatDistance } from "date-fns";
-import { Comment } from "../api/commentsAPI";
+import { Comment, deleteComment } from "../api/commentsAPI";
 import { SessionData } from "../api/authAPI";
 import DeleteIcon from "./icons/DeleteIcon";
 import EditIcon from "./icons/EditIcon";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function CommentClient({
   comments,
@@ -13,6 +15,20 @@ export default function CommentClient({
   comments: Comment[];
   session: SessionData;
 }) {
+  const router = useRouter()
+
+  const onDelete = async (commentId: number) => {
+    toast.promise(deleteComment(commentId), {
+      loading: "Deleting comment...",
+      success: ({ message, status }) => {
+        if (status == 200) {
+            router.refresh()
+        }
+        return { type: status == 200 ? "success" : "error", message };
+      },
+    });
+  };
+
   return (
     <>
       <div className="mt-1 ms-2">
@@ -47,7 +63,7 @@ export default function CommentClient({
                   <button className="border-0! p-0!">
                     <EditIcon className="size-4.5" />
                   </button>
-                  <button className="border-0! p-0!">
+                  <button className="border-0! p-0!" onClick={() => onDelete(comment.id)}>
                     <DeleteIcon className="size-5 dark:text-red-400 text-red-700" />
                   </button>
                 </div>

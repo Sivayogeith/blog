@@ -1,3 +1,5 @@
+"use server"
+
 import { del, post, Comment } from "./helper";
 export type { Comment } from "./helper";
 
