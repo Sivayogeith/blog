@@ -22,3 +22,8 @@ export const dislikeComment = async (commentId: number) => {
   const response = await post(`/comments/${commentId}/dislike`, {})
   return { message: await response.text(), status: response.status}
 }
+
+export const reportComment = async (commentId: number) => {
+  const response = await post(`/comments/${commentId}/report`, {})
+  return { message: await response.text(), status: response.status }
+}
