@@ -7,6 +7,7 @@ import {
   dislikeComment,
   editComment,
   likeComment,
+  reportComment,
 } from "../api/commentsAPI";
 import { SessionData } from "../api/authAPI";
 import DeleteIcon from "./icons/DeleteIcon";
@@ -77,6 +78,15 @@ export default function CommentClient({
     }
     toast.error(result.message);
   };
+
+  const onReport = async (commentId: number) => {
+   toast.promise(reportComment(commentId), {
+    loading: "Reporting...",
+    success: ({ message, status }) => {
+      return { type: status == 200 ? "success" : "error", message}
+    }
+   })
+  }
 
   return (
     <>
@@ -164,7 +174,7 @@ export default function CommentClient({
                       </button>
                     </>
                   ) : (
-                    <button className="border-0! p-0!">
+                    <button className="border-0! p-0!" onClick={() => onReport(comment.id)}>
                       <ReportIcon className="size-5 dark:text-red-400 text-red-700" />
                     </button>
                   )}
