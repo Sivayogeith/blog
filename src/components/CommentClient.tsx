@@ -1,7 +1,7 @@
 "use client";
 
 import { formatDistance } from "date-fns";
-import { Comment, deleteComment, editComment } from "../api/commentsAPI";
+import { Comment, deleteComment, editComment, likeComment } from "../api/commentsAPI";
 import { SessionData } from "../api/authAPI";
 import DeleteIcon from "./icons/DeleteIcon";
 import EditIcon from "./icons/EditIcon";
@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { commentSchema } from "./CommentForm";
 import { zodResolver } from "@hookform/resolvers/zod";
+import LikeIcon from "./icons/LikeIcon";
 
 export default function CommentClient({
   comments,
@@ -32,7 +33,7 @@ export default function CommentClient({
     toast.promise(editComment(commentId, message), {
       loading: "Editing...",
       success: ({ message, status }) => {
-        setEdit(null)
+        setEdit(null);
         if (status == 200) {
           router.refresh();
         }
@@ -52,6 +53,14 @@ export default function CommentClient({
       },
     });
   };
+
+  const onLike = async (commentId: number) => {
+    const result = await likeComment(commentId)
+    if (result.status == 200) {
+      return router.refresh()
+    }
+    toast.error(result.message)
+  }
 
   return (
     <>
@@ -94,6 +103,12 @@ export default function CommentClient({
                 ) : (
                   <p className="text-lg ms-1">{comment.message}</p>
                 )}
+                <div className="flex items-center">
+                  <button className="border-0! p-0! ms-1 mt-1" type="button" onClick={() => onLike(comment.id)}>
+                    <LikeIcon className="size-5" filled={comment.likes.includes(session.username)}/>
+                  </button>
+                  <span className="ms-1 mt-1">{comment.likes.length}</span>
+                </div>
               </form>
               {comment.from == session.username && (
                 <div className="flex flex-col gap-4 items-center h-full">

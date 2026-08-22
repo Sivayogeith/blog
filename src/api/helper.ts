@@ -93,6 +93,8 @@ export interface Comment {
   image: string; // user's profile picture
   on: number; // slug from posts
   message: string;
+  likes: string[];
+  dislikes: string[];
 }
 
 export interface MacondoProject {
