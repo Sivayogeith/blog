@@ -1,7 +1,13 @@
 "use client";
 
 import { formatDistance } from "date-fns";
-import { Comment, deleteComment, editComment, likeComment } from "../api/commentsAPI";
+import {
+  Comment,
+  deleteComment,
+  dislikeComment,
+  editComment,
+  likeComment,
+} from "../api/commentsAPI";
 import { SessionData } from "../api/authAPI";
 import DeleteIcon from "./icons/DeleteIcon";
 import EditIcon from "./icons/EditIcon";
@@ -12,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { commentSchema } from "./CommentForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LikeIcon from "./icons/LikeIcon";
+import DislikeIcon from "./icons/DislikeIcon";
 
 export default function CommentClient({
   comments,
@@ -55,12 +62,20 @@ export default function CommentClient({
   };
 
   const onLike = async (commentId: number) => {
-    const result = await likeComment(commentId)
+    const result = await likeComment(commentId);
     if (result.status == 200) {
-      return router.refresh()
+      return router.refresh();
     }
-    toast.error(result.message)
-  }
+    toast.error(result.message);
+  };
+
+  const onDislike = async (commentId: number) => {
+    const result = await dislikeComment(commentId);
+    if (result.status == 200) {
+      return router.refresh();
+    }
+    toast.error(result.message);
+  };
 
   return (
     <>
@@ -104,10 +119,28 @@ export default function CommentClient({
                   <p className="text-lg ms-1">{comment.message}</p>
                 )}
                 <div className="flex items-center">
-                  <button className="border-0! p-0! ms-1 mt-1" type="button" onClick={() => onLike(comment.id)}>
-                    <LikeIcon className="size-5" filled={comment.likes.includes(session.username)}/>
+                  <button
+                    className="border-0! p-0! ms-1 mt-1"
+                    type="button"
+                    onClick={() => onLike(comment.id)}
+                  >
+                    <LikeIcon
+                      className="size-5"
+                      filled={comment.likes.includes(session.username)}
+                    />
                   </button>
                   <span className="ms-1 mt-1">{comment.likes.length}</span>
+                  <button
+                    className="border-0! p-0! ms-4 mt-1"
+                    type="button"
+                    onClick={() => onDislike(comment.id)}
+                  >
+                    <DislikeIcon
+                      className="size-5"
+                      filled={comment.dislikes.includes(session.username)}
+                    />
+                  </button>
+                  <span className="ms-1 mt-1">{comment.dislikes.length}</span>
                 </div>
               </form>
               {comment.from == session.username && (
