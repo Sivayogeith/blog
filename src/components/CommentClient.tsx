@@ -19,6 +19,7 @@ import { commentSchema } from "./CommentForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LikeIcon from "./icons/LikeIcon";
 import DislikeIcon from "./icons/DislikeIcon";
+import ReportIcon from "./icons/ReportIcon";
 
 export default function CommentClient({
   comments,
@@ -118,9 +119,9 @@ export default function CommentClient({
                 ) : (
                   <p className="text-lg ms-1">{comment.message}</p>
                 )}
-                <div className="flex items-center">
+                <div className="flex items-center mt-1">
                   <button
-                    className="border-0! p-0! ms-1 mt-1"
+                    className="border-0! p-0! ms-1"
                     type="button"
                     onClick={() => onLike(comment.id)}
                   >
@@ -129,9 +130,9 @@ export default function CommentClient({
                       filled={comment.likes.includes(session.username)}
                     />
                   </button>
-                  <span className="ms-1 mt-1">{comment.likes.length}</span>
+                  <span className="ms-1">{comment.likes.length}</span>
                   <button
-                    className="border-0! p-0! ms-4 mt-1"
+                    className="border-0! p-0! ms-4"
                     type="button"
                     onClick={() => onDislike(comment.id)}
                   >
@@ -140,12 +141,9 @@ export default function CommentClient({
                       filled={comment.dislikes.includes(session.username)}
                     />
                   </button>
-                  <span className="ms-1 mt-1">{comment.dislikes.length}</span>
-                </div>
-              </form>
-              {comment.from == session.username && (
-                <div className="flex flex-col gap-4 items-center h-full">
-                  {edit !== comment.id && (
+                  <span className="ms-1">{comment.dislikes.length}</span>
+                  <div className="w-0 h-6 border-[0.5] border-secondary mx-2"></div>
+                  {comment.from == session.username ? (
                     <>
                       <button
                         className="border-0! p-0!"
@@ -158,16 +156,20 @@ export default function CommentClient({
                         <EditIcon className="size-4.5" />
                       </button>
                       <button
-                        className="border-0! p-0!"
+                        className="border-0! p-0! ms-2"
                         onClick={() => onDelete(comment.id)}
                         type="button"
                       >
                         <DeleteIcon className="size-5 dark:text-red-400 text-red-700" />
                       </button>
                     </>
+                  ) : (
+                    <button className="border-0! p-0!">
+                      <ReportIcon className="size-5 dark:text-red-400 text-red-700" />
+                    </button>
                   )}
                 </div>
-              )}
+              </form>
             </div>
           </div>
         ))}
