@@ -31,14 +31,20 @@ export default function CommentClient({
 }) {
   const router = useRouter();
   const [edit, setEdit] = useState<number | null>(null);
-  const { register, getValues, setValue } = useForm({
+  const {
+    register,
+    getValues,
+    setValue,
+    watch,
+    formState: { isValid },
+  } = useForm({
     resolver: zodResolver(commentSchema),
     mode: "onTouched",
   });
 
+  const message = watch("text")
+
   const onEdit = async (commentId: number) => {
-    const message = getValues("text");
-    console.log(message);
     toast.promise(editComment(commentId, message), {
       loading: "Editing...",
       success: ({ message, status }) => {
@@ -80,13 +86,13 @@ export default function CommentClient({
   };
 
   const onReport = async (commentId: number) => {
-   toast.promise(reportComment(commentId), {
-    loading: "Reporting...",
-    success: ({ message, status }) => {
-      return { type: status == 200 ? "success" : "error", message}
-    }
-   })
-  }
+    toast.promise(reportComment(commentId), {
+      loading: "Reporting...",
+      success: ({ message, status }) => {
+        return { type: status == 200 ? "success" : "error", message };
+      },
+    });
+  };
 
   return (
     <>
@@ -116,15 +122,24 @@ export default function CommentClient({
                   </div>
                 </div>
                 {edit == comment.id ? (
-                  <div className="w-[98%] flex flex-col mt-1">
-                    <textarea {...register("text")} />
-                    <button
-                      className="border-0! p-0! text-end mt-1"
-                      onClick={() => onEdit(comment.id)}
-                      type="button"
-                    >
-                      save
-                    </button>
+                  <div className="w-[98%] flex flex-col mt-1 items-end mb-2">
+                    <textarea {...register("text")} className="w-full" />
+                    <div className="flex gap-3 items-center justify-between w-full">
+                      <p
+                        className={`${isValid && "dark:text-green-400! text-green-700!"} error-msg text-end`}
+                      >
+                        {message.length}/150 chars (min. 10)
+                      </p>
+                      <button
+                        className="border-0! p-0! mt-1"
+                        onClick={() => onEdit(comment.id)}
+                        type="button"
+                        disabled={!isValid}
+                      >
+                        save
+                      </button>
+                    </div>
+                    <hr className="w-full border-secondary border-1/2"/>
                   </div>
                 ) : (
                   <p className="text-lg ms-1">{comment.message}</p>
@@ -174,7 +189,10 @@ export default function CommentClient({
                       </button>
                     </>
                   ) : (
-                    <button className="border-0! p-0!" onClick={() => onReport(comment.id)}>
+                    <button
+                      className="border-0! p-0!"
+                      onClick={() => onReport(comment.id)}
+                    >
                       <ReportIcon className="size-5 dark:text-red-400 text-red-700" />
                     </button>
                   )}
