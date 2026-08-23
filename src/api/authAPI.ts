@@ -33,5 +33,5 @@ export const logout = async (): Promise<string> =>
 
 export const setSlackId = async (code: string) => {
   const response = await post("/auth/setSlackId", { code })
-  return { message: response.text(), status: response.status }
+  return { message: await response.text(), status: response.status }
 }
