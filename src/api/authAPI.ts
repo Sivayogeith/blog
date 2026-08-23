@@ -30,3 +30,8 @@ export const getMe = async (): Promise<SessionData> => {
 
 export const logout = async (): Promise<string> =>
   (await get(`/auth/logout`)).text();
+
+export const setSlackId = async (code: string) => {
+  const response = await post("/auth/setSlackId", { code })
+  return { message: response.text(), status: response.status }
+}
