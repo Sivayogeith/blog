@@ -58,6 +58,7 @@ export interface User {
   isAdmin: boolean;
   isOwner: boolean;
   image: string;
+  slackId: string;
 }
 
 export interface SessionData {

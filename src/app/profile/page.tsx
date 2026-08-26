@@ -71,13 +71,13 @@ export default function Profile() {
     });
 
     setEdit(false);
-    setUser({ username, name, image: user.image });
+    setUser({ username, name, image: user.image, slackId: user.slackId });
   };
 
   const onPreview = async () => {
-    setUser({ ...user, image: getValues("imageUrl")})
-    setValue("image", null)
-  }
+    setUser({ ...user, image: getValues("imageUrl") });
+    setValue("image", null);
+  };
 
   useEffect(() => {
     getMe().then((s) =>
@@ -104,7 +104,7 @@ export default function Profile() {
                     render={({ field: { onChange } }) => (
                       <ProfileDropzone
                         onChange={async (e) => {
-                          setUser({...user, image: ""})
+                          setUser({ ...user, image: "" });
                           onChange(e.target.files);
                           await trigger("image");
                         }}
@@ -124,7 +124,11 @@ export default function Profile() {
                           className="py-0!"
                           placeholder="Enter a Image Url"
                         />
-                        <button className="p-1" onClick={onPreview} type="button">
+                        <button
+                          className="p-1"
+                          onClick={onPreview}
+                          type="button"
+                        >
                           Preview
                         </button>
                       </div>
@@ -153,7 +157,7 @@ export default function Profile() {
                 </div>
               </form>
               <button
-                className="opacity-85 lg:pt-2 flex gap-1 items-center h-min hover:dark:text-lightest hover:text-dark text-lg lg:w-auto w-full mt-6 p-2 lg:border-0 justify-center"
+                className="opacity-85 lg:pt-2 flex gap-1 items-center h-min hover:dark:text-lightest hover:text-dark text-lg lg:w-auto w-full mt-6 lg:border-0! justify-center"
                 onClick={() => (edit ? onSubmit() : setEdit(true))}
               >
                 {edit ? (
@@ -173,19 +177,14 @@ export default function Profile() {
                 />
                 <div>
                   <p className="text-lg">Hack Club Auth</p>
-                  <p className="text-sm opacity-80">Not Connected</p>
+                  <p className="text-sm opacity-80">{user.slackId ? `Connected (${user.slackId})` : "Not Connected" }</p>
                 </div>
               </div>
-              <button
-                className="p-1"
-                onClick={() =>
-                  alert(
-                    "sorry! hackclub auth is WIP - check for updates: #sage-meows",
-                  )
-                }
-              >
-                Connect
-              </button>
+              {!user.slackId && (
+                <a className="p-1 border border-secondary" href={HCA_URL}>
+                  Connect
+                </a>
+              )}
             </div>
           </>
         ) : (
@@ -228,3 +227,6 @@ export const editProfileSchema = z.object({
 });
 
 export type EditProfileFormData = z.infer<typeof editProfileSchema>;
+
+export const HCA_URL =
+  "https://auth.hackclub.com/oauth/authorize?client_id=3ada672b2a9188007596741f47b7e1bd&redirect_uri=https%3A%2F%2Fblog.sagecat.dev%2Fauth%2FHCA&response_type=code&scope=openid+slack_id";
