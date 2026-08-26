@@ -67,6 +67,7 @@ export interface SessionData {
   userId: string;
   isAdmin: boolean;
   isOwner: boolean;
+  slackId: string | null;
 }
 
 export interface Post {

@@ -7,12 +7,22 @@ import CommentClient from "./CommentClient";
 export default async function Comments({ post }: { post: Post }) {
   const comments = await getComments(post.slug);
   const session = await getMe();
-
+  console.log(session)
   return (
     <>
       <div className="relative">
         <div
-          className={`absolute z-10 inset-0 flex justify-center pt-5 text-xl ${session.username && "hidden"}`}
+          className={`absolute z-10 inset-0 flex justify-center pt-5 text-xl ${session.username && !session.slackId ? "" : "hidden"}`}
+        >
+          <p>
+            <a href="/profile" className="dark:text-light text-dark">
+              Connect to HCA
+            </a>{" "}
+            to make a comment!
+          </p>
+        </div>
+        <div
+          className={`absolute z-10 inset-0 flex justify-center pt-5 text-xl ${!session.username ? "" : "hidden"}`}
         >
           <p>
             <a href="/register" className="dark:text-light text-dark">
@@ -27,13 +37,13 @@ export default async function Comments({ post }: { post: Post }) {
         </div>
         <CommentForm
           post={post}
-          className={` ${!session.username && "brightness-40"}`}
-          placeholder={!!session.username}
-          charValid={!!session.username}
+          className={`${(!session.username || !session.slackId) && "brightness-40"}`}
+          placeholder={!!session.username && !!session.slackId}
+          charValid={!!session.username && !!session.slackId}
         />
       </div>
       <p className="text-xl font-bold mt-4">Comments</p>
-      <CommentClient comments={comments} session={session}/>
+      <CommentClient comments={comments} session={session} />
     </>
   );
 }
