@@ -7,7 +7,7 @@ import CommentClient from "./CommentClient";
 export default async function Comments({ post }: { post: Post }) {
   const comments = await getComments(post.slug);
   const session = await getMe();
-  console.log(session)
+
   return (
     <>
       <div className="relative">

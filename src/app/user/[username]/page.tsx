@@ -21,9 +21,9 @@ export async function generateMetadata({
     title: `${user.name}'s Profile`,
     description: `The user page of ${user.name} with all their posts, comments and more!`,
     openGraph: {
-      images: user.image
-    }
-  }
+      images: user.image,
+    },
+  };
 }
 
 export default async function UserPage({
@@ -69,7 +69,18 @@ export default async function UserPage({
                 )
               )}
             </div>
-            <p className="text-xl opacity-75">@{user.username}</p>
+            <div className="flex gap-2 items-center mt-1">
+              <p className="text-xl opacity-75">@{user.username}</p>
+              {user.slackId && (
+                <a
+                  className="text-secondary mt-0.5"
+                  target="_blank"
+                  href={`https://hackclub.enterprise.slack.com/team/${user.slackId}`}
+                >
+                  Slack ({user.slackId})
+                </a>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex gap-8 items-center justify-center pt-2 ">
