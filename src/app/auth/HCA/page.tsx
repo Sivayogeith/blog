@@ -2,9 +2,9 @@
 
 import { setSlackId } from "@/src/api/authAPI";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
-export default function HCA() {
+function HCAInternal() {
   const params = useSearchParams();
   const router = useRouter();
   const [message, setMessage] = useState(
@@ -31,5 +31,13 @@ export default function HCA() {
     <div className="flex flex-col items-center justify-center h-[84vh]">
       <p className="text-xl">{message}</p>
     </div>
+  );
+}
+
+export default function HCA() {
+  return (
+    <Suspense>
+      <HCAInternal />
+    </Suspense>
   );
 }
