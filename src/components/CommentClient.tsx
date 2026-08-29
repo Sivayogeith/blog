@@ -42,7 +42,7 @@ export default function CommentClient({
     mode: "onTouched",
   });
 
-  const message = watch("text")
+  const message = watch("text");
 
   const onEdit = async (commentId: number) => {
     toast.promise(editComment(commentId, message), {
@@ -94,113 +94,222 @@ export default function CommentClient({
     });
   };
 
+  const getReplies = (commentId: number) => {
+    return comments.filter((comment) => comment.parent == commentId);
+  };
+
   return (
     <>
       <div className="mt-1 ms-2">
-        {comments.map((comment) => (
-          <div className="mb-4" key={comment.id}>
-            <div className="flex gap-1 w-full">
-              <img
-                src={comment.image}
-                className="size-7 rounded-full me-1 mt-0.5"
-              />
-              <form className="w-full">
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-1 items-center">
-                    <a
-                      className="text-lg font-bold"
-                      href={`/user/${comment.from}`}
-                    >
-                      @{comment.from}
-                    </a>
-                    <span className="text-sm">
-                      •{" "}
-                      {formatDistance(comment.created_at, Date.now(), {
-                        addSuffix: true,
-                      })}
-                    </span>
-                  </div>
-                </div>
-                {edit == comment.id ? (
-                  <div className="w-[98%] flex flex-col mt-1 items-end mb-2">
-                    <textarea {...register("text")} className="w-full" />
-                    <div className="flex gap-3 items-center justify-between w-full">
-                      <p
-                        className={`${isValid && "dark:text-green-400! text-green-700!"} error-msg text-end`}
-                      >
-                        {message.length}/150 chars (min. 10)
-                      </p>
-                      <button
-                        className="border-0! p-0! mt-1"
-                        onClick={() => onEdit(comment.id)}
-                        type="button"
-                        disabled={!isValid}
-                      >
-                        save
-                      </button>
+        {comments.map((comment) => {
+          const replies = getReplies(comment.id);
+          return (
+            comment.parent == null && (
+              <div className="mb-4" key={comment.id}>
+                <div className="flex gap-1 w-full">
+                  <img
+                    src={comment.image}
+                    className="size-7 rounded-full me-1 mt-0.5"
+                  />
+                  <form className="w-full">
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-1 items-center">
+                        <a
+                          className="text-lg font-bold"
+                          href={`/user/${comment.from}`}
+                        >
+                          @{comment.from}
+                        </a>
+                        <span className="text-sm">
+                          •{" "}
+                          {formatDistance(comment.created_at, Date.now(), {
+                            addSuffix: true,
+                          })}
+                        </span>
+                      </div>
                     </div>
-                    <hr className="w-full border-secondary border-1/2"/>
-                  </div>
-                ) : (
-                  <p className="text-lg ms-1">{comment.message}</p>
-                )}
-                <div className="flex items-center mt-1">
-                  <button
-                    className="border-0! p-0! ms-1"
-                    type="button"
-                    onClick={() => onLike(comment.id)}
-                  >
-                    <LikeIcon
-                      className="size-5"
-                      filled={comment.likes.includes(session.username)}
-                    />
-                  </button>
-                  <span className="ms-1">{comment.likes.length}</span>
-                  <button
-                    className="border-0! p-0! ms-4"
-                    type="button"
-                    onClick={() => onDislike(comment.id)}
-                  >
-                    <DislikeIcon
-                      className="size-5"
-                      filled={comment.dislikes.includes(session.username)}
-                    />
-                  </button>
-                  <span className="ms-1">{comment.dislikes.length}</span>
-                  <div className="w-0 h-6 border-[0.5] border-secondary mx-2"></div>
-                  {comment.from == session.username ? (
-                    <>
+                    {edit == comment.id ? (
+                      <div className="w-[98%] flex flex-col mt-1 items-end mb-2">
+                        <textarea {...register("text")} className="w-full" />
+                        <div className="flex gap-3 items-center justify-between w-full">
+                          <p
+                            className={`${isValid && "dark:text-green-400! text-green-700!"} error-msg text-end`}
+                          >
+                            {message.length}/150 chars (min. 10)
+                          </p>
+                          <button
+                            className="border-0! p-0! mt-1"
+                            onClick={() => onEdit(comment.id)}
+                            type="button"
+                            disabled={!isValid}
+                          >
+                            save
+                          </button>
+                        </div>
+                        <hr className="w-full border-secondary border-1/2" />
+                      </div>
+                    ) : (
+                      <p className="text-lg ms-1">{comment.message}</p>
+                    )}
+                    <div className="flex items-center mt-1">
                       <button
-                        className="border-0! p-0!"
-                        onClick={() => {
-                          setEdit(comment.id);
-                          setValue("text", comment.message);
-                        }}
+                        className="border-0! p-0! ms-1"
                         type="button"
+                        onClick={() => onLike(comment.id)}
                       >
-                        <EditIcon className="size-4.5" />
+                        <LikeIcon
+                          className="size-5"
+                          filled={comment.likes.includes(session.username)}
+                        />
                       </button>
+                      <span className="ms-1">{comment.likes.length}</span>
                       <button
-                        className="border-0! p-0! ms-2"
-                        onClick={() => onDelete(comment.id)}
+                        className="border-0! p-0! ms-4"
                         type="button"
+                        onClick={() => onDislike(comment.id)}
                       >
-                        <DeleteIcon className="size-5 dark:text-red-400 text-red-700" />
+                        <DislikeIcon
+                          className="size-5"
+                          filled={comment.dislikes.includes(session.username)}
+                        />
                       </button>
-                    </>
-                  ) : (
-                    <button
-                      className="border-0! p-0!"
-                      onClick={() => onReport(comment.id)}
-                    >
-                      <ReportIcon className="size-5 dark:text-red-400 text-red-700" />
-                    </button>
-                  )}
+                      <span className="ms-1">{comment.dislikes.length}</span>
+                      <div className="w-0 h-6 border-[0.5] border-secondary mx-2"></div>
+                      {comment.from == session.username ? (
+                        <>
+                          <button
+                            className="border-0! p-0!"
+                            onClick={() => {
+                              setEdit(comment.id);
+                              setValue("text", comment.message);
+                            }}
+                            type="button"
+                          >
+                            <EditIcon className="size-4.5" />
+                          </button>
+                          <button
+                            className="border-0! p-0! ms-2"
+                            onClick={() => onDelete(comment.id)}
+                            type="button"
+                          >
+                            <DeleteIcon className="size-5 dark:text-red-400 text-red-700" />
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          className="border-0! p-0!"
+                          onClick={() => onReport(comment.id)}
+                        >
+                          <ReportIcon className="size-5 dark:text-red-400 text-red-700" />
+                        </button>
+                      )}
+                    </div>
+
+                    {replies.length ? (
+                      <div className="ms-3">
+                        <hr className="border-secondary mt-3 mb-3" />
+                        {replies.map((reply) => (
+                            <div className="flex gap-1 w-full" key={reply.id}>
+                              <img
+                                src={reply.image}
+                                className="size-7 rounded-full me-1 mt-0.5"
+                              />
+                              <div>
+                                <div className="flex items-center justify-between">
+                                  <div className="flex gap-1 items-center">
+                                    <a
+                                      className="text-lg font-bold"
+                                      href={`/user/${reply.from}`}
+                                    >
+                                      @{reply.from}
+                                    </a>
+                                    <span className="text-sm">
+                                      •{" "}
+                                      {formatDistance(
+                                        reply.created_at,
+                                        Date.now(),
+                                        {
+                                          addSuffix: true,
+                                        },
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                                <p className="text-lg ms-1">{reply.message}</p>
+                                <div className="flex items-center mt-1">
+                                  <button
+                                    className="border-0! p-0! ms-1"
+                                    type="button"
+                                    onClick={() => onLike(reply.id)}
+                                  >
+                                    <LikeIcon
+                                      className="size-5"
+                                      filled={reply.likes.includes(
+                                        session.username,
+                                      )}
+                                    />
+                                  </button>
+                                  <span className="ms-1">
+                                    {reply.likes.length}
+                                  </span>
+                                  <button
+                                    className="border-0! p-0! ms-4"
+                                    type="button"
+                                    onClick={() => onDislike(reply.id)}
+                                  >
+                                    <DislikeIcon
+                                      className="size-5"
+                                      filled={reply.dislikes.includes(
+                                        session.username,
+                                      )}
+                                    />
+                                  </button>
+                                  <span className="ms-1">
+                                    {reply.dislikes.length}
+                                  </span>
+                                  <div className="w-0 h-6 border-[0.5] border-secondary mx-2"></div>
+                                  {reply.from == session.username ? (
+                                    <>
+                                      {/* <button
+                                        className="border-0! p-0!"
+                                        onClick={() => {
+                                          setEdit(comment.id);
+                                          setValue("text", comment.message);
+                                        }}
+                                        type="button"
+                                      >
+                                        <EditIcon className="size-4.5" />
+                                      </button>
+                                      <button
+                                        className="border-0! p-0! ms-2"
+                                        onClick={() => onDelete(comment.id)}
+                                        type="button"
+                                      >
+                                        <DeleteIcon className="size-5 dark:text-red-400 text-red-700" />
+                                      </button> */}
+                                    </>
+                                  ) : (
+                                    <button
+                                      className="border-0! p-0!"
+                                      onClick={() => onReport(reply.id)}
+                                    >
+                                      <ReportIcon className="size-5 dark:text-red-400 text-red-700" />
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                        ))}
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </form>
                 </div>
-              </form>
-            </div>
-          </div>
-        ))}
+              </div>
+            )
+          );
+        })}
       </div>
     </>
   );
