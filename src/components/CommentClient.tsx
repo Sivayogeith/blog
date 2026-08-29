@@ -7,6 +7,7 @@ import {
   dislikeComment,
   editComment,
   likeComment,
+  removeOpinion,
   reportComment,
 } from "../api/commentsAPI";
 import { SessionData } from "../api/authAPI";
@@ -69,16 +70,16 @@ export default function CommentClient({
     });
   };
 
-  const onLike = async (commentId: number) => {
-    const result = await likeComment(commentId);
+  const onLike = async (commentId: number, remove: boolean = false) => {
+    const result = await (remove ? removeOpinion : likeComment)(commentId);
     if (result.status == 200) {
       return router.refresh();
     }
     toast.error(result.message);
   };
 
-  const onDislike = async (commentId: number) => {
-    const result = await dislikeComment(commentId);
+  const onDislike = async (commentId: number, remove: boolean = false) => {
+    const result = await (remove ? removeOpinion : dislikeComment)(commentId);
     if (result.status == 200) {
       return router.refresh();
     }
@@ -155,7 +156,12 @@ export default function CommentClient({
                       <button
                         className="border-0! p-0! ms-1"
                         type="button"
-                        onClick={() => onLike(comment.id)}
+                        onClick={() =>
+                          onLike(
+                            comment.id,
+                            comment.likes.includes(session.username),
+                          )
+                        }
                       >
                         <LikeIcon
                           className="size-5"
@@ -166,7 +172,12 @@ export default function CommentClient({
                       <button
                         className="border-0! p-0! ms-4"
                         type="button"
-                        onClick={() => onDislike(comment.id)}
+                        onClick={() =>
+                          onDislike(
+                            comment.id,
+                            comment.dislikes.includes(session.username),
+                          )
+                        }
                       >
                         <DislikeIcon
                           className="size-5"
@@ -209,68 +220,68 @@ export default function CommentClient({
                       <div className="ms-3">
                         <hr className="border-secondary mt-3 mb-3" />
                         {replies.map((reply) => (
-                            <div className="flex gap-1 w-full" key={reply.id}>
-                              <img
-                                src={reply.image}
-                                className="size-7 rounded-full me-1 mt-0.5"
-                              />
-                              <div>
-                                <div className="flex items-center justify-between">
-                                  <div className="flex gap-1 items-center">
-                                    <a
-                                      className="text-lg font-bold"
-                                      href={`/user/${reply.from}`}
-                                    >
-                                      @{reply.from}
-                                    </a>
-                                    <span className="text-sm">
-                                      •{" "}
-                                      {formatDistance(
-                                        reply.created_at,
-                                        Date.now(),
-                                        {
-                                          addSuffix: true,
-                                        },
-                                      )}
-                                    </span>
-                                  </div>
+                          <div className="flex gap-1 w-full" key={reply.id}>
+                            <img
+                              src={reply.image}
+                              className="size-7 rounded-full me-1 mt-0.5"
+                            />
+                            <div>
+                              <div className="flex items-center justify-between">
+                                <div className="flex gap-1 items-center">
+                                  <a
+                                    className="text-lg font-bold"
+                                    href={`/user/${reply.from}`}
+                                  >
+                                    @{reply.from}
+                                  </a>
+                                  <span className="text-sm">
+                                    •{" "}
+                                    {formatDistance(
+                                      reply.created_at,
+                                      Date.now(),
+                                      {
+                                        addSuffix: true,
+                                      },
+                                    )}
+                                  </span>
                                 </div>
-                                <p className="text-lg ms-1">{reply.message}</p>
-                                <div className="flex items-center mt-1">
-                                  <button
-                                    className="border-0! p-0! ms-1"
-                                    type="button"
-                                    onClick={() => onLike(reply.id)}
-                                  >
-                                    <LikeIcon
-                                      className="size-5"
-                                      filled={reply.likes.includes(
-                                        session.username,
-                                      )}
-                                    />
-                                  </button>
-                                  <span className="ms-1">
-                                    {reply.likes.length}
-                                  </span>
-                                  <button
-                                    className="border-0! p-0! ms-4"
-                                    type="button"
-                                    onClick={() => onDislike(reply.id)}
-                                  >
-                                    <DislikeIcon
-                                      className="size-5"
-                                      filled={reply.dislikes.includes(
-                                        session.username,
-                                      )}
-                                    />
-                                  </button>
-                                  <span className="ms-1">
-                                    {reply.dislikes.length}
-                                  </span>
-                                  <div className="w-0 h-6 border-[0.5] border-secondary mx-2"></div>
-                                  {reply.from == session.username ? (
-                                    <>
-                                      {/* <button
+                              </div>
+                              <p className="text-lg ms-1">{reply.message}</p>
+                              <div className="flex items-center mt-1">
+                                <button
+                                  className="border-0! p-0! ms-1"
+                                  type="button"
+                                  onClick={() => onLike(reply.id, reply.likes.includes(session.username))}
+                                >
+                                  <LikeIcon
+                                    className="size-5"
+                                    filled={reply.likes.includes(
+                                      session.username,
+                                    )}
+                                  />
+                                </button>
+                                <span className="ms-1">
+                                  {reply.likes.length}
+                                </span>
+                                <button
+                                  className="border-0! p-0! ms-4"
+                                  type="button"
+                                  onClick={() => onDislike(reply.id, reply.likes.includes(session.username))}
+                                >
+                                  <DislikeIcon
+                                    className="size-5"
+                                    filled={reply.dislikes.includes(
+                                      session.username,
+                                    )}
+                                  />
+                                </button>
+                                <span className="ms-1">
+                                  {reply.dislikes.length}
+                                </span>
+                                <div className="w-0 h-6 border-[0.5] border-secondary mx-2"></div>
+                                {reply.from == session.username ? (
+                                  <>
+                                    {/* <button
                                         className="border-0! p-0!"
                                         onClick={() => {
                                           setEdit(comment.id);
@@ -287,18 +298,18 @@ export default function CommentClient({
                                       >
                                         <DeleteIcon className="size-5 dark:text-red-400 text-red-700" />
                                       </button> */}
-                                    </>
-                                  ) : (
-                                    <button
-                                      className="border-0! p-0!"
-                                      onClick={() => onReport(reply.id)}
-                                    >
-                                      <ReportIcon className="size-5 dark:text-red-400 text-red-700" />
-                                    </button>
-                                  )}
-                                </div>
+                                  </>
+                                ) : (
+                                  <button
+                                    className="border-0! p-0!"
+                                    onClick={() => onReport(reply.id)}
+                                  >
+                                    <ReportIcon className="size-5 dark:text-red-400 text-red-700" />
+                                  </button>
+                                )}
                               </div>
                             </div>
+                          </div>
                         ))}
                       </div>
                     ) : (
