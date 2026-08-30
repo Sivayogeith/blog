@@ -22,6 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import LikeIcon from "./icons/LikeIcon";
 import DislikeIcon from "./icons/DislikeIcon";
 import ReportIcon from "./icons/ReportIcon";
+import ReplyIcon from "./icons/ReplyIcon";
 
 export default function CommentClient({
   comments,
@@ -185,6 +186,8 @@ export default function CommentClient({
                         />
                       </button>
                       <span className="ms-1">{comment.dislikes.length}</span>
+                      <button className="border-0! p-0! ms-2"><ReplyIcon className="size-5" /></button>
+                      <span className="ms-1 text-sm"> Reply</span>
                       <div className="w-0 h-6 border-[0.5] border-secondary mx-2"></div>
                       {comment.from == session.username ? (
                         <>
