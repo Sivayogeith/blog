@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { commentSchema } from "./CommentForm";
+import CommentForm, { commentSchema } from "./CommentForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import LikeIcon from "./icons/LikeIcon";
 import DislikeIcon from "./icons/DislikeIcon";
@@ -33,6 +33,7 @@ export default function CommentClient({
 }) {
   const router = useRouter();
   const [edit, setEdit] = useState<number | null>(null);
+  const [replyTo, setReplyTo] = useState<number | null>(null);
   const {
     register,
     getValues,
@@ -113,7 +114,7 @@ export default function CommentClient({
                     src={comment.image}
                     className="size-7 rounded-full me-1 mt-0.5"
                   />
-                  <form className="w-full">
+                  <div className="w-full">
                     <div className="flex items-center justify-between">
                       <div className="flex gap-1 items-center">
                         <a
@@ -186,8 +187,14 @@ export default function CommentClient({
                         />
                       </button>
                       <span className="ms-1">{comment.dislikes.length}</span>
-                      <button className="border-0! p-0! ms-2"><ReplyIcon className="size-5" /></button>
-                      <span className="ms-1 text-sm"> Reply</span>
+                      <button
+                        className="border-0! p-0! ms-2 flex items-center gap-1"
+                        onClick={() => setReplyTo(comment.id)}
+                        type="button"
+                      >
+                        <ReplyIcon className="size-5" />
+                        <span className="text-sm"> Reply</span>
+                      </button>
                       <div className="w-0 h-6 border-[0.5] border-secondary mx-2"></div>
                       {comment.from == session.username ? (
                         <>
@@ -218,7 +225,7 @@ export default function CommentClient({
                         </button>
                       )}
                     </div>
-
+                    {replyTo == comment.id && <CommentForm comment={comment} />}
                     {replies.length ? (
                       <div className="ms-3">
                         <hr className="border-secondary mt-3 mb-3" />
@@ -254,7 +261,12 @@ export default function CommentClient({
                                 <button
                                   className="border-0! p-0! ms-1"
                                   type="button"
-                                  onClick={() => onLike(reply.id, reply.likes.includes(session.username))}
+                                  onClick={() =>
+                                    onLike(
+                                      reply.id,
+                                      reply.likes.includes(session.username),
+                                    )
+                                  }
                                 >
                                   <LikeIcon
                                     className="size-5"
@@ -269,7 +281,12 @@ export default function CommentClient({
                                 <button
                                   className="border-0! p-0! ms-4"
                                   type="button"
-                                  onClick={() => onDislike(reply.id, reply.likes.includes(session.username))}
+                                  onClick={() =>
+                                    onDislike(
+                                      reply.id,
+                                      reply.likes.includes(session.username),
+                                    )
+                                  }
                                 >
                                   <DislikeIcon
                                     className="size-5"
@@ -318,7 +335,7 @@ export default function CommentClient({
                     ) : (
                       ""
                     )}
-                  </form>
+                  </div>
                 </div>
               </div>
             )

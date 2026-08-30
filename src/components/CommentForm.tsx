@@ -7,8 +7,9 @@ import { addComment, Post } from "../api/postsAPI";
 import { toast } from "sonner";
 import SendIcon from "./icons/SendIcon";
 import { useRouter } from "next/navigation";
+import { Comment } from "../api/commentsAPI"
 
-export default function CommentForm({ post, className, placeholder = true, charValid = true}: { post: Post, className?: string, placeholder?: boolean, charValid?: boolean}) {
+export default function CommentForm({ post, comment, className, placeholder = true, charValid = true, reply = false}: { post?: Post, comment?: Comment, className?: string, placeholder?: boolean, charValid?: boolean, reply?: boolean}) {
   const {
     register,
     handleSubmit,
@@ -23,7 +24,12 @@ export default function CommentForm({ post, className, placeholder = true, charV
   const text = watch("text", "");
 
   const onSubmit = async ({ text }: CommentFormData) => {
-    const result = await addComment(post.slug, text);
+    let result;
+    // if (reply) {
+      // result =
+    // } else {
+      result = await addComment(post!.slug, text);
+    // }
     if (result.status == 200) {
       router.refresh()
       setValue("text", "")
