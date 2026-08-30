@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { del, post, Comment } from "./helper";
 export type { Comment } from "./helper";
@@ -14,21 +14,26 @@ export const deleteComment = async (commentId: number) => {
 };
 
 export const likeComment = async (commentId: number) => {
-  const response = await post(`/comments/${commentId}/like`, {})
-  return { message: await response.text(), status: response.status}
-}
+  const response = await post(`/comments/${commentId}/like`, {});
+  return { message: await response.text(), status: response.status };
+};
 
 export const dislikeComment = async (commentId: number) => {
-  const response = await post(`/comments/${commentId}/dislike`, {})
-  return { message: await response.text(), status: response.status}
-}
+  const response = await post(`/comments/${commentId}/dislike`, {});
+  return { message: await response.text(), status: response.status };
+};
 
 export const reportComment = async (commentId: number) => {
-  const response = await post(`/comments/${commentId}/report`, {})
-  return { message: await response.text(), status: response.status }
-}
+  const response = await post(`/comments/${commentId}/report`, {});
+  return { message: await response.text(), status: response.status };
+};
 
 export const removeOpinion = async (commentId: number) => {
-  const response = await post(`/comments/${commentId}/removeOpinion`, {})
+  const response = await post(`/comments/${commentId}/removeOpinion`, {});
+  return { message: await response.text(), status: response.status };
+};
+
+export const replyToComment = async (commentId: number, message: string) => {
+  const response = await post(`/comments/${commentId}/reply`, { message });
   return { message: await response.text(), status: response.status }
-}
+};
