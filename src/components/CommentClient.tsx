@@ -55,7 +55,7 @@ function CommentItem({
   session: SessionData;
 }) {
   const router = useRouter();
-  const [edit, setEdit] = useState<number | null>(null); 
+  const [edit, setEdit] = useState<number | null>(null);
 
   const {
     register,
@@ -239,7 +239,12 @@ function CommentItem({
                 </button>
               )}
             </div>
-            <CommentForm comment={comment} ref={formRef} reply className="ms-3" />
+            <CommentForm
+              comment={comment}
+              ref={formRef}
+              reply
+              className="ms-3"
+            />
             {replies.length ? (
               <div className="ms-3">
                 <hr className="border-secondary mt-3 mb-3" />
@@ -312,14 +317,14 @@ function CommentItem({
                                         type="button"
                                       >
                                         <EditIcon className="size-4.5" />
-                                      </button>
-                                      <button
-                                        className="border-0! p-0! ms-2"
-                                        onClick={() => onDelete(comment.id)}
-                                        type="button"
-                                      >
-                                        <DeleteIcon className="size-5 dark:text-red-400 text-red-700" />
                                       </button> */}
+                            <button
+                              className="border-0! p-0! ms-2"
+                              onClick={() => onDelete(reply.id)}
+                              type="button"
+                            >
+                              <DeleteIcon className="size-5 dark:text-red-400 text-red-700" />
+                            </button>
                           </>
                         ) : (
                           <button
