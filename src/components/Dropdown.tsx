@@ -30,7 +30,7 @@ export default function Dropdown(props: {
         {props.session.username}
       </button>
       <div
-        className={`${isOpened ? "" : "hidden"} absolute border dark:border-secondary border-dark p-2 rounded-sm dark:bg-dark bg-lightest w-35 mt-1 -left-25`}
+        className={`${isOpened ? "" : "hidden"} absolute z-10 border dark:border-secondary border-dark p-2 rounded-sm dark:bg-dark bg-lightest w-35 mt-1 -left-25`}
         ref={dropdownRef}
       >
         {items.map(
