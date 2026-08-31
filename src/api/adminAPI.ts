@@ -75,3 +75,8 @@ export const checkInvite = async () => {
   if (!response.ok) return false;
   return await response.text() === "true";
 };
+
+export const setCdnAPIKey = async (cdnAPIKey: string) => {
+  const response = await post("/admin/setCdnAPIKey", {cdnAPIKey})
+  return { message: await response.text(), status: response.status}
+}

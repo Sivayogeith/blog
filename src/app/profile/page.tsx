@@ -11,12 +11,12 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import ProfileDropzone from "@/src/components/ProfileDropzone";
 import z from "zod";
+import { setCdnAPIKey } from "@/src/api/adminAPI";
 
 export default function Profile() {
-  const [user, setUser] = useState(
-    {} as Omit<Omit<User, "isAdmin">, "isOwner">,
-  );
+  const [user, setUser] = useState({} as User);
   const [edit, setEdit] = useState(false);
+  const [cdn, setCdn] = useState("");
 
   const {
     register,
@@ -71,12 +71,31 @@ export default function Profile() {
     });
 
     setEdit(false);
-    setUser({ username, name, image: user.image, slackId: user.slackId });
+    setUser({
+      username,
+      name,
+      image: user.image,
+      slackId: user.slackId,
+      isAdmin: user.isAdmin,
+      isOwner: user.isOwner,
+    });
   };
 
   const onPreview = async () => {
     setUser({ ...user, image: getValues("imageUrl") });
     setValue("image", null);
+  };
+
+  const onCdnSave = async () => {
+    toast.promise(setCdnAPIKey(cdn), {
+      loading: "Saving...",
+      success: ({ message, status }) => {
+        if (status == 200) {
+          setCdn("");
+        }
+        return { type: status == 200 ? "success" : "error", message };
+      },
+    });
   };
 
   useEffect(() => {
@@ -177,7 +196,11 @@ export default function Profile() {
                 />
                 <div>
                   <p className="text-lg">Hack Club Auth</p>
-                  <p className="text-sm opacity-80">{user.slackId ? `Connected (${user.slackId})` : "Not Connected" }</p>
+                  <p className="text-sm opacity-80">
+                    {user.slackId
+                      ? `Connected (${user.slackId})`
+                      : "Not Connected"}
+                  </p>
                 </div>
               </div>
               {!user.slackId && (
@@ -186,6 +209,24 @@ export default function Profile() {
                 </a>
               )}
             </div>
+            {user.isAdmin && (
+              <div className="border-[0.5] border-secondary w-full flex h-25 rounded-sm px-5 items-center mt-4 gap-4">
+                <div className="flex gap-2 items-center">
+                  <p className="text-lg">HackClub CDN API Key</p>
+                </div>
+                <div className="flex flex-col w-full ms-6">
+                  <input
+                    placeholder="Enter your CDN API Key"
+                    onChange={(e) => setCdn(e.target.value)}
+                    value={cdn}
+                  />
+                  <span className="bold text-sm">
+                    This replaces any previously set API key!
+                  </span>
+                </div>
+                <button onClick={onCdnSave}>Save</button>
+              </div>
+            )}
           </>
         ) : (
           <Spinner size={128} />
