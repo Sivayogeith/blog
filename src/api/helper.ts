@@ -97,7 +97,8 @@ export interface Comment {
   message: string;
   likes: string[];
   dislikes: string[];
-  parent: number
+  parent: number;
+  deleted: boolean;
 }
 
 export interface MacondoProject {

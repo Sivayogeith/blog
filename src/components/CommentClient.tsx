@@ -169,7 +169,7 @@ function CommentItem({
                 <hr className="w-full border-secondary border-1/2" />
               </div>
             ) : (
-              <p className="text-lg ms-1">{comment.message}</p>
+              <p className={`text-lg ms-1 ${comment.deleted && "dark:text-red-400 text-red-700 italic"}`}>{comment.message}</p>
             )}
             <div className="flex items-center mt-1">
               <button
@@ -292,7 +292,7 @@ function CommentItem({
                           <hr className="w-full border-secondary border-1/2" />
                         </div>
                       ) : (
-                        <p className="text-lg ms-1">{reply.message}</p>
+                        <p className={`text-lg ms-1 ${reply.deleted && "dark:text-red-400 text-red-700 italic"}`}>{reply.message}</p>
                       )}
                       <div className="flex items-center mt-1">
                         <button
