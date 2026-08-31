@@ -254,7 +254,7 @@ function CommentItem({
                       src={reply.image}
                       className="size-7 rounded-full me-1 mt-0.5"
                     />
-                    <div>
+                    <div className="w-full">
                       <div className="flex items-center justify-between">
                         <div className="flex gap-1 items-center">
                           <a
@@ -271,7 +271,29 @@ function CommentItem({
                           </span>
                         </div>
                       </div>
-                      <p className="text-lg ms-1">{reply.message}</p>
+                      {edit == reply.id ? (
+                        <div className="w-[98%] flex flex-col mt-1 items-end mb-2">
+                          <textarea {...register("text")} className="w-full" />
+                          <div className="flex gap-3 items-center justify-between w-full">
+                            <p
+                              className={`${isValid && "dark:text-green-400! text-green-700!"} error-msg text-end`}
+                            >
+                              {message.length}/150 chars (min. 10)
+                            </p>
+                            <button
+                              className="border-0! p-0! mt-1"
+                              onClick={() => onEdit(reply.id)}
+                              type="button"
+                              disabled={!isValid}
+                            >
+                              save
+                            </button>
+                          </div>
+                          <hr className="w-full border-secondary border-1/2" />
+                        </div>
+                      ) : (
+                        <p className="text-lg ms-1">{reply.message}</p>
+                      )}
                       <div className="flex items-center mt-1">
                         <button
                           className="border-0! p-0! ms-1"
@@ -308,16 +330,16 @@ function CommentItem({
                         <div className="w-0 h-6 border-[0.5] border-secondary mx-2"></div>
                         {reply.from == session.username ? (
                           <>
-                            {/* <button
-                                        className="border-0! p-0!"
-                                        onClick={() => {
-                                          setEdit(comment.id);
-                                          setValue("text", comment.message);
-                                        }}
-                                        type="button"
-                                      >
-                                        <EditIcon className="size-4.5" />
-                                      </button> */}
+                            <button
+                              className="border-0! p-0!"
+                              onClick={() => {
+                                setEdit(reply.id);
+                                setValue("text", reply.message);
+                              }}
+                              type="button"
+                            >
+                              <EditIcon className="size-4.5" />
+                            </button>
                             <button
                               className="border-0! p-0! ms-2"
                               onClick={() => onDelete(reply.id)}
